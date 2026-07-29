@@ -4,7 +4,7 @@ part 'recent_generation.freezed.dart';
 part 'recent_generation.g.dart';
 
 @freezed
-class RecentGeneration with _$RecentGeneration {
+abstract class RecentGeneration with _$RecentGeneration {
   const factory RecentGeneration({
     required String id,
     required String thumbnailUrl,

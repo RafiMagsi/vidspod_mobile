@@ -4,7 +4,7 @@ part 'research_result.freezed.dart';
 part 'research_result.g.dart';
 
 @freezed
-class ResearchResult with _$ResearchResult {
+abstract class ResearchResult with _$ResearchResult {
   const factory ResearchResult({
     required String id,
     required String content,

@@ -4,7 +4,7 @@ part 'motion.freezed.dart';
 part 'motion.g.dart';
 
 @freezed
-class Motion with _$Motion {
+abstract class Motion with _$Motion {
   const factory Motion({
     required String publicGuid,
     required String title,

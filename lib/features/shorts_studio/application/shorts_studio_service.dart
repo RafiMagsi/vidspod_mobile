@@ -3,19 +3,13 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:vidspod_mobile/app/config.dart';
 import 'package:vidspod_mobile/core/media/media_providers.dart';
 import 'package:vidspod_mobile/features/generations/generation_providers.dart';
 import 'package:vidspod_mobile/core/media/media_repository.dart';
 import 'package:vidspod_mobile/features/generations/data/generation_repository.dart';
 
-enum UploadStatus {
-  initial,
-  picking,
-  picked,
-  uploading,
-  uploaded,
-  error,
-}
+enum UploadStatus { initial, picking, picked, uploading, uploaded, error }
 
 class ShortsStudioState {
   final UploadStatus status;
@@ -47,7 +41,8 @@ class ShortsStudioService extends StateNotifier<ShortsStudioState> {
   final _picker = ImagePicker();
   final _dio = Dio();
 
-  ShortsStudioService(this._mediaRepository, this._generationRepository) : super(ShortsStudioState());
+  ShortsStudioService(this._mediaRepository, this._generationRepository)
+    : super(ShortsStudioState());
 
   Future<void> pickImage() async {
     state = state.copyWith(status: UploadStatus.picking);
@@ -62,7 +57,10 @@ class ShortsStudioService extends StateNotifier<ShortsStudioState> {
         state = state.copyWith(status: UploadStatus.initial);
       }
     } catch (e) {
-      state = state.copyWith(status: UploadStatus.error, errorMessage: e.toString());
+      state = state.copyWith(
+        status: UploadStatus.error,
+        errorMessage: e.toString(),
+      );
     }
   }
 
@@ -71,6 +69,12 @@ class ShortsStudioService extends StateNotifier<ShortsStudioState> {
 
     state = state.copyWith(status: UploadStatus.uploading);
     try {
+      if (Config.previewMode) {
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+        state = state.copyWith(status: UploadStatus.uploaded);
+        return;
+      }
+
       final fileName = state.image!.path.split('/').last;
       final presignedUrl = await _mediaRepository.getPresignedUrl(fileName);
 
@@ -79,9 +83,7 @@ class ShortsStudioService extends StateNotifier<ShortsStudioState> {
         presignedUrl,
         data: file.openRead(),
         options: Options(
-          headers: {
-            Headers.contentLengthHeader: await file.length(),
-          },
+          headers: {Headers.contentLengthHeader: await file.length()},
         ),
       );
 
@@ -97,13 +99,17 @@ class ShortsStudioService extends StateNotifier<ShortsStudioState> {
 
       state = state.copyWith(status: UploadStatus.uploaded);
     } catch (e) {
-      state = state.copyWith(status: UploadStatus.error, errorMessage: e.toString());
+      state = state.copyWith(
+        status: UploadStatus.error,
+        errorMessage: e.toString(),
+      );
     }
   }
 }
 
-final shortsStudioProvider = StateNotifierProvider<ShortsStudioService, ShortsStudioState>((ref) {
-  final mediaRepository = ref.watch(mediaRepositoryProvider);
-  final generationRepository = ref.watch(generationRepositoryProvider);
-  return ShortsStudioService(mediaRepository, generationRepository);
-});
+final shortsStudioProvider =
+    StateNotifierProvider<ShortsStudioService, ShortsStudioState>((ref) {
+      final mediaRepository = ref.watch(mediaRepositoryProvider);
+      final generationRepository = ref.watch(generationRepositoryProvider);
+      return ShortsStudioService(mediaRepository, generationRepository);
+    });

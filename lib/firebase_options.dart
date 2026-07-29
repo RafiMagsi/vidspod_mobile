@@ -3,6 +3,11 @@
 // To generate this file, run the following command in your project's root directory:
 //
 // flutterfire configure
+import 'package:firebase_core/firebase_core.dart';
+
 class DefaultFirebaseOptions {
-  static var currentPlatform;
+  // Firebase can still use the native platform configuration when one is
+  // supplied by the deployed app. Returning null keeps local builds usable
+  // when Firebase configuration has not been added yet.
+  static FirebaseOptions? get currentPlatform => null;
 }

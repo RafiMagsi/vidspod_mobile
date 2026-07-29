@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -5,24 +7,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vidspod_mobile/app/app.dart';
 import 'package:vidspod_mobile/firebase_options.dart';
 
-Future<void> main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  runApp(const ProviderScope(child: VidsPodApp()));
 
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Got a message whilst in the foreground!');
-    print('Message data: ${message.data}');
+  unawaited(_initializeFirebase());
+}
 
-    if (message.notification != null) {
-      print('Message also contained a notification: ${message.notification}');
-    }
-  });
+Future<void> _initializeFirebase() async {
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
 
-  runApp(
-    const ProviderScope(
-      child: VidsPodApp(),
-    ),
-  );
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      debugPrint('Received foreground message: ${message.data}');
+    });
+  } on Object catch (error) {
+    // Firebase is optional for rendering the app. A missing native config
+    // must not prevent users from reaching authentication and the API UI.
+    debugPrint('Firebase initialization skipped: $error');
+  }
 }

@@ -4,6 +4,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vidspod_mobile/core/widgets/coming_soon_screen.dart';
 import 'package:vidspod_mobile/features/auth/application/auth_service.dart';
 import 'package:vidspod_mobile/features/auth/presentation/screens/login_screen.dart';
+import 'package:vidspod_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:vidspod_mobile/features/generations/presentation/screens/generation_detail_screen.dart';
+import 'package:vidspod_mobile/features/generations/presentation/screens/generation_list_screen.dart';
+import 'package:vidspod_mobile/features/motions/presentation/screens/motion_detail_screen.dart';
+import 'package:vidspod_mobile/features/motions/presentation/screens/motion_list_screen.dart';
+import 'package:vidspod_mobile/features/profile/presentation/screens/profile_screen.dart';
+import 'package:vidspod_mobile/features/research/presentation/screens/research_detail_screen.dart';
+import 'package:vidspod_mobile/features/research/presentation/screens/research_list_screen.dart';
+import 'package:vidspod_mobile/features/settings/presentation/screens/settings_screen.dart';
+import 'package:vidspod_mobile/features/shorts_studio/presentation/screens/shorts_studio_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);

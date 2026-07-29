@@ -4,7 +4,7 @@ part 'generation.freezed.dart';
 part 'generation.g.dart';
 
 @freezed
-class Generation with _$Generation {
+abstract class Generation with _$Generation {
   const factory Generation({
     required String id,
     required String status,

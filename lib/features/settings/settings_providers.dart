@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vidspod_mobile/app/config.dart';
 import 'package:vidspod_mobile/core/api/api_providers.dart';
+import 'package:vidspod_mobile/core/preview/preview_data.dart';
 import 'package:vidspod_mobile/features/settings/data/settings_repository.dart';
 import 'package:vidspod_mobile/features/settings/domain/settings.dart';
 
@@ -9,6 +11,9 @@ final settingsRepositoryProvider = Provider<SettingsRepository>((ref) {
 });
 
 final settingsProvider = FutureProvider<AppSettings>((ref) {
+  if (Config.previewMode) {
+    return Future.value(PreviewData.settings);
+  }
   final settingsRepository = ref.watch(settingsRepositoryProvider);
   return settingsRepository.getSettings();
 });

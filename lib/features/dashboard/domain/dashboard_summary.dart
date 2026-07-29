@@ -4,7 +4,7 @@ part 'dashboard_summary.freezed.dart';
 part 'dashboard_summary.g.dart';
 
 @freezed
-class DashboardSummary with _$DashboardSummary {
+abstract class DashboardSummary with _$DashboardSummary {
   const factory DashboardSummary({
     required int creditBalance,
     required int recentGenerationsCount,

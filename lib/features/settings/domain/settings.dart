@@ -4,7 +4,7 @@ part 'settings.freezed.dart';
 part 'settings.g.dart';
 
 @freezed
-class AppSettings with _$AppSettings {
+abstract class AppSettings with _$AppSettings {
   const factory AppSettings({
     required bool autoplay,
     required bool useMobileData,

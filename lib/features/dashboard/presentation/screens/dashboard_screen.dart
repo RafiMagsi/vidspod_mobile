@@ -15,6 +15,15 @@ class DashboardScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Dashboard'),
         actions: [
+          PopupMenuButton<String>(
+            onSelected: (route) => context.go(route),
+            itemBuilder: (context) => const [
+              PopupMenuItem(value: '/motions', child: Text('Motions')),
+              PopupMenuItem(value: '/studio', child: Text('Shorts Studio')),
+              PopupMenuItem(value: '/generations', child: Text('Generations')),
+              PopupMenuItem(value: '/research', child: Text('Research')),
+            ],
+          ),
           IconButton(
             icon: const Icon(Icons.person),
             onPressed: () => context.go('/profile'),
@@ -31,7 +40,9 @@ class DashboardScreen extends ConsumerWidget {
             summary.when(
               data: (summary) => ListTile(
                 title: Text('Credit Balance: ${summary.creditBalance}'),
-                subtitle: Text('Recent Generations: ${summary.recentGenerationsCount}'),
+                subtitle: Text(
+                  'Recent Generations: ${summary.recentGenerationsCount}',
+                ),
               ),
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (error, stack) => Center(child: Text('Error: $error')),
