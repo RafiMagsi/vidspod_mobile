@@ -3,9 +3,10 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:vidspod_mobile/core/core_providers.dart';
-import 'package:vidspod_mobile/core/media/media_repository.dart';
+import 'package:vidspod_mobile/core/media/media_providers.dart';
 import 'package:vidspod_mobile/features/generations/generation_providers.dart';
+import 'package:vidspod_mobile/core/media/media_repository.dart';
+import 'package:vidspod_mobile/features/generations/data/generation_repository.dart';
 
 enum UploadStatus {
   initial,

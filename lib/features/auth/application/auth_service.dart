@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vidspod_mobile/core/core_providers.dart';
+import 'package:vidspod_mobile/features/auth/auth_providers.dart';
 import 'package:vidspod_mobile/features/auth/data/auth_repository.dart';
 
 enum AuthStatus {

@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vidspod_mobile/core/core_providers.dart';
+import 'package:vidspod_mobile/core/api/api_providers.dart';
 import 'package:vidspod_mobile/features/generations/data/generation_repository.dart';
 import 'package:vidspod_mobile/features/generations/domain/generation.dart';
 

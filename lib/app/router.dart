@@ -87,14 +87,15 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/research',
         builder: (BuildContext context, GoRouterState state) {
-          return const ComingSoonScreen(title: 'Research');
+          return const ResearchListScreen();
         },
       ),
       GoRoute(
         path: '/research/:id',
         builder: (BuildContext context, GoRouterState state) {
-          return ComingSoonScreen(
-              title: 'Research Details: ${state.pathParameters['id']}');
+          return ResearchDetailScreen(
+            id: state.pathParameters['id']!,
+          );
         },
       ),
       GoRoute(
