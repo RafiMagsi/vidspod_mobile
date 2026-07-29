@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vidspod_mobile/app/app_scaffold.dart';
 import 'package:vidspod_mobile/core/widgets/coming_soon_screen.dart';
 import 'package:vidspod_mobile/features/auth/application/auth_service.dart';
 import 'package:vidspod_mobile/features/auth/presentation/screens/login_screen.dart';
@@ -15,10 +16,13 @@ import 'package:vidspod_mobile/features/research/presentation/screens/research_l
 import 'package:vidspod_mobile/features/settings/presentation/screens/settings_screen.dart';
 import 'package:vidspod_mobile/features/shorts_studio/presentation/screens/shorts_studio_screen.dart';
 
+final _rootNavigatorKey = GlobalKey<NavigatorState>();
+
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
 
   return GoRouter(
+    navigatorKey: _rootNavigatorKey,
     initialLocation: '/dashboard',
     redirect: (BuildContext context, GoRouterState state) {
       final bool loggedIn = authState == AuthStatus.authenticated;
@@ -34,29 +38,11 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       return null;
     },
-    routes: <GoRoute>[
-      GoRoute(
-        path: '/',
-        builder: (BuildContext context, GoRouterState state) {
-          return const ComingSoonScreen(title: 'Home');
-        },
-      ),
+    routes: <RouteBase>[
       GoRoute(
         path: '/login',
         builder: (BuildContext context, GoRouterState state) {
           return LoginScreen();
-        },
-      ),
-      GoRoute(
-        path: '/dashboard',
-        builder: (BuildContext context, GoRouterState state) {
-          return const DashboardScreen();
-        },
-      ),
-      GoRoute(
-        path: '/motions',
-        builder: (BuildContext context, GoRouterState state) {
-          return const MotionListScreen();
         },
       ),
       GoRoute(
@@ -78,12 +64,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (BuildContext context, GoRouterState state) {
           return ComingSoonScreen(
               title: 'Studio Generation: ${state.pathParameters['id']}');
-        },
-      ),
-      GoRoute(
-        path: '/generations',
-        builder: (BuildContext context, GoRouterState state) {
-          return const GenerationListScreen();
         },
       ),
       GoRoute(
@@ -109,16 +89,41 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
       ),
       GoRoute(
-        path: '/profile',
-        builder: (BuildContext context, GoRouterState state) {
-          return const ProfileScreen();
-        },
-      ),
-      GoRoute(
         path: '/settings',
         builder: (BuildContext context, GoRouterState state) {
           return const SettingsScreen();
         },
+      ),
+      ShellRoute(
+        builder: (BuildContext context, GoRouterState state, Widget child) {
+          return AppScaffold(child: child);
+        },
+        routes: <GoRoute>[
+          GoRoute(
+            path: '/dashboard',
+            builder: (BuildContext context, GoRouterState state) {
+              return const DashboardScreen();
+            },
+          ),
+          GoRoute(
+            path: '/motions',
+            builder: (BuildContext context, GoRouterState state) {
+              return const MotionListScreen();
+            },
+          ),
+          GoRoute(
+            path: '/generations',
+            builder: (BuildContext context, GoRouterState state) {
+              return const GenerationListScreen();
+            },
+          ),
+          GoRoute(
+            path: '/profile',
+            builder: (BuildContext context, GoRouterState state) {
+              return const ProfileScreen();
+            },
+          ),
+        ],
       ),
     ],
   );

@@ -9,18 +9,40 @@ class GenerationListScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final generations = ref.watch(generationHistoryProvider);
+    final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Generations')),
+      appBar: AppBar(
+        title: const Text('Generations'),
+      ),
       body: generations.when(
         data: (generations) => ListView.builder(
+          padding: const EdgeInsets.all(8.0),
           itemCount: generations.length,
           itemBuilder: (context, index) {
             final generation = generations[index];
-            return ListTile(
-              title: Text(generation.id),
-              subtitle: Text(generation.status),
-              onTap: () => context.go('/generations/${generation.id}'),
+            return Card(
+              elevation: 2.0,
+              margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: ListTile(
+                leading: const CircleAvatar(
+                  child: Icon(Icons.videocam_off_outlined),
+                ),
+                title: Text(
+                  generation.id,
+                  style: theme.textTheme.titleMedium,
+                ),
+                subtitle: Text(
+                  generation.status,
+                  style: theme.textTheme.bodyMedium,
+                ),
+                onTap: () => context.go('/generations/${generation.id}'),
+                trailing: const Icon(Icons.chevron_right),
+              ),
             );
           },
         ),
