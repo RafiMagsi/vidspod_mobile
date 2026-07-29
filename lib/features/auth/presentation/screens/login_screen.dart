@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vidspod_mobile/core/widgets/gradient_button.dart';
 import 'package:vidspod_mobile/features/auth/application/auth_service.dart';
 
 class LoginScreen extends ConsumerWidget {
@@ -24,23 +25,26 @@ class LoginScreen extends ConsumerWidget {
             children: [
               const SizedBox(height: 60),
               Icon(
-                Icons.videocam,
+                Icons.auto_awesome,
                 size: 80,
                 color: colorScheme.primary,
               ),
               const SizedBox(height: 20),
               Text(
-                'Welcome to VidsPod',
+                'Welcome to Creati',
                 textAlign: TextAlign.center,
                 style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
                 'Sign in to continue',
                 textAlign: TextAlign.center,
-                style: theme.textTheme.bodyLarge,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: Colors.white70,
+                ),
               ),
               const SizedBox(height: 40),
               TextFormField(
@@ -70,20 +74,14 @@ class LoginScreen extends ConsumerWidget {
               if (authState == AuthStatus.loading)
                 const Center(child: CircularProgressIndicator())
               else
-                ElevatedButton(
+                GradientButton(
+                  text: 'Login',
                   onPressed: () {
                     authNotifier.login(
                       _emailController.text,
                       _passwordController.text,
                     );
                   },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                  ),
-                  child: const Text('Login'),
                 ),
               const SizedBox(height: 20),
               TextButton(
@@ -96,7 +94,7 @@ class LoginScreen extends ConsumerWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Don't have an account?"),
+                  const Text("Don't have an account?", style: TextStyle(color: Colors.white70)),
                   TextButton(
                     onPressed: () {
                       // TODO: Implement sign up

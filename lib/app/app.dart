@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vidspod_mobile/app/router.dart';
-import 'package:vidspod_mobile/app/theme.dart';
+import 'package:vidspod_mobile/app/creati_theme.dart';
 
 class VidsPodApp extends ConsumerWidget {
   const VidsPodApp({super.key});
@@ -11,9 +11,9 @@ class VidsPodApp extends ConsumerWidget {
     final router = ref.watch(routerProvider);
 
     return MaterialApp.router(
-      title: 'VidsPod',
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
+      title: 'Creati',
+      themeMode: ThemeMode.dark,
+      darkTheme: CreatiTheme.darkTheme(),
       routerConfig: router,
     );
   }

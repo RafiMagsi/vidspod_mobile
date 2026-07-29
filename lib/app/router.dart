@@ -14,16 +14,16 @@ import 'package:vidspod_mobile/features/profile/presentation/screens/profile_scr
 import 'package:vidspod_mobile/features/research/presentation/screens/research_detail_screen.dart';
 import 'package:vidspod_mobile/features/research/presentation/screens/research_list_screen.dart';
 import 'package:vidspod_mobile/features/settings/presentation/screens/settings_screen.dart';
+import 'package:vidspod_mobile/features/shorts_studio/presentation/screens/get_started_screen.dart';
 import 'package:vidspod_mobile/features/shorts_studio/presentation/screens/shorts_studio_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
-
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: '/dashboard',
+    initialLocation: '/studio',
     redirect: (BuildContext context, GoRouterState state) {
       final bool loggedIn = authState == AuthStatus.authenticated;
       final bool loggingIn = state.matchedLocation == '/login';
@@ -33,7 +33,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       }
 
       if (loggingIn) {
-        return '/dashboard';
+        return '/studio';
       }
 
       return null;
@@ -43,6 +43,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/login',
         builder: (BuildContext context, GoRouterState state) {
           return LoginScreen();
+        },
+      ),
+      GoRoute(
+        path: '/get-started',
+        builder: (BuildContext context, GoRouterState state) {
+          return const GetStartedScreen();
         },
       ),
       GoRoute(
