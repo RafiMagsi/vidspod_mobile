@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:vidspod_mobile/app/creati_theme.dart';
 import 'package:vidspod_mobile/features/auth/application/auth_service.dart';
 import 'package:vidspod_mobile/features/dashboard/dashboard_providers.dart';
 import 'package:vidspod_mobile/features/profile/profile_providers.dart';
@@ -13,111 +14,143 @@ class ProfileScreen extends ConsumerWidget {
     final profile = ref.watch(profileProvider);
     final summary = ref.watch(dashboardSummaryProvider);
     final authNotifier = ref.read(authStateProvider.notifier);
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-      ),
+      backgroundColor: CreatiTheme.black,
       body: profile.when(
-        data: (profile) => ListView(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          children: [
-            Column(
-              children: [
-                const CircleAvatar(
-                  radius: 50,
-                  child: Icon(Icons.person, size: 50),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  profile.displayName,
-                  style: theme.textTheme.headlineSmall,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  profile.email,
-                  style: theme.textTheme.bodyLarge,
-                ),
-              ],
+        data: (profile) => CustomScrollView(
+          physics: const BouncingScrollPhysics(),
+          slivers: [
+            SliverAppBar(
+              pinned: true,
+              backgroundColor: CreatiTheme.black,
+              surfaceTintColor: Colors.transparent,
+              title: Text('Profile', style: CreatiTheme.headingLarge()),
             ),
-            const SizedBox(height: 30),
-            summary.when(
-              data: (summary) => Card(
-                margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                elevation: 4.0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Credit Balance',
-                        style: theme.textTheme.titleLarge
-                            ?.copyWith(color: colorScheme.primary),
-                      ),
-                      const SizedBox(height: 8.0),
-                      Text(
-                        '${summary.creditBalance}',
-                        style: theme.textTheme.headlineMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                    ],
+            SliverToBoxAdapter(
+              child: Column(children: [
+                const SizedBox(height: 20),
+                Container(
+                  width: 88, height: 88,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: CreatiTheme.brandGradient,
+                  ),
+                  padding: const EdgeInsets.all(3),
+                  child: Container(
+                    decoration: const BoxDecoration(shape: BoxShape.circle, color: CreatiTheme.darkSurface),
+                    child: const Center(child: Icon(Icons.person, color: Colors.white38, size: 40)),
                   ),
                 ),
+                const SizedBox(height: 14),
+                Text(profile.displayName, style: CreatiTheme.headingSmall(fontSize: 20)),
+                const SizedBox(height: 4),
+                Text(profile.email, style: CreatiTheme.bodySmall(color: Colors.white.withAlpha(100))),
+              ]),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+                child: summary.when(
+                  data: (summary) => Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: CreatiTheme.surfaceDark,
+                      borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
+                      border: Border.all(color: CreatiTheme.cardBorder.withAlpha(60)),
+                      boxShadow: CreatiTheme.cardShadow(CreatiTheme.black),
+                    ),
+                    child: Row(children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          gradient: CreatiTheme.brandGradient,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Icon(Icons.auto_awesome, color: Colors.white, size: 20),
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                          Text('Credit Balance', style: CreatiTheme.bodyMedium(fontWeight: FontWeight.w500)),
+                          const SizedBox(height: 4),
+                          Text('${summary.creditBalance} credits', style: CreatiTheme.caption(color: Colors.white.withAlpha(100))),
+                        ]),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+                        decoration: BoxDecoration(
+                          gradient: CreatiTheme.brandGradient,
+                          borderRadius: BorderRadius.circular(CreatiTheme.radiusFull),
+                        ),
+                        child: Text('Buy', style: CreatiTheme.caption(fontWeight: FontWeight.w600)),
+                      ),
+                    ]),
+                  ),
+                  loading: () => const SizedBox(height: 80, child: Center(child: CircularProgressIndicator(color: CreatiTheme.purple))),
+                  error: (_, __) => const SizedBox.shrink(),
+                ),
               ),
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (error, stack) => const SizedBox.shrink(),
             ),
-            const SizedBox(height: 20),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.history_outlined),
-              title: const Text('Generation History'),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => context.go('/generations'),
-            ),
-            ListTile(
-              leading: const Icon(Icons.favorite_border),
-              title: const Text('Saved Motions'),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => context.go('/motions'),
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.settings_outlined),
-              title: const Text('Settings'),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => context.go('/settings'),
-            ),
-            const Divider(),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  authNotifier.logout();
-                },
-                icon: const Icon(Icons.logout),
-                label: const Text('Logout'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: colorScheme.error,
-                  foregroundColor: colorScheme.onError,
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
+            SliverToBoxAdapter(child: _MenuTile(Icons.history_outlined, 'Generation History', () => context.go('/generations'))),
+            SliverToBoxAdapter(child: _MenuTile(Icons.favorite_border, 'Saved Motions', () => context.go('/motions'))),
+            SliverToBoxAdapter(child: _MenuTile(Icons.settings_outlined, 'Settings', () => context.go('/settings'))),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 24, 16, 40),
+                child: GestureDetector(
+                  onTap: () => authNotifier.logout(),
+                  child: Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
+                      border: Border.all(color: Colors.red.withAlpha(80)),
+                      color: Colors.red.withAlpha(15),
+                    ),
+                    child: Center(
+                      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                        Icon(Icons.logout, color: Colors.red.withAlpha(200), size: 18),
+                        const SizedBox(width: 8),
+                        Text('Logout', style: TextStyle(color: Colors.red.withAlpha(200), fontSize: 15, fontWeight: FontWeight.w600, letterSpacing: 0.3)),
+                      ]),
+                    ),
                   ),
                 ),
               ),
             ),
           ],
         ),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('Error: $error')),
+        loading: () => const Center(child: CircularProgressIndicator(color: CreatiTheme.purple)),
+        error: (error, _) => Center(child: Text('Error: $error', style: const TextStyle(color: Colors.white38))),
+      ),
+    );
+  }
+}
+
+class _MenuTile extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final VoidCallback onTap;
+  const _MenuTile(this.icon, this.title, this.onTap);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+          decoration: BoxDecoration(
+            border: Border(bottom: BorderSide(color: CreatiTheme.cardBorder.withAlpha(40))),
+          ),
+          child: Row(children: [
+            Icon(icon, color: Colors.white.withAlpha(150), size: 22),
+            const SizedBox(width: 14),
+            Expanded(child: Text(title, style: CreatiTheme.bodyMedium(fontWeight: FontWeight.w500, fontSize: 15))),
+            Icon(Icons.chevron_right, color: Colors.white.withAlpha(80), size: 20),
+          ]),
+        ),
       ),
     );
   }

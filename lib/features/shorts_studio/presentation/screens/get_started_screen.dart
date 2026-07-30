@@ -1,152 +1,146 @@
 import 'package:flutter/material.dart';
-import 'package:vidspod_mobile/core/widgets/gradient_button.dart';
+import 'package:go_router/go_router.dart';
+import 'package:vidspod_mobile/app/creati_theme.dart';
 
 class GetStartedScreen extends StatelessWidget {
-  const GetStartedScreen({super.key});
+  final String? motionId;
+  final String? motionTitle;
+  const GetStartedScreen({super.key, this.motionId, this.motionTitle});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('SeeDance'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => context.pop(),
+        ),
+        title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text('SeeDance', style: CreatiTheme.headingSmall()),
+          if (motionTitle != null)
+            Text(motionTitle!, style: CreatiTheme.caption(color: Colors.white.withAlpha(100))),
+        ]),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildInputSection(),
-            const SizedBox(height: 20),
-            _buildHintsSection(),
-            const SizedBox(height: 20),
-            _buildPromptInput(),
-            const SizedBox(height: 20),
-            GradientButton(
-              text: 'Generate',
-              onPressed: () {},
-            ),
-            const SizedBox(height: 10),
-            const Center(
-              child: Text(
-                '50 credits',
-                style: TextStyle(color: Colors.white70),
-              ),
-            ),
-          ],
-        ),
+        padding: const EdgeInsets.all(16),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          _buildInputSection(),
+          const SizedBox(height: 20),
+          _buildPromptInput(),
+          const SizedBox(height: 24),
+          _buildGenerateButton(),
+          const SizedBox(height: 12),
+          _buildCreditsDisplay(),
+        ]),
       ),
     );
   }
 
   Widget _buildInputSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Input',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text('Input', style: CreatiTheme.headingMedium()),
+      const SizedBox(height: 12),
+      Row(children: [
+        Container(
+          width: 120, height: 160,
+          decoration: BoxDecoration(
+            color: CreatiTheme.surfaceDark,
+            borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
+            image: const DecorationImage(image: NetworkImage('https://picsum.photos/seed/face/200/200'), fit: BoxFit.cover),
           ),
-        ),
-        const SizedBox(height: 10),
-        Row(
-          children: [
-            Container(
-              width: 150,
-              height: 150,
-              decoration: BoxDecoration(
-                color: Colors.grey[900],
-                borderRadius: BorderRadius.circular(12),
-                image: const DecorationImage(
-                  image: NetworkImage('https://picsum.photos/seed/face/200/200'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: const Center(
-                child: Text(
-                  'Your Photo',
-                  style: TextStyle(color: Colors.white, backgroundColor: Colors.black54),
-                ),
-              ),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
+              border: Border.all(color: CreatiTheme.purple, width: 2),
             ),
-            const SizedBox(width: 20),
-            Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                color: Colors.grey[800],
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.upload, color: Colors.white),
-                  SizedBox(height: 8),
-                  Text('Upload more', style: TextStyle(color: Colors.white)),
-                ],
-              ),
+            alignment: Alignment.bottomCenter,
+            padding: const EdgeInsets.all(6),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              decoration: BoxDecoration(color: Colors.black.withAlpha(180), borderRadius: BorderRadius.circular(4)),
+              child: const Text('@image1', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500)),
             ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildHintsSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Hints',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 80,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 5,
-            itemBuilder: (context, index) {
-              return Container(
-                width: 80,
-                margin: const EdgeInsets.only(right: 10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  image: DecorationImage(
-                    image: NetworkImage('https://picsum.photos/seed/$index/200/200'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              );
-            },
+        const SizedBox(width: 16),
+        GestureDetector(
+          onTap: () {},
+          child: Container(
+            width: 100, height: 130,
+            decoration: BoxDecoration(
+              color: CreatiTheme.surfaceDark,
+              borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
+              border: Border.all(color: Colors.white.withAlpha(20)),
+            ),
+            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(color: Colors.white.withAlpha(15), shape: BoxShape.circle),
+                child: const Icon(Icons.add, color: Colors.white38, size: 22),
+              ),
+              const SizedBox(height: 8),
+              const Text('Upload\nmore', textAlign: TextAlign.center, style: TextStyle(color: Colors.white38, fontSize: 12)),
+            ]),
           ),
         ),
-      ],
-    );
+      ]),
+    ]);
   }
 
   Widget _buildPromptInput() {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.grey[900],
-        borderRadius: BorderRadius.circular(12),
+        color: CreatiTheme.surfaceDark,
+        borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
       ),
-      child: const TextField(
-        maxLines: 5,
-        decoration: InputDecoration(
-          hintText: 'appearances/identities from @image1 -- exact faces and bodies, preserve likeness 100% throughout...',
-          border: InputBorder.none,
-          hintStyle: TextStyle(color: Colors.white54),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        const TextField(
+          maxLines: 6,
+          decoration: InputDecoration(
+            hintText: 'Describe your vision — faces, bodies, scenes, camera movement...',
+            border: InputBorder.none,
+            hintStyle: TextStyle(color: Colors.white24, fontSize: 13),
+            isCollapsed: true,
+          ),
+          style: TextStyle(color: Colors.white, fontSize: 13),
         ),
-        style: TextStyle(color: Colors.white),
+        const SizedBox(height: 8),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Row(children: [
+            Icon(Icons.auto_awesome, color: CreatiTheme.purple.withAlpha(150), size: 14),
+            const SizedBox(width: 4),
+            Text('AI Powered', style: TextStyle(color: CreatiTheme.purple.withAlpha(150), fontSize: 11, fontWeight: FontWeight.w500)),
+          ]),
+          Text('2879/1000', style: CreatiTheme.caption(color: Colors.white.withAlpha(60))),
+        ]),
+      ]),
+    );
+  }
+
+  Widget _buildGenerateButton() {
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        height: 54,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(27),
+          gradient: CreatiTheme.brandGradient,
+          boxShadow: CreatiTheme.buttonShadow(CreatiTheme.purple),
+        ),
+        child: Center(
+          child: Text('Generate', style: CreatiTheme.bodyMedium(fontWeight: FontWeight.w600, fontSize: 16)),
+        ),
       ),
     );
+  }
+
+  Widget _buildCreditsDisplay() {
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Icon(Icons.bolt, color: Colors.amber.shade300, size: 16),
+      const SizedBox(width: 6),
+      Text('50 credits', style: CreatiTheme.bodySmall(color: Colors.white.withAlpha(110))),
+    ]);
   }
 }

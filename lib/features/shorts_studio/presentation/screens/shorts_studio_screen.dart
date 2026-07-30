@@ -1,347 +1,168 @@
-import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vidspod_mobile/core/widgets/custom_bottom_nav_bar.dart';
+import 'package:go_router/go_router.dart';
+import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/widgets/app_motion_card.dart';
 import 'package:vidspod_mobile/core/widgets/gradient_button.dart';
-import 'package:vidspod_mobile/features/motions/domain/motion.dart';
-import 'package:vidspod_mobile/features/motions/motion_providers.dart';
-import 'package:vidspod_mobile/features/shorts_studio/state/shorts_studio_state.dart';
+import 'package:vidspod_mobile/core/widgets/staggered_fade_in.dart';
 
 class ShortsStudioScreen extends ConsumerWidget {
   const ShortsStudioScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final shortsStudioState = ref.watch(shortsStudioProvider);
-    final shortsStudioNotifier = ref.read(shortsStudioProvider.notifier);
-    final motionsAsync = ref.watch(motionListProvider);
-
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: CreatiTheme.black,
       body: CustomScrollView(
-        slivers: <Widget>[
-          SliverAppBar(
-            expandedHeight: 350.0,
-            backgroundColor: Colors.black,
-            pinned: true,
-            elevation: 0,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Image.network(
-                    'https://firebasestorage.googleapis.com/v0/b/vidspod-2282a.appspot.com/o/spider_man.png?alt=media&token=29998159-2346-4456-8ab0-3abe29a393d4',
-                    fit: BoxFit.cover,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          Colors.black.withOpacity(0.7),
-                          Colors.transparent,
-                          Colors.black.withOpacity(0.9)
-                        ],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        stops: const [0.0, 0.5, 1.0],
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 50,
-                    left: 16,
-                    child: CircleAvatar(
-                      backgroundColor: Colors.black.withOpacity(0.5),
-                      child:
-                          const Icon(Icons.headset, color: Colors.white),
-                    ),
-                  ),
-                  Positioned(
-                    top: 50,
-                    right: 16,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        gradient: const LinearGradient(
-                          colors: [Colors.blue, Colors.purple],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                      ),
-                      child: const Text('PRO',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 80,
-                    left: 0,
-                    right: 0,
-                    child: Column(
-                      children: [
-                        const Text(
-                          'SeeDance 2.5',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.3),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(Icons.arrow_forward,
-                              color: Colors.white),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+        physics: const BouncingScrollPhysics(),
+        slivers: [
+          _StudioAppBar(),
+          const SliverToBoxAdapter(child: _StartButton()),
+          const SliverToBoxAdapter(child: SizedBox(height: 8)),
+          const SliverToBoxAdapter(child: _StudioChips()),
+          const _StudioSection('Profile Photo', _ProfileGrid()),
+          const _StudioSection('Trending', _MediaGrid()),
+          const _StudioSection('Seedance 2.5 Video', _MediaGrid()),
+          const _StudioSection('New Arrivals', _MediaGrid()),
+          const SliverToBoxAdapter(child: SizedBox(height: 100)),
+        ],
+      ),
+      bottomNavigationBar: _StudioBottomNav(),
+    );
+  }
+}
+
+class _StudioAppBar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SliverAppBar(
+      expandedHeight: 360,
+      backgroundColor: CreatiTheme.black,
+      pinned: true,
+      elevation: 0,
+      surfaceTintColor: Colors.transparent,
+      flexibleSpace: FlexibleSpaceBar(
+        background: Stack(
+          fit: StackFit.expand,
+          children: [
+            Image.network(
+              'https://picsum.photos/seed/studio/800/1200',
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => Container(color: CreatiTheme.darkSurface),
             ),
-          ),
-          SliverToBoxAdapter(
-            child: Transform.translate(
-              offset: const Offset(0, -40),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                child: Container(
-                  height: 60,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.purple.withOpacity(0.7),
-                        Colors.blue.withOpacity(0.7)
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.purple.withOpacity(0.5),
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      )
-                    ],
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'Start From Photo',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    CreatiTheme.black.withAlpha(200),
+                    Colors.transparent,
+                    CreatiTheme.black.withAlpha(230),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: const [0.0, 0.4, 1.0],
                 ),
               ),
             ),
-          ),
-          _buildCategoryList(),
-          SliverToBoxAdapter(
-            child: _buildSectionTitle('Profile Photo'),
-          ),
-          _buildMotionsList([], isCircular: true),
-          SliverToBoxAdapter(
-            child: _buildSectionTitle('Trending'),
-          ),
-          _buildMotionsList([], isCircular: false),
-        ],
-      ),
-      bottomNavigationBar: const CustomBottomNavBar(),
-    );
-  }
-
-  Widget _buildCategoryList() {
-    final categories = [
-      Category(
-          icon: Icons.slideshow,
-          name: 'SeeDance',
-          badge: 'New',
-          color: Colors.blue),
-      Category(
-          icon: Icons.nightlight_round,
-          name: 'Nano Banana',
-          badge: 'Hot',
-          color: Colors.orange),
-      Category(
-          icon: Icons.movie_filter,
-          name: 'Text to Video',
-          badge: 'Seedance 2',
-          color: Colors.cyan),
-      Category(
-          icon: Icons.image,
-          name: 'Image',
-          badge: '',
-          color: Colors.transparent),
-    ];
-    return SliverToBoxAdapter(
-      child: SizedBox(
-        height: 80,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: categories.length,
-          itemBuilder: (context, index) {
-            final category = categories[index];
-            return Container(
-              width: 120,
-              margin: const EdgeInsets.symmetric(horizontal: 8),
-              decoration: BoxDecoration(
-                color: Colors.grey[900],
-                borderRadius: BorderRadius.circular(12),
+            Positioned(
+              top: 52,
+              left: 16,
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: CreatiTheme.black.withAlpha(140),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.headset_mic_outlined, color: Colors.white, size: 22),
               ),
-              child: Stack(
+            ),
+            Positioned(
+              top: 52,
+              right: 16,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                decoration: BoxDecoration(
+                  gradient: CreatiTheme.proGradient,
+                  borderRadius: BorderRadius.circular(CreatiTheme.radiusFull),
+                ),
+                child: Text('PRO', style: CreatiTheme.label()),
+              ),
+            ),
+            Positioned(
+              bottom: 60,
+              left: 0,
+              right: 0,
+              child: Column(
                 children: [
-                  Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(category.icon, color: Colors.white),
-                        const SizedBox(height: 4),
-                        Text(category.name,
-                            style: const TextStyle(color: Colors.white)),
-                      ],
+                  Text('SeeDance 2.5', style: CreatiTheme.displayLarge()),
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withAlpha(30),
+                      shape: BoxShape.circle,
                     ),
+                    child: const Icon(Icons.arrow_forward, color: Colors.white, size: 20),
                   ),
-                  if (category.badge.isNotEmpty)
-                    Positioned(
-                      top: 4,
-                      right: 4,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 6, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: category.color,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          category.badge,
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 10),
-                        ),
-                      ),
-                    ),
                 ],
               ),
-            );
-          },
+            ),
+          ],
         ),
       ),
     );
   }
+}
 
-  Widget _buildSectionTitle(String title) {
+class _StartButton extends StatelessWidget {
+  const _StartButton();
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const Text(
-            'All >',
-            style: TextStyle(color: Colors.grey),
-          ),
-        ],
+      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+      child: GradientButton(
+        text: 'Start From Photo',
+        onPressed: () => context.push('/get-started'),
+        icon: Icons.photo_camera_outlined,
+        height: 58,
       ),
     );
   }
+}
 
-  Widget _buildMotionsList(List<Motion> motions, {bool isCircular = false}) {
-    return SliverToBoxAdapter(
+class _StudioChips extends StatelessWidget {
+  const _StudioChips();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: SizedBox(
-        height: 200,
-        child: ListView.builder(
+        height: 40,
+        child: ListView.separated(
           scrollDirection: Axis.horizontal,
-          itemCount: motions.isEmpty ? 5 : motions.length,
-          itemBuilder: (context, index) {
-            if (motions.isEmpty) {
-              return Container(
-                width: isCircular ? 150 : 110,
-                margin: const EdgeInsets.symmetric(horizontal: 8),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: AspectRatio(
-                        aspectRatio: isCircular ? 1 / 1 : 9 / 16,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey[900],
-                            shape: isCircular
-                                ? BoxShape.circle
-                                : BoxShape.rectangle,
-                            borderRadius:
-                                isCircular ? null : BorderRadius.circular(12),
-                          ),
-                        ),
-                      ),
-                    ),
-                    if (!isCircular) const SizedBox(height: 8),
-                    if (!isCircular)
-                      Container(
-                        height: 15,
-                        width: 80,
-                        color: Colors.grey[900],
-                      ),
-                  ],
-                ),
-              );
-            }
-            final motion = motions[index];
+          itemCount: 8,
+          separatorBuilder: (_, __) => const SizedBox(width: 8),
+          itemBuilder: (_, i) {
+            const items = ['SeeDance', 'Nano', 'Banana', 'Text to Video', 'Image', 'New', 'Hot', 'All'];
             return GestureDetector(
-              onTap: () {
-                context.push('/motions/${motion.publicGuid}');
-              },
+              onTap: () => context.go('/motions'),
               child: Container(
-                width: 110,
-                margin: const EdgeInsets.symmetric(horizontal: 8),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: AspectRatio(
-                        aspectRatio: 9 / 16,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey[900],
-                            borderRadius: BorderRadius.circular(12),
-                            image: motion.thumbnailUrl.isNotEmpty
-                                ? DecorationImage(
-                                    image: NetworkImage(motion.thumbnailUrl),
-                                    fit: BoxFit.cover,
-                                  )
-                                : null,
-                          ),
-                          child: motion.thumbnailUrl.isEmpty
-                              ? const Center(
-                                  child: Icon(Icons.movie_creation,
-                                      color: Colors.white),
-                                )
-                              : null,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      motion.title,
-                      style: const TextStyle(color: Colors.white),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+                decoration: BoxDecoration(
+                  color: i >= 5 ? CreatiTheme.lightSurface : CreatiTheme.darkSurface,
+                  borderRadius: BorderRadius.circular(CreatiTheme.radiusFull),
+                  border: Border.all(color: i == 0 ? CreatiTheme.purple.withAlpha(100) : CreatiTheme.cardBorder.withAlpha(60)),
+                ),
+                child: Text(
+                  items[i],
+                  style: TextStyle(
+                    color: i == 0 ? CreatiTheme.purple.withAlpha(230) : Colors.white,
+                    fontSize: 13,
+                    fontWeight: i == 0 ? FontWeight.w600 : FontWeight.w400,
+                    letterSpacing: 0.15,
+                  ),
                 ),
               ),
             );
@@ -352,15 +173,165 @@ class ShortsStudioScreen extends ConsumerWidget {
   }
 }
 
-class Category {
-  final IconData icon;
-  final String name;
-  final String badge;
-  final Color color;
+class _StudioSection extends StatelessWidget {
+  final String title;
+  final Widget child;
+  const _StudioSection(this.title, this.child);
 
-  Category(
-      {required this.icon,
-      required this.name,
-      required this.badge,
-      required this.color});
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 20, 16, 12),
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Text(title, style: CreatiTheme.headingMedium()),
+            GestureDetector(
+              onTap: () => context.go('/motions'),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                decoration: BoxDecoration(
+                  color: Colors.white.withAlpha(10),
+                  borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
+                ),
+                child: Row(mainAxisSize: MainAxisSize.min, children: [
+                  Text('All', style: CreatiTheme.bodySmall(color: Colors.white.withAlpha(150))),
+                  const SizedBox(width: 3),
+                  Icon(Icons.chevron_right, color: Colors.white.withAlpha(100), size: 14),
+                ]),
+              ),
+            ),
+          ]),
+        ),
+        child,
+      ]),
+    );
+  }
+}
+
+class _ProfileGrid extends StatelessWidget {
+  const _ProfileGrid();
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 100,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        itemCount: 6,
+        separatorBuilder: (_, __) => const SizedBox(width: 16),
+        itemBuilder: (_, i) => StaggeredFadeIn(
+          index: i,
+          child: GestureDetector(
+            onTap: () => context.push('/motions/studio-profile-$i'),
+            child: Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.white.withAlpha(30), width: 2),
+                color: CreatiTheme.mediumSurface,
+              ),
+              child: Center(
+                child: Icon(Icons.person, color: Colors.white.withAlpha(40), size: 30),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _MediaGrid extends StatelessWidget {
+  const _MediaGrid();
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 200,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        itemCount: 4,
+        separatorBuilder: (_, __) => const SizedBox(width: 10),
+        itemBuilder: (_, i) => StaggeredFadeIn(
+          index: i,
+          child: AppMotionCard(
+            imageUrl: 'https://picsum.photos/seed/studio-card$i/300/400',
+            label: 'AI Video ${i + 1}',
+            route: '/motions/demo-media-${i + 1}',
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _StudioBottomNav extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        border: Border(top: BorderSide(color: CreatiTheme.surfaceDark, width: 0.5)),
+        color: Color(0xFF0C0C0C),
+      ),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+          child:           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _NavItem(Icons.person, 'Creator', true, () {}),
+              _NavItem(Icons.business_center_outlined, 'Business', false, () => context.go('/business')),
+              _NavItem(Icons.record_voice_over_outlined, 'Speak', false, () => context.go('/speak')),
+              _NavItem(Icons.build_outlined, 'Tools', false, () => context.go('/tools')),
+              _NavItem(Icons.history_outlined, 'History', false, () => context.go('/history')),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _NavItem extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+  const _NavItem(this.icon, this.label, this.selected, this.onTap);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOutCubic,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        decoration: BoxDecoration(
+          color: selected ? CreatiTheme.purple.withAlpha(30) : Colors.transparent,
+          borderRadius: BorderRadius.circular(CreatiTheme.radiusMd),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: selected ? CreatiTheme.purple : CreatiTheme.textSecondary, size: 22),
+            const SizedBox(height: 2),
+            Text(label,
+              style: TextStyle(
+                color: selected ? CreatiTheme.purple : CreatiTheme.textSecondary,
+                fontSize: 10,
+                fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+                letterSpacing: 0.3,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

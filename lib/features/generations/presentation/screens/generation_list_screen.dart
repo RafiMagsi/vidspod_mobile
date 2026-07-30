@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/widgets/staggered_fade_in.dart';
 import 'package:vidspod_mobile/features/generations/generation_providers.dart';
 
 class GenerationListScreen extends ConsumerWidget {
@@ -9,45 +11,65 @@ class GenerationListScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final generations = ref.watch(generationHistoryProvider);
-    final theme = Theme.of(context);
-
     return Scaffold(
+      backgroundColor: CreatiTheme.black,
       appBar: AppBar(
-        title: const Text('Generations'),
+        title: Text('Generations', style: CreatiTheme.headingLarge()),
       ),
       body: generations.when(
-        data: (generations) => ListView.builder(
-          padding: const EdgeInsets.all(8.0),
-          itemCount: generations.length,
-          itemBuilder: (context, index) {
-            final generation = generations[index];
-            return Card(
-              elevation: 2.0,
-              margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0),
+        data: (items) => items.isEmpty
+            ? Center(child: Text('No generations yet', style: CreatiTheme.bodyMedium(color: Colors.white.withAlpha(80))))
+            : ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.all(16),
+                itemCount: items.length,
+                itemBuilder: (_, i) {
+                  final gen = items[i];
+                  return StaggeredFadeIn(
+                    index: i,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: GestureDetector(
+                        onTap: () => context.push('/generations/${gen.id}'),
+                        child: Container(
+                          padding: const EdgeInsets.all(14),
+                          decoration: BoxDecoration(
+                            color: CreatiTheme.surfaceDark,
+                            borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
+                            border: Border.all(color: CreatiTheme.cardBorder.withAlpha(60)),
+                            boxShadow: CreatiTheme.cardShadow(CreatiTheme.black),
+                          ),
+                          child: Row(children: [
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: gen.status == 'complete' ? CreatiTheme.green.withAlpha(40) : CreatiTheme.blue.withAlpha(40),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Icon(
+                                gen.status == 'complete' ? Icons.check_circle : Icons.hourglass_empty,
+                                color: gen.status == 'complete' ? CreatiTheme.green : CreatiTheme.blue,
+                                size: 22,
+                              ),
+                            ),
+                            const SizedBox(width: 14),
+                            Expanded(
+                              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                Text(gen.id, style: CreatiTheme.bodyMedium(fontWeight: FontWeight.w600), maxLines: 1, overflow: TextOverflow.ellipsis),
+                                const SizedBox(height: 2),
+                                Text(gen.status, style: CreatiTheme.caption(color: Colors.white.withAlpha(80))),
+                              ]),
+                            ),
+                            Icon(Icons.chevron_right, color: Colors.white.withAlpha(60), size: 20),
+                          ]),
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
-              clipBehavior: Clip.antiAlias,
-              child: ListTile(
-                leading: const CircleAvatar(
-                  child: Icon(Icons.videocam_off_outlined),
-                ),
-                title: Text(
-                  generation.id,
-                  style: theme.textTheme.titleMedium,
-                ),
-                subtitle: Text(
-                  generation.status,
-                  style: theme.textTheme.bodyMedium,
-                ),
-                onTap: () => context.go('/generations/${generation.id}'),
-                trailing: const Icon(Icons.chevron_right),
-              ),
-            );
-          },
-        ),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('Error: $error')),
+        loading: () => const Center(child: CircularProgressIndicator(color: CreatiTheme.purple)),
+        error: (error, _) => Center(child: Text('Failed to load', style: CreatiTheme.bodyMedium(color: Colors.white.withAlpha(100)))),
       ),
     );
   }

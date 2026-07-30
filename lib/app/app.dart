@@ -11,7 +11,7 @@ class VidsPodApp extends ConsumerWidget {
     final router = ref.watch(routerProvider);
 
     return MaterialApp.router(
-      title: 'Creati',
+      title: 'VidsPod',
       themeMode: ThemeMode.dark,
       darkTheme: CreatiTheme.darkTheme(),
       routerConfig: router,

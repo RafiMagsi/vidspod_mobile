@@ -1,79 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:vidspod_mobile/app/creati_theme.dart';
 
 class AppScaffold extends StatelessWidget {
-  const AppScaffold({
-    required this.child,
-    super.key,
-  });
+  const AppScaffold({required this.child, super.key});
 
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
+    final index = _calculateSelectedIndex(context);
     return Scaffold(
       body: child,
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.create_outlined),
-            activeIcon: Icon(Icons.create),
-            label: 'Creator',
+      bottomNavigationBar: Container(
+        decoration: const BoxDecoration(
+          border: Border(
+            top: BorderSide(color: CreatiTheme.surfaceDark, width: 0.5),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.business_center_outlined),
-            activeIcon: Icon(Icons.business_center),
-            label: 'Business',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.speaker_notes_outlined),
-            activeIcon: Icon(Icons.speaker_notes),
-            label: 'Speak',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history_outlined),
-            activeIcon: Icon(Icons.history),
-            label: 'History',
-          ),
-        ],
-        currentIndex: _calculateSelectedIndex(context),
-        onTap: (int idx) => _onItemTapped(idx, context),
-        type: BottomNavigationBarType.fixed,
+        ),
+        child: BottomNavigationBar(
+          backgroundColor: CreatiTheme.nearBlack,
+          selectedItemColor: CreatiTheme.purple,
+          unselectedItemColor: CreatiTheme.textSecondary,
+          type: BottomNavigationBarType.fixed,
+          elevation: 0,
+          selectedLabelStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, letterSpacing: 0.3),
+          unselectedLabelStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.w400),
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.person_outline), activeIcon: Icon(Icons.person), label: 'Creator'),
+            BottomNavigationBarItem(icon: Icon(Icons.business_center_outlined), activeIcon: Icon(Icons.business_center), label: 'Business'),
+            BottomNavigationBarItem(icon: Icon(Icons.record_voice_over_outlined), activeIcon: Icon(Icons.record_voice_over), label: 'Speak'),
+            BottomNavigationBarItem(icon: Icon(Icons.build_outlined), activeIcon: Icon(Icons.build), label: 'Tools'),
+            BottomNavigationBarItem(icon: Icon(Icons.history_outlined), activeIcon: Icon(Icons.history), label: 'History'),
+          ],
+          currentIndex: index,
+          onTap: (i) => _onTap(i, context),
+        ),
       ),
     );
   }
 
   static int _calculateSelectedIndex(BuildContext context) {
-    final String location = GoRouterState.of(context).matchedLocation;
-    if (location.startsWith('/dashboard')) {
-      return 0;
-    }
-    if (location.startsWith('/business')) {
-      return 1;
-    }
-    if (location.startsWith('/speak')) {
-      return 2;
-    }
-    if (location.startsWith('/history')) {
-      return 3;
-    }
+    final location = GoRouterState.of(context).matchedLocation;
+    if (location.startsWith('/dashboard')) return 0;
+    if (location.startsWith('/business')) return 1;
+    if (location.startsWith('/speak')) return 2;
+    if (location.startsWith('/tools')) return 3;
+    if (location.startsWith('/history')) return 4;
     return 0;
   }
 
-  void _onItemTapped(int index, BuildContext context) {
+  void _onTap(int index, BuildContext context) {
     switch (index) {
-      case 0:
-        context.go('/dashboard');
-        break;
-      case 1:
-        context.go('/business');
-        break;
-      case 2:
-        context.go('/speak');
-        break;
-      case 3:
-        context.go('/history');
-        break;
+      case 0: context.go('/dashboard');
+      case 1: context.go('/business');
+      case 2: context.go('/speak');
+      case 3: context.go('/tools');
+      case 4: context.go('/history');
     }
   }
 }

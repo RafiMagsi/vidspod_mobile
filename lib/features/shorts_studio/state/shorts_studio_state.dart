@@ -15,22 +15,26 @@ class ShortsStudioState {
   final UploadStatus status;
   final File? image;
   final String? errorMessage;
+  final bool isSelectingPhoto;
 
   ShortsStudioState({
     this.status = UploadStatus.initial,
     this.image,
     this.errorMessage,
+    this.isSelectingPhoto = false,
   });
 
   ShortsStudioState copyWith({
     UploadStatus? status,
     File? image,
     String? errorMessage,
+    bool? isSelectingPhoto,
   }) {
     return ShortsStudioState(
       status: status ?? this.status,
       image: image ?? this.image,
       errorMessage: errorMessage ?? this.errorMessage,
+      isSelectingPhoto: isSelectingPhoto ?? this.isSelectingPhoto,
     );
   }
 }
@@ -104,6 +108,10 @@ class ShortsStudioService extends StateNotifier<ShortsStudioState> {
         errorMessage: e.toString(),
       );
     }
+  }
+
+  void toggleSelectPhoto() {
+    state = state.copyWith(isSelectingPhoto: !state.isSelectingPhoto);
   }
 }
 

@@ -1,7 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
+import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/widgets/app_motion_card.dart';
+import 'package:vidspod_mobile/core/widgets/staggered_fade_in.dart';
 import 'package:vidspod_mobile/features/motions/motion_providers.dart';
 
 class MotionListScreen extends ConsumerWidget {
@@ -10,65 +11,39 @@ class MotionListScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final motions = ref.watch(motionListProvider);
-    final theme = Theme.of(context);
-
     return Scaffold(
+      backgroundColor: CreatiTheme.black,
       appBar: AppBar(
-        title: const Text('Motions'),
+        title: Text('Motions', style: CreatiTheme.headingLarge()),
       ),
       body: motions.when(
         data: (motions) => GridView.builder(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
+          physics: const BouncingScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            crossAxisSpacing: 16.0,
-            mainAxisSpacing: 16.0,
-            childAspectRatio: 0.8,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+            childAspectRatio: 0.75,
           ),
           itemCount: motions.length,
-          itemBuilder: (context, index) {
+          itemBuilder: (_, index) {
             final motion = motions[index];
-            return Card(
-              elevation: 2.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: InkWell(
-                onTap: () => context.go('/motions/${motion.publicGuid}'),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: CachedNetworkImage(
-                        imageUrl: motion.thumbnailUrl,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        placeholder: (context, url) => const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                        errorWidget: (context, url, error) => const Center(
-                          child: Icon(Icons.error),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        motion.title,
-                        style: theme.textTheme.titleSmall,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
+            return StaggeredFadeIn(
+              index: index,
+              child: AppMotionCard(
+                imageUrl: motion.thumbnailUrl,
+                label: motion.title,
+                route: '/motions/${motion.publicGuid}',
+                height: double.infinity,
               ),
             );
           },
         ),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('Error: $error')),
+        loading: () => const Center(child: CircularProgressIndicator(color: CreatiTheme.purple)),
+        error: (error, _) => Center(
+          child: Text('Failed to load motions', style: CreatiTheme.bodyMedium(color: Colors.white.withAlpha(100))),
+        ),
       ),
     );
   }
