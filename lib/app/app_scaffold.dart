@@ -16,24 +16,24 @@ class AppScaffold extends StatelessWidget {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard_outlined),
-            activeIcon: Icon(Icons.dashboard),
-            label: 'Dashboard',
+            icon: Icon(Icons.create_outlined),
+            activeIcon: Icon(Icons.create),
+            label: 'Creator',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.video_library_outlined),
-            activeIcon: Icon(Icons.video_library),
-            label: 'Motions',
+            icon: Icon(Icons.business_center_outlined),
+            activeIcon: Icon(Icons.business_center),
+            label: 'Business',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.speaker_notes_outlined),
+            activeIcon: Icon(Icons.speaker_notes),
+            label: 'Speak',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.history_outlined),
             activeIcon: Icon(Icons.history),
-            label: 'Generations',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: 'Profile',
+            label: 'History',
           ),
         ],
         currentIndex: _calculateSelectedIndex(context),
@@ -48,13 +48,13 @@ class AppScaffold extends StatelessWidget {
     if (location.startsWith('/dashboard')) {
       return 0;
     }
-    if (location.startsWith('/motions')) {
+    if (location.startsWith('/business')) {
       return 1;
     }
-    if (location.startsWith('/generations')) {
+    if (location.startsWith('/speak')) {
       return 2;
     }
-    if (location.startsWith('/profile')) {
+    if (location.startsWith('/history')) {
       return 3;
     }
     return 0;
@@ -66,13 +66,13 @@ class AppScaffold extends StatelessWidget {
         context.go('/dashboard');
         break;
       case 1:
-        context.go('/motions');
+        context.go('/business');
         break;
       case 2:
-        context.go('/generations');
+        context.go('/speak');
         break;
       case 3:
-        context.go('/profile');
+        context.go('/history');
         break;
     }
   }

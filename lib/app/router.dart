@@ -14,6 +14,9 @@ import 'package:vidspod_mobile/features/profile/presentation/screens/profile_scr
 import 'package:vidspod_mobile/features/research/presentation/screens/research_detail_screen.dart';
 import 'package:vidspod_mobile/features/research/presentation/screens/research_list_screen.dart';
 import 'package:vidspod_mobile/features/settings/presentation/screens/settings_screen.dart';
+import 'package:vidspod_mobile/features/business/presentation/screens/business_screen.dart';
+import 'package:vidspod_mobile/features/speak/presentation/screens/speak_screen.dart';
+import 'package:vidspod_mobile/features/history/presentation/screens/history_screen.dart';
 import 'package:vidspod_mobile/features/shorts_studio/presentation/screens/get_started_screen.dart';
 import 'package:vidspod_mobile/features/shorts_studio/presentation/screens/shorts_studio_screen.dart';
 
@@ -23,7 +26,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: '/studio',
+    initialLocation: '/dashboard',
     redirect: (BuildContext context, GoRouterState state) {
       final bool loggedIn = authState == AuthStatus.authenticated;
       final bool loggingIn = state.matchedLocation == '/login';
@@ -109,6 +112,24 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/dashboard',
             builder: (BuildContext context, GoRouterState state) {
               return const DashboardScreen();
+            },
+          ),
+          GoRoute(
+            path: '/business',
+            builder: (BuildContext context, GoRouterState state) {
+              return const BusinessScreen();
+            },
+          ),
+          GoRoute(
+            path: '/speak',
+            builder: (BuildContext context, GoRouterState state) {
+              return const SpeakScreen();
+            },
+          ),
+          GoRoute(
+            path: '/history',
+            builder: (BuildContext context, GoRouterState state) {
+              return const HistoryScreen();
             },
           ),
           GoRoute(
