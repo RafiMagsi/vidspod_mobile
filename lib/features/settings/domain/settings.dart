@@ -12,5 +12,6 @@ abstract class AppSettings with _$AppSettings {
     required String language,
   }) = _AppSettings;
 
-  factory AppSettings.fromJson(Map<String, dynamic> json) => _$AppSettingsFromJson(json);
+  factory AppSettings.fromJson(Map<String, dynamic> json) =>
+      _$AppSettingsFromJson(json);
 }

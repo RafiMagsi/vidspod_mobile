@@ -21,7 +21,10 @@ class ResearchRepository {
 
   Future<ResearchRun> createResearchRun(String topic) async {
     try {
-      final response = await _apiClient.dio.post('/research/runs', data: {'topic': topic});
+      final response = await _apiClient.dio.post(
+        '/research/runs',
+        data: {'topic': topic},
+      );
       return ResearchRun.fromJson(response.data);
     } on DioException catch (e) {
       throw ApiError.fromJson(e.response!.data);

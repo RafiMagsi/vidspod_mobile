@@ -12,5 +12,6 @@ abstract class ApiError with _$ApiError {
     String? requestId,
   }) = _ApiError;
 
-  factory ApiError.fromJson(Map<String, dynamic> json) => _$ApiErrorFromJson(json);
+  factory ApiError.fromJson(Map<String, dynamic> json) =>
+      _$ApiErrorFromJson(json);
 }

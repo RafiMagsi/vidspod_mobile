@@ -22,12 +22,14 @@ class _SplashScreenState extends State<SplashScreen>
       vsync: this,
       duration: const Duration(milliseconds: 1200),
     );
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
-    _scaleAnimation = Tween<double>(begin: 0.75, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
-    );
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+    _scaleAnimation = Tween<double>(
+      begin: 0.75,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
     _controller.forward();
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) context.go('/dashboard');
@@ -49,27 +51,41 @@ class _SplashScreenState extends State<SplashScreen>
           opacity: _fadeAnimation,
           child: ScaleTransition(
             scale: _scaleAnimation,
-            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Container(
-                width: 80, height: 80,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: CreatiTheme.brandGradient,
-                  boxShadow: CreatiTheme.buttonShadow(CreatiTheme.purple),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: CreatiTheme.brandGradient,
+                    boxShadow: CreatiTheme.buttonShadow(CreatiTheme.purple),
+                  ),
+                  child: const Icon(
+                    Icons.auto_awesome,
+                    color: Colors.white,
+                    size: 36,
+                  ),
                 ),
-                child: const Icon(Icons.auto_awesome, color: Colors.white, size: 36),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                'VidsPod',
-                style: CreatiTheme.displayLarge(fontSize: 44, letterSpacing: 3),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'AI Video & Motion Creator',
-                style: CreatiTheme.bodySmall(color: Colors.white.withAlpha(90), letterSpacing: 2),
-              ),
-            ]),
+                const SizedBox(height: 24),
+                Text(
+                  'VidsPod',
+                  style: CreatiTheme.displayLarge(
+                    fontSize: 44,
+                    letterSpacing: 3,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'AI Video & Motion Creator',
+                  style: CreatiTheme.bodySmall(
+                    color: Colors.white.withAlpha(90),
+                    letterSpacing: 2,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

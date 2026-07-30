@@ -12,5 +12,6 @@ abstract class ResearchRun with _$ResearchRun {
     required Map<String, dynamic> progress,
   }) = _ResearchRun;
 
-  factory ResearchRun.fromJson(Map<String, dynamic> json) => _$ResearchRunFromJson(json);
+  factory ResearchRun.fromJson(Map<String, dynamic> json) =>
+      _$ResearchRunFromJson(json);
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/utils/platform_utils.dart';
 
 class GradientButton extends StatefulWidget {
   final String text;
@@ -32,9 +33,10 @@ class _GradientButtonState extends State<GradientButton>
       vsync: this,
       duration: const Duration(milliseconds: 150),
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.97).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.97,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
   }
 
   @override
@@ -47,6 +49,7 @@ class _GradientButtonState extends State<GradientButton>
   Widget build(BuildContext context) {
     return GestureDetector(
       onTapDown: (_) {
+        hapticTap();
         setState(() => _pressed = true);
         _controller.forward();
       },
@@ -61,10 +64,8 @@ class _GradientButtonState extends State<GradientButton>
       },
       child: AnimatedBuilder(
         animation: _scaleAnimation,
-        builder: (_, child) => Transform.scale(
-          scale: _scaleAnimation.value,
-          child: child,
-        ),
+        builder: (_, child) =>
+            Transform.scale(scale: _scaleAnimation.value, child: child),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           height: widget.height,
@@ -80,10 +81,15 @@ class _GradientButtonState extends State<GradientButton>
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (widget.icon != null) ...[
-                  Icon(widget.icon, color: Colors.white.withAlpha(230), size: 20),
+                  Icon(
+                    widget.icon,
+                    color: Colors.white.withAlpha(230),
+                    size: 20,
+                  ),
                   const SizedBox(width: 8),
                 ],
-                Text(widget.text,
+                Text(
+                  widget.text,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,

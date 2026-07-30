@@ -9,7 +9,10 @@ class MediaRepository {
 
   Future<String> getPresignedUrl(String fileName) async {
     try {
-      final response = await _apiClient.dio.post('/uploads/presign', data: {'file_name': fileName});
+      final response = await _apiClient.dio.post(
+        '/uploads/presign',
+        data: {'file_name': fileName},
+      );
       return response.data['url'];
     } on DioException catch (e) {
       throw ApiError.fromJson(e.response!.data);
@@ -18,7 +21,10 @@ class MediaRepository {
 
   Future<void> confirmUpload(String uploadId) async {
     try {
-      await _apiClient.dio.post('/uploads/confirm', data: {'upload_id': uploadId});
+      await _apiClient.dio.post(
+        '/uploads/confirm',
+        data: {'upload_id': uploadId},
+      );
     } on DioException catch (e) {
       throw ApiError.fromJson(e.response!.data);
     }

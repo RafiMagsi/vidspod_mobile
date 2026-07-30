@@ -10,5 +10,6 @@ abstract class AuthTokens with _$AuthTokens {
     required String refreshToken,
   }) = _AuthTokens;
 
-  factory AuthTokens.fromJson(Map<String, dynamic> json) => _$AuthTokensFromJson(json);
+  factory AuthTokens.fromJson(Map<String, dynamic> json) =>
+      _$AuthTokensFromJson(json);
 }

@@ -38,18 +38,19 @@ Page<void> _slideRight(Widget child, GoRouterState state) {
     reverseTransitionDuration: const Duration(milliseconds: 250),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       return SlideTransition(
-        position: Tween<Offset>(
-          begin: const Offset(0.3, 0),
-          end: Offset.zero,
-        ).animate(CurvedAnimation(
-          parent: animation,
-          curve: Curves.easeOutCubic,
-          reverseCurve: Curves.easeInCubic,
-        )),
+        position: Tween<Offset>(begin: const Offset(0.3, 0), end: Offset.zero)
+            .animate(
+              CurvedAnimation(
+                parent: animation,
+                curve: Curves.easeOutCubic,
+                reverseCurve: Curves.easeInCubic,
+              ),
+            ),
         child: FadeTransition(
-          opacity: Tween<double>(begin: 0, end: 1).animate(
-            CurvedAnimation(parent: animation, curve: Curves.easeOut),
-          ),
+          opacity: Tween<double>(
+            begin: 0,
+            end: 1,
+          ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOut)),
           child: child,
         ),
       );
@@ -65,18 +66,19 @@ Page<void> _slideUp(Widget child, GoRouterState state) {
     reverseTransitionDuration: const Duration(milliseconds: 250),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       return SlideTransition(
-        position: Tween<Offset>(
-          begin: const Offset(0, 0.2),
-          end: Offset.zero,
-        ).animate(CurvedAnimation(
-          parent: animation,
-          curve: Curves.easeOutCubic,
-          reverseCurve: Curves.easeInCubic,
-        )),
+        position: Tween<Offset>(begin: const Offset(0, 0.2), end: Offset.zero)
+            .animate(
+              CurvedAnimation(
+                parent: animation,
+                curve: Curves.easeOutCubic,
+                reverseCurve: Curves.easeInCubic,
+              ),
+            ),
         child: FadeTransition(
-          opacity: Tween<double>(begin: 0, end: 1).animate(
-            CurvedAnimation(parent: animation, curve: Curves.easeOut),
-          ),
+          opacity: Tween<double>(
+            begin: 0,
+            end: 1,
+          ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOut)),
           child: child,
         ),
       );
@@ -138,11 +140,13 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/upload-suggestions',
-        pageBuilder: (context, state) => _slideUp(const UploadSuggestionsScreen(), state),
+        pageBuilder: (context, state) =>
+            _slideUp(const UploadSuggestionsScreen(), state),
       ),
       GoRoute(
         path: '/product-upload',
-        pageBuilder: (context, state) => _slideUp(const ProductUploadScreen(), state),
+        pageBuilder: (context, state) =>
+            _slideUp(const ProductUploadScreen(), state),
       ),
       GoRoute(
         path: '/motions/:public_guid',
@@ -153,7 +157,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/studio',
-        pageBuilder: (context, state) => _slideRight(const ShortsStudioScreen(), state),
+        pageBuilder: (context, state) =>
+            _slideRight(const ShortsStudioScreen(), state),
       ),
       GoRoute(
         path: '/studio/generation/:id',
@@ -164,19 +169,23 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/image-studio',
-        pageBuilder: (context, state) => _slideRight(const ImageStudioScreen(), state),
+        pageBuilder: (context, state) =>
+            _slideRight(const ImageStudioScreen(), state),
       ),
       GoRoute(
         path: '/voice-studio',
-        pageBuilder: (context, state) => _slideRight(const VoiceStudioScreen(), state),
+        pageBuilder: (context, state) =>
+            _slideRight(const VoiceStudioScreen(), state),
       ),
       GoRoute(
         path: '/script-writer',
-        pageBuilder: (context, state) => _slideRight(const ScriptWriterScreen(), state),
+        pageBuilder: (context, state) =>
+            _slideRight(const ScriptWriterScreen(), state),
       ),
       GoRoute(
         path: '/youtube-download',
-        pageBuilder: (context, state) => _slideRight(const YouTubeDownloadScreen(), state),
+        pageBuilder: (context, state) =>
+            _slideRight(const YouTubeDownloadScreen(), state),
       ),
       GoRoute(
         path: '/generations/:id',
@@ -187,7 +196,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/research',
-        pageBuilder: (context, state) => _slideRight(const ResearchListScreen(), state),
+        pageBuilder: (context, state) =>
+            _slideRight(const ResearchListScreen(), state),
       ),
       GoRoute(
         path: '/research/:id',
@@ -198,42 +208,51 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/settings',
-        pageBuilder: (context, state) => _slideRight(const SettingsScreen(), state),
+        pageBuilder: (context, state) =>
+            _slideRight(const SettingsScreen(), state),
       ),
       ShellRoute(
         builder: (context, state, child) => AppScaffold(child: child),
         routes: <GoRoute>[
           GoRoute(
             path: '/dashboard',
-            pageBuilder: (context, state) => _slideRight(const DashboardScreen(), state),
+            pageBuilder: (context, state) =>
+                _slideRight(const DashboardScreen(), state),
           ),
           GoRoute(
             path: '/business',
-            pageBuilder: (context, state) => _slideRight(const BusinessScreen(), state),
+            pageBuilder: (context, state) =>
+                _slideRight(const BusinessScreen(), state),
           ),
           GoRoute(
             path: '/speak',
-            pageBuilder: (context, state) => _slideRight(const SpeakScreen(), state),
+            pageBuilder: (context, state) =>
+                _slideRight(const SpeakScreen(), state),
           ),
           GoRoute(
             path: '/tools',
-            pageBuilder: (context, state) => _slideRight(const ToolsScreen(), state),
+            pageBuilder: (context, state) =>
+                _slideRight(const ToolsScreen(), state),
           ),
           GoRoute(
             path: '/history',
-            pageBuilder: (context, state) => _slideRight(const HistoryScreen(), state),
+            pageBuilder: (context, state) =>
+                _slideRight(const HistoryScreen(), state),
           ),
           GoRoute(
             path: '/motions',
-            pageBuilder: (context, state) => _slideRight(const MotionListScreen(), state),
+            pageBuilder: (context, state) =>
+                _slideRight(const MotionListScreen(), state),
           ),
           GoRoute(
             path: '/generations',
-            pageBuilder: (context, state) => _slideRight(const GenerationListScreen(), state),
+            pageBuilder: (context, state) =>
+                _slideRight(const GenerationListScreen(), state),
           ),
           GoRoute(
             path: '/profile',
-            pageBuilder: (context, state) => _slideRight(const ProfileScreen(), state),
+            pageBuilder: (context, state) =>
+                _slideRight(const ProfileScreen(), state),
           ),
         ],
       ),

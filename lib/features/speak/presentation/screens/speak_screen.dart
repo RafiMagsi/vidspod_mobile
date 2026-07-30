@@ -20,53 +20,103 @@ class SpeakScreen extends StatelessWidget {
             actions: [
               Container(
                 margin: const EdgeInsets.only(right: 12),
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 7,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white.withAlpha(20),
                   borderRadius: BorderRadius.circular(CreatiTheme.radiusFull),
                 ),
-                child: Row(mainAxisSize: MainAxisSize.min, children: [
-                  Icon(Icons.headphones, color: Colors.white.withAlpha(150), size: 16),
-                  const SizedBox(width: 6),
-                  Text('Listen', style: CreatiTheme.bodySmall(fontWeight: FontWeight.w500, color: Colors.white.withAlpha(150))),
-                ]),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.headphones,
+                      color: Colors.white.withAlpha(150),
+                      size: 16,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      'Listen',
+                      style: CreatiTheme.bodySmall(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white.withAlpha(150),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Column(children: [
-                Container(
-                  width: 100, height: 100,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: SweepGradient(colors: [
-                      CreatiTheme.purple, CreatiTheme.pink, CreatiTheme.orange, CreatiTheme.purple,
-                    ]),
-                  ),
-                  padding: const EdgeInsets.all(3),
-                  child: Container(
-                    decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.black),
+              child: Column(
+                children: [
+                  Container(
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: SweepGradient(
+                        colors: [
+                          CreatiTheme.purple,
+                          CreatiTheme.pink,
+                          CreatiTheme.orange,
+                          CreatiTheme.purple,
+                        ],
+                      ),
+                    ),
+                    padding: const EdgeInsets.all(3),
                     child: Container(
-                      margin: const EdgeInsets.all(16),
-                      decoration: const BoxDecoration(shape: BoxShape.circle, gradient: CreatiTheme.brandGradient),
-                      child: const Icon(Icons.mic, color: Colors.white, size: 28),
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.black,
+                      ),
+                      child: Container(
+                        margin: const EdgeInsets.all(16),
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: CreatiTheme.brandGradient,
+                        ),
+                        child: const Icon(
+                          Icons.mic,
+                          color: Colors.white,
+                          size: 28,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                Text('ANYONE SPEAK', style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w800, letterSpacing: 4, height: 1.1)),
-                const SizedBox(height: 6),
-                Text('Tap to start speaking', style: CreatiTheme.bodyMedium(color: Colors.white.withAlpha(80))),
-              ]),
+                  const SizedBox(height: 16),
+                  Text(
+                    'ANYONE SPEAK',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 28,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 4,
+                      height: 1.1,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'Tap to start speaking',
+                    style: CreatiTheme.bodyMedium(
+                      color: Colors.white.withAlpha(80),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           const SliverToBoxAdapter(child: _SpeakCategory('Vlog', 'vlog')),
           const SliverToBoxAdapter(child: _SpeakCategory('KOL', 'kol')),
           const SliverToBoxAdapter(child: _SpeakCategory('Voiceover', 'voice')),
           const SliverToBoxAdapter(child: _SpeakCategory('Podcast', 'podcast')),
-          const SliverToBoxAdapter(child: _SpeakCategory('Narration', 'narrate')),
+          const SliverToBoxAdapter(
+            child: _SpeakCategory('Narration', 'narrate'),
+          ),
           const SliverToBoxAdapter(child: SizedBox(height: 24)),
         ],
       ),

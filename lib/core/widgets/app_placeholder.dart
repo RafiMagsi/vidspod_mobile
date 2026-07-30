@@ -11,7 +11,11 @@ class AppPlaceholder extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [CreatiTheme.lightSurface, CreatiTheme.mediumSurface, CreatiTheme.darkSurface],
+          colors: [
+            CreatiTheme.lightSurface,
+            CreatiTheme.mediumSurface,
+            CreatiTheme.darkSurface,
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           stops: const [0.0, 0.5, 1.0],
@@ -23,7 +27,10 @@ class AppPlaceholder extends StatelessWidget {
           children: [
             Icon(icon, color: Colors.white.withAlpha(25), size: 32),
             const SizedBox(height: 4),
-            Text('N/A', style: TextStyle(color: Colors.white.withAlpha(15), fontSize: 11)),
+            Text(
+              'N/A',
+              style: TextStyle(color: Colors.white.withAlpha(15), fontSize: 11),
+            ),
           ],
         ),
       ),

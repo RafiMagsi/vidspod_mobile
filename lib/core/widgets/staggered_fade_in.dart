@@ -33,12 +33,14 @@ class _StaggeredFadeInState extends State<StaggeredFadeIn>
       vsync: this,
       duration: const Duration(milliseconds: 400),
     );
-    _opacity = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: widget.curve),
-    );
-    _slide = Tween<Offset>(begin: widget.slideOffset, end: Offset.zero).animate(
-      CurvedAnimation(parent: _controller, curve: widget.curve),
-    );
+    _opacity = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _controller, curve: widget.curve));
+    _slide = Tween<Offset>(
+      begin: widget.slideOffset,
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _controller, curve: widget.curve));
     Future.delayed(widget.delay * widget.index, _controller.forward);
   }
 

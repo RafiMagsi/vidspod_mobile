@@ -15,7 +15,10 @@ class CreatorScreen extends ConsumerWidget {
         leading: IconButton(
           icon: Container(
             padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(color: Colors.white.withAlpha(15), shape: BoxShape.circle),
+            decoration: BoxDecoration(
+              color: Colors.white.withAlpha(15),
+              shape: BoxShape.circle,
+            ),
             child: const Icon(Icons.arrow_back, color: Colors.white, size: 20),
           ),
           onPressed: () => Navigator.of(context).pop(),
@@ -25,7 +28,10 @@ class CreatorScreen extends ConsumerWidget {
           IconButton(
             icon: Container(
               padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(color: Colors.white.withAlpha(15), shape: BoxShape.circle),
+              decoration: BoxDecoration(
+                color: Colors.white.withAlpha(15),
+                shape: BoxShape.circle,
+              ),
               child: const Icon(Icons.search, color: Colors.white, size: 20),
             ),
             onPressed: () {},
@@ -33,11 +39,24 @@ class CreatorScreen extends ConsumerWidget {
         ],
       ),
       body: Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Icon(Icons.person_outline, color: Colors.white.withAlpha(40), size: 64),
-          const SizedBox(height: 16),
-          Text('Creator Space', style: CreatiTheme.bodyMedium(fontWeight: FontWeight.w500, color: Colors.white.withAlpha(80))),
-        ]),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.person_outline,
+              color: Colors.white.withAlpha(40),
+              size: 64,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Creator Space',
+              style: CreatiTheme.bodyMedium(
+                fontWeight: FontWeight.w500,
+                color: Colors.white.withAlpha(80),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/utils/platform_utils.dart';
 import 'package:vidspod_mobile/features/research/research_providers.dart';
 
 class ResearchDetailScreen extends ConsumerWidget {
@@ -27,8 +28,15 @@ class ResearchDetailScreen extends ConsumerWidget {
                   IconButton(
                     icon: Container(
                       padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(color: CreatiTheme.darkSurface, borderRadius: BorderRadius.circular(10)),
-                      child: const Icon(Icons.cancel_outlined, color: Colors.white, size: 20),
+                      decoration: BoxDecoration(
+                        color: CreatiTheme.darkSurface,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Icon(
+                        Icons.cancel_outlined,
+                        color: Colors.white,
+                        size: 20,
+                      ),
                     ),
                     onPressed: () {},
                   ),
@@ -42,33 +50,62 @@ class ResearchDetailScreen extends ConsumerWidget {
                   decoration: BoxDecoration(
                     color: CreatiTheme.surfaceDark,
                     borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
-                    border: Border.all(color: CreatiTheme.cardBorder.withAlpha(60)),
+                    border: Border.all(
+                      color: CreatiTheme.cardBorder.withAlpha(60),
+                    ),
                     boxShadow: CreatiTheme.cardShadow(CreatiTheme.black),
                   ),
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text('Details', style: CreatiTheme.headingSmall()),
-                    const SizedBox(height: 14),
-                    _DetailRow(Icons.tag, 'ID', run.id),
-                    _DetailRow(Icons.sync, 'Status', run.status,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Details', style: CreatiTheme.headingSmall()),
+                      const SizedBox(height: 14),
+                      _DetailRow(Icons.tag, 'ID', run.id),
+                      _DetailRow(
+                        Icons.sync,
+                        'Status',
+                        run.status,
                         trailing: run.status == 'running'
-                            ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: CreatiTheme.purple))
-                            : null),
-                  ]),
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: CreatiTheme.purple,
+                                ),
+                              )
+                            : null,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                child: Text('Results', style: CreatiTheme.bodySmall(fontWeight: FontWeight.w600, color: Colors.white.withAlpha(150))),
+                child: Text(
+                  'Results',
+                  style: CreatiTheme.bodySmall(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white.withAlpha(150),
+                  ),
+                ),
               ),
             ),
             researchResults.when(
               data: (results) => results.isEmpty
-                  ? SliverToBoxAdapter(child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Text('No results yet', style: CreatiTheme.bodySmall(color: Colors.white.withAlpha(60))),
-                    ))
+                  ? SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Text(
+                          'No results yet',
+                          style: CreatiTheme.bodySmall(
+                            color: Colors.white.withAlpha(60),
+                          ),
+                        ),
+                      ),
+                    )
                   : SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (_, i) => Padding(
@@ -77,40 +114,88 @@ class ResearchDetailScreen extends ConsumerWidget {
                             padding: const EdgeInsets.all(14),
                             decoration: BoxDecoration(
                               color: CreatiTheme.surfaceDark,
-                              borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
-                              border: Border.all(color: CreatiTheme.cardBorder.withAlpha(60)),
+                              borderRadius: BorderRadius.circular(
+                                CreatiTheme.radiusLg,
+                              ),
+                              border: Border.all(
+                                color: CreatiTheme.cardBorder.withAlpha(60),
+                              ),
                             ),
-                            child: Text(results[i].content, style: CreatiTheme.bodySmall()),
+                            child: Text(
+                              results[i].content,
+                              style: CreatiTheme.bodySmall(),
+                            ),
                           ),
                         ),
                         childCount: results.length,
                       ),
                     ),
-              loading: () => const SliverToBoxAdapter(child: Center(child: Padding(
-                padding: EdgeInsets.all(32),
-                child: CircularProgressIndicator(color: CreatiTheme.purple),
-              ))),
-              error: (error, _) => SliverToBoxAdapter(child: Center(child: Padding(
-                padding: EdgeInsets.all(32),
-                child: Text('Error: $error', style: CreatiTheme.bodySmall(color: Colors.white.withAlpha(100))),
-              ))),
+              loading: () => SliverToBoxAdapter(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(32),
+                    child: platformLoader(size: 24),
+                  ),
+                ),
+              ),
+              error: (error, _) => SliverToBoxAdapter(
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(32),
+                    child: Text(
+                      'Error: $error',
+                      style: CreatiTheme.bodySmall(
+                        color: Colors.white.withAlpha(100),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ),
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 40),
-                child: Row(children: [
-                  Expanded(child: _ActionChip(Icons.save_alt_outlined, 'Save', () {}, outlined: false)),
-                  const SizedBox(width: 10),
-                  Expanded(child: _ActionChip(Icons.share_outlined, 'Share', () {}, outlined: true)),
-                  const SizedBox(width: 10),
-                  Expanded(child: _ActionChip(Icons.upload_file_outlined, 'Export', () {}, outlined: true)),
-                ]),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: _ActionChip(
+                        Icons.save_alt_outlined,
+                        'Save',
+                        () {},
+                        outlined: false,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: _ActionChip(
+                        Icons.share_outlined,
+                        'Share',
+                        () {},
+                        outlined: true,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: _ActionChip(
+                        Icons.upload_file_outlined,
+                        'Export',
+                        () {},
+                        outlined: true,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
         ),
-        loading: () => const Center(child: CircularProgressIndicator(color: CreatiTheme.purple)),
-        error: (error, _) => Center(child: Text('Error: $error', style: const TextStyle(color: Colors.white38))),
+        loading: () => Center(child: platformLoader(size: 28)),
+        error: (error, _) => Center(
+          child: Text(
+            'Error: $error',
+            style: const TextStyle(color: Colors.white38),
+          ),
+        ),
       ),
     );
   }
@@ -127,14 +212,22 @@ class _DetailRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(children: [
-        Icon(icon, color: Colors.white.withAlpha(100), size: 18),
-        const SizedBox(width: 12),
-        Text(label, style: CreatiTheme.bodySmall(color: Colors.white.withAlpha(150))),
-        const Spacer(),
-        Text(value, style: CreatiTheme.bodySmall(fontWeight: FontWeight.w500)),
-        if (trailing != null) ...[const SizedBox(width: 8), trailing!],
-      ]),
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.white.withAlpha(100), size: 18),
+          const SizedBox(width: 12),
+          Text(
+            label,
+            style: CreatiTheme.bodySmall(color: Colors.white.withAlpha(150)),
+          ),
+          const Spacer(),
+          Text(
+            value,
+            style: CreatiTheme.bodySmall(fontWeight: FontWeight.w500),
+          ),
+          if (trailing != null) ...[const SizedBox(width: 8), trailing!],
+        ],
+      ),
     );
   }
 }
@@ -154,14 +247,29 @@ class _ActionChip extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(CreatiTheme.radiusMd),
-          color: outlined ? Colors.transparent : CreatiTheme.purple.withAlpha(30),
-          border: outlined ? Border.all(color: Colors.white.withAlpha(30)) : null,
+          color: outlined
+              ? Colors.transparent
+              : CreatiTheme.purple.withAlpha(30),
+          border: outlined
+              ? Border.all(color: Colors.white.withAlpha(30))
+              : null,
         ),
-        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Icon(icon, color: Colors.white.withAlpha(200), size: 16),
-          const SizedBox(width: 6),
-          Text(label, style: TextStyle(color: Colors.white.withAlpha(200), fontSize: 13, fontWeight: FontWeight.w600, letterSpacing: 0.15)),
-        ]),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: Colors.white.withAlpha(200), size: 16),
+            const SizedBox(width: 6),
+            Text(
+              label,
+              style: TextStyle(
+                color: Colors.white.withAlpha(200),
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.15,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

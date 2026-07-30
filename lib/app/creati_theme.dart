@@ -51,13 +51,29 @@ class CreatiTheme {
 
   // Shadows
   static List<BoxShadow> cardShadow(Color color) => [
-    BoxShadow(color: color.withAlpha(25), blurRadius: 8, offset: const Offset(0, 4)),
-    BoxShadow(color: color.withAlpha(10), blurRadius: 16, offset: const Offset(0, 8)),
+    BoxShadow(
+      color: color.withAlpha(25),
+      blurRadius: 8,
+      offset: const Offset(0, 4),
+    ),
+    BoxShadow(
+      color: color.withAlpha(10),
+      blurRadius: 16,
+      offset: const Offset(0, 8),
+    ),
   ];
 
   static List<BoxShadow> buttonShadow(Color color) => [
-    BoxShadow(color: color.withAlpha(60), blurRadius: 16, offset: const Offset(0, 6)),
-    BoxShadow(color: color.withAlpha(20), blurRadius: 24, offset: const Offset(0, 12)),
+    BoxShadow(
+      color: color.withAlpha(60),
+      blurRadius: 16,
+      offset: const Offset(0, 6),
+    ),
+    BoxShadow(
+      color: color.withAlpha(20),
+      blurRadius: 24,
+      offset: const Offset(0, 12),
+    ),
   ];
 
   // Typography helpers
@@ -68,7 +84,11 @@ class CreatiTheme {
     double? letterSpacing,
     double? height,
   }) => GoogleFonts.inter(
-    fontSize: fontSize ?? 34, fontWeight: fontWeight ?? FontWeight.w800, color: color, letterSpacing: letterSpacing ?? letterSpacingTight, height: height ?? 1.1,
+    fontSize: fontSize ?? 34,
+    fontWeight: fontWeight ?? FontWeight.w800,
+    color: color,
+    letterSpacing: letterSpacing ?? letterSpacingTight,
+    height: height ?? 1.1,
   );
 
   static TextStyle headingLarge({
@@ -78,7 +98,11 @@ class CreatiTheme {
     double? letterSpacing,
     double? height,
   }) => GoogleFonts.inter(
-    fontSize: fontSize ?? 24, fontWeight: fontWeight ?? FontWeight.w700, color: color, letterSpacing: letterSpacing ?? letterSpacingTight, height: height ?? 1.2,
+    fontSize: fontSize ?? 24,
+    fontWeight: fontWeight ?? FontWeight.w700,
+    color: color,
+    letterSpacing: letterSpacing ?? letterSpacingTight,
+    height: height ?? 1.2,
   );
 
   static TextStyle headingMedium({
@@ -88,7 +112,11 @@ class CreatiTheme {
     double? letterSpacing,
     double? height,
   }) => GoogleFonts.inter(
-    fontSize: fontSize ?? 19, fontWeight: fontWeight ?? FontWeight.w700, color: color, letterSpacing: letterSpacing ?? letterSpacingTight, height: height ?? 1.3,
+    fontSize: fontSize ?? 19,
+    fontWeight: fontWeight ?? FontWeight.w700,
+    color: color,
+    letterSpacing: letterSpacing ?? letterSpacingTight,
+    height: height ?? 1.3,
   );
 
   static TextStyle headingSmall({
@@ -98,7 +126,11 @@ class CreatiTheme {
     double? letterSpacing,
     double? height,
   }) => GoogleFonts.inter(
-    fontSize: fontSize ?? 17, fontWeight: fontWeight ?? FontWeight.w600, color: color, letterSpacing: letterSpacing ?? letterSpacingBody, height: height ?? 1.3,
+    fontSize: fontSize ?? 17,
+    fontWeight: fontWeight ?? FontWeight.w600,
+    color: color,
+    letterSpacing: letterSpacing ?? letterSpacingBody,
+    height: height ?? 1.3,
   );
 
   static TextStyle bodyMedium({
@@ -108,7 +140,11 @@ class CreatiTheme {
     double? letterSpacing,
     double? height,
   }) => GoogleFonts.inter(
-    fontSize: fontSize ?? 14, fontWeight: fontWeight ?? FontWeight.w400, color: color, letterSpacing: letterSpacing ?? letterSpacingBody, height: height ?? 1.5,
+    fontSize: fontSize ?? 14,
+    fontWeight: fontWeight ?? FontWeight.w400,
+    color: color,
+    letterSpacing: letterSpacing ?? letterSpacingBody,
+    height: height ?? 1.5,
   );
 
   static TextStyle bodySmall({
@@ -118,7 +154,11 @@ class CreatiTheme {
     double? letterSpacing,
     double? height,
   }) => GoogleFonts.inter(
-    fontSize: fontSize ?? 13, fontWeight: fontWeight ?? FontWeight.w400, color: color, letterSpacing: letterSpacing ?? letterSpacingBody, height: height ?? 1.4,
+    fontSize: fontSize ?? 13,
+    fontWeight: fontWeight ?? FontWeight.w400,
+    color: color,
+    letterSpacing: letterSpacing ?? letterSpacingBody,
+    height: height ?? 1.4,
   );
 
   static TextStyle caption({
@@ -128,7 +168,11 @@ class CreatiTheme {
     double? letterSpacing,
     double? height,
   }) => GoogleFonts.inter(
-    fontSize: fontSize ?? 12, fontWeight: fontWeight ?? FontWeight.w500, color: color, letterSpacing: letterSpacing ?? letterSpacingBody, height: height ?? 1.3,
+    fontSize: fontSize ?? 12,
+    fontWeight: fontWeight ?? FontWeight.w500,
+    color: color,
+    letterSpacing: letterSpacing ?? letterSpacingBody,
+    height: height ?? 1.3,
   );
 
   static TextStyle label({
@@ -138,7 +182,11 @@ class CreatiTheme {
     double? letterSpacing,
     double? height,
   }) => GoogleFonts.inter(
-    fontSize: fontSize ?? 11, fontWeight: fontWeight ?? FontWeight.w600, color: color, letterSpacing: letterSpacing ?? letterSpacingLabel, height: height ?? 1.2,
+    fontSize: fontSize ?? 11,
+    fontWeight: fontWeight ?? FontWeight.w600,
+    color: color,
+    letterSpacing: letterSpacing ?? letterSpacingLabel,
+    height: height ?? 1.2,
   );
 
   static ThemeData darkTheme() {
@@ -151,10 +199,9 @@ class CreatiTheme {
         surface: darkSurface,
         onSurface: Colors.white,
       ),
-      textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme).apply(
-        bodyColor: Colors.white,
-        displayColor: Colors.white,
-      ),
+      textTheme: GoogleFonts.interTextTheme(
+        ThemeData.dark().textTheme,
+      ).apply(bodyColor: Colors.white, displayColor: Colors.white),
       appBarTheme: AppBarTheme(
         backgroundColor: black,
         elevation: 0,
@@ -168,14 +215,24 @@ class CreatiTheme {
         unselectedItemColor: textSecondary,
         type: BottomNavigationBarType.fixed,
         elevation: 0,
-        selectedLabelStyle: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w600, letterSpacing: letterSpacingLabel),
-        unselectedLabelStyle: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w400, letterSpacing: letterSpacingLabel / 2),
+        selectedLabelStyle: GoogleFonts.inter(
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+          letterSpacing: letterSpacingLabel,
+        ),
+        unselectedLabelStyle: GoogleFonts.inter(
+          fontSize: 11,
+          fontWeight: FontWeight.w400,
+          letterSpacing: letterSpacingLabel / 2,
+        ),
       ),
       dividerColor: mediumSurface,
       cardTheme: CardThemeData(
         color: darkSurface,
         elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radiusLg)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radiusLg),
+        ),
       ),
     );
   }

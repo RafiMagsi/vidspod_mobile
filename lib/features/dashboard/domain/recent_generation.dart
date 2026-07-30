@@ -11,5 +11,6 @@ abstract class RecentGeneration with _$RecentGeneration {
     required String status,
   }) = _RecentGeneration;
 
-  factory RecentGeneration.fromJson(Map<String, dynamic> json) => _$RecentGenerationFromJson(json);
+  factory RecentGeneration.fromJson(Map<String, dynamic> json) =>
+      _$RecentGenerationFromJson(json);
 }

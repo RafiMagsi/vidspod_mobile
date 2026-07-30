@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/utils/platform_utils.dart';
 import 'package:vidspod_mobile/core/widgets/app_placeholder.dart';
 import 'package:vidspod_mobile/core/widgets/shimmer_widget.dart';
 
@@ -56,6 +57,7 @@ class _AppMotionCardState extends State<AppMotionCard>
   Widget build(BuildContext context) {
     return GestureDetector(
       onTapDown: (_) {
+        hapticTap();
         setState(() => _pressed = true);
         _scaleController.forward();
       },
@@ -86,7 +88,13 @@ class _AppMotionCardState extends State<AppMotionCard>
                   : CreatiTheme.cardBorder.withAlpha(80),
             ),
             boxShadow: _pressed
-                ? [BoxShadow(color: CreatiTheme.purple.withAlpha(15), blurRadius: 12, offset: const Offset(0, 4))]
+                ? [
+                    BoxShadow(
+                      color: CreatiTheme.purple.withAlpha(15),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ]
                 : CreatiTheme.cardShadow(CreatiTheme.black),
           ),
           clipBehavior: Clip.antiAlias,
@@ -96,12 +104,11 @@ class _AppMotionCardState extends State<AppMotionCard>
               CachedNetworkImage(
                 imageUrl: widget.imageUrl,
                 fit: BoxFit.cover,
-                placeholder: (_, __) => ShimmerWidget(
-                  width: widget.width,
-                  height: widget.height,
+                placeholder: (_, __) =>
+                    ShimmerWidget(width: widget.width, height: widget.height),
+                errorWidget: (_, __, ___) => AppPlaceholder(
+                  icon: widget.icon ?? Icons.movie_creation_outlined,
                 ),
-                errorWidget: (_, __, ___) =>
-                    AppPlaceholder(icon: widget.icon ?? Icons.movie_creation_outlined),
               ),
               Positioned(
                 top: 8,
@@ -112,11 +119,17 @@ class _AppMotionCardState extends State<AppMotionCard>
                     gradient: CreatiTheme.brandGradient,
                     borderRadius: BorderRadius.circular(6),
                   ),
-                  child: const Icon(Icons.auto_awesome, color: Colors.white, size: 10),
+                  child: const Icon(
+                    Icons.auto_awesome,
+                    color: Colors.white,
+                    size: 10,
+                  ),
                 ),
               ),
               Positioned(
-                bottom: 0, left: 0, right: 0,
+                bottom: 0,
+                left: 0,
+                right: 0,
                 child: Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
@@ -129,13 +142,15 @@ class _AppMotionCardState extends State<AppMotionCard>
                       end: Alignment.bottomCenter,
                     ),
                   ),
-                  child: Text(widget.label,
+                  child: Text(
+                    widget.label,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
                       letterSpacing: 0.15,
-                    )),
+                    ),
+                  ),
                 ),
               ),
               if (_pressed)

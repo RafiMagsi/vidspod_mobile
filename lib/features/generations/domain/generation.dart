@@ -14,5 +14,6 @@ abstract class Generation with _$Generation {
     String? videoUrl,
   }) = _Generation;
 
-  factory Generation.fromJson(Map<String, dynamic> json) => _$GenerationFromJson(json);
+  factory Generation.fromJson(Map<String, dynamic> json) =>
+      _$GenerationFromJson(json);
 }

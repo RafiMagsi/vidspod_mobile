@@ -20,7 +20,9 @@ class DashboardRepository {
 
   Future<List<RecentGeneration>> getRecentGenerations() async {
     try {
-      final response = await _apiClient.dio.get('/dashboard/recent-generations');
+      final response = await _apiClient.dio.get(
+        '/dashboard/recent-generations',
+      );
       final data = response.data as List;
       return data.map((item) => RecentGeneration.fromJson(item)).toList();
     } on DioException catch (e) {

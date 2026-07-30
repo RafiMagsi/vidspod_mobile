@@ -19,7 +19,10 @@ class SettingsRepository {
 
   Future<AppSettings> updateSettings(AppSettings settings) async {
     try {
-      final response = await _apiClient.dio.patch('/me/settings', data: settings.toJson());
+      final response = await _apiClient.dio.patch(
+        '/me/settings',
+        data: settings.toJson(),
+      );
       return AppSettings.fromJson(response.data);
     } on DioException catch (e) {
       throw ApiError.fromJson(e.response!.data);

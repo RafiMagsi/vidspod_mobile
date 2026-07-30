@@ -12,10 +12,10 @@ class AuthRepository {
 
   Future<void> register(String email, String password) async {
     try {
-      await _apiClient.dio.post('/auth/register', data: {
-        'email': email,
-        'password': password,
-      });
+      await _apiClient.dio.post(
+        '/auth/register',
+        data: {'email': email, 'password': password},
+      );
     } on DioException catch (e) {
       throw ApiError.fromJson(e.response!.data);
     }
@@ -23,13 +23,19 @@ class AuthRepository {
 
   Future<AuthTokens> login(String email, String password) async {
     try {
-      final response = await _apiClient.dio.post('/auth/login', data: {
-        'email': email,
-        'password': password,
-      });
+      final response = await _apiClient.dio.post(
+        '/auth/login',
+        data: {'email': email, 'password': password},
+      );
       final tokens = AuthTokens.fromJson(response.data);
-      await _secureStorageRepository.write(key: 'access_token', value: tokens.accessToken);
-      await _secureStorageRepository.write(key: 'refresh_token', value: tokens.refreshToken);
+      await _secureStorageRepository.write(
+        key: 'access_token',
+        value: tokens.accessToken,
+      );
+      await _secureStorageRepository.write(
+        key: 'refresh_token',
+        value: tokens.refreshToken,
+      );
       return tokens;
     } on DioException catch (e) {
       throw ApiError.fromJson(e.response!.data);

@@ -32,10 +32,18 @@ class BusinessScreen extends StatelessWidget {
               ),
             ],
           ),
-          const SliverToBoxAdapter(child: _BusinessCategory('Beauty', 'beauty')),
-          const SliverToBoxAdapter(child: _BusinessCategory('Electronics & Software', 'elec')),
-          const SliverToBoxAdapter(child: _BusinessCategory('Fashion', 'fashion')),
-          const SliverToBoxAdapter(child: _BusinessCategory('Food & Beverage', 'food')),
+          const SliverToBoxAdapter(
+            child: _BusinessCategory('Beauty', 'beauty'),
+          ),
+          const SliverToBoxAdapter(
+            child: _BusinessCategory('Electronics & Software', 'elec'),
+          ),
+          const SliverToBoxAdapter(
+            child: _BusinessCategory('Fashion', 'fashion'),
+          ),
+          const SliverToBoxAdapter(
+            child: _BusinessCategory('Food & Beverage', 'food'),
+          ),
           const SliverToBoxAdapter(child: SizedBox(height: 24)),
         ],
       ),

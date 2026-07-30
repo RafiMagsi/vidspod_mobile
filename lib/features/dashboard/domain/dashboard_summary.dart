@@ -10,5 +10,6 @@ abstract class DashboardSummary with _$DashboardSummary {
     required int recentGenerationsCount,
   }) = _DashboardSummary;
 
-  factory DashboardSummary.fromJson(Map<String, dynamic> json) => _$DashboardSummaryFromJson(json);
+  factory DashboardSummary.fromJson(Map<String, dynamic> json) =>
+      _$DashboardSummaryFromJson(json);
 }

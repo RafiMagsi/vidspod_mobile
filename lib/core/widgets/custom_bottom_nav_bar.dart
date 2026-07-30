@@ -4,11 +4,7 @@ class CustomBottomNavBar extends StatelessWidget {
   final int? currentIndex;
   final ValueChanged<int>? onTap;
 
-  const CustomBottomNavBar({
-    super.key,
-    this.currentIndex,
-    this.onTap,
-  });
+  const CustomBottomNavBar({super.key, this.currentIndex, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +22,16 @@ class CustomBottomNavBar extends StatelessWidget {
     );
   }
 
-  Widget _buildNavItem(IconData icon, String label, int index, BuildContext context) {
+  Widget _buildNavItem(
+    IconData icon,
+    String label,
+    int index,
+    BuildContext context,
+  ) {
     final isSelected = currentIndex == index;
-    final color = isSelected ? Theme.of(context).colorScheme.primary : Colors.grey;
+    final color = isSelected
+        ? Theme.of(context).colorScheme.primary
+        : Colors.grey;
     return InkWell(
       onTap: () => onTap?.call(index),
       borderRadius: BorderRadius.circular(20),

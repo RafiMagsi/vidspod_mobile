@@ -13,10 +13,10 @@ class GenerationRepository {
     required String uploadId,
   }) async {
     try {
-      final response = await _apiClient.dio.post('/generations', data: {
-        'motion_id': motionId,
-        'upload_id': uploadId,
-      });
+      final response = await _apiClient.dio.post(
+        '/generations',
+        data: {'motion_id': motionId, 'upload_id': uploadId},
+      );
       return Generation.fromJson(response.data);
     } on DioException catch (e) {
       throw ApiError.fromJson(e.response!.data);

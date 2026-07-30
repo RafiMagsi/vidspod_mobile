@@ -19,7 +19,10 @@ class ProfileRepository {
 
   Future<Profile> updateProfile(Profile profile) async {
     try {
-      final response = await _apiClient.dio.patch('/me/profile', data: profile.toJson());
+      final response = await _apiClient.dio.patch(
+        '/me/profile',
+        data: profile.toJson(),
+      );
       return Profile.fromJson(response.data);
     } on DioException catch (e) {
       throw ApiError.fromJson(e.response!.data);
