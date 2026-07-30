@@ -36,11 +36,11 @@ class GetStartedScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _buildInputSection(),
+              _buildInputSection(context),
               const SizedBox(height: 20),
               _buildPromptInput(),
               const SizedBox(height: 24),
-              _buildGenerateButton(),
+              _buildGenerateButton(context),
               const SizedBox(height: 12),
               _buildCreditsDisplay(),
             ],
@@ -50,7 +50,7 @@ class GetStartedScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInputSection() {
+  Widget _buildInputSection(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -100,7 +100,9 @@ class GetStartedScreen extends StatelessWidget {
             ),
             const SizedBox(width: 16),
             GestureDetector(
-              onTap: () {},
+              onTap: () => ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Upload reference video')),
+              ),
               child: Container(
                 width: 100,
                 height: 130,
@@ -194,9 +196,11 @@ class GetStartedScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildGenerateButton() {
+  Widget _buildGenerateButton(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () => ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Starting generation...'))),
       child: Container(
         height: 54,
         decoration: BoxDecoration(

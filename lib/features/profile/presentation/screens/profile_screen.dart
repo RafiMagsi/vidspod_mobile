@@ -184,21 +184,33 @@ class ProfileScreen extends ConsumerWidget {
               ),
             ),
             SliverToBoxAdapter(
-              child: _MenuTile(Icons.dashboard_outlined, 'Brand Kits', () {}),
+              child: _MenuTile(
+                Icons.dashboard_outlined,
+                'Brand Kits',
+                () => context.push('/brand-kits'),
+              ),
             ),
             SliverToBoxAdapter(child: _SectionHeader('Subscription')),
             SliverToBoxAdapter(
               child: _MenuTile(
                 Icons.workspace_premium_outlined,
                 'Plan & Billing',
-                () {},
+                () => context.push('/plan-billing'),
               ),
             ),
             SliverToBoxAdapter(
-              child: _MenuTile(Icons.history, 'Transaction History', () {}),
+              child: _MenuTile(
+                Icons.history,
+                'Transaction History',
+                () => context.push('/transactions'),
+              ),
             ),
             SliverToBoxAdapter(
-              child: _MenuTile(Icons.share_outlined, 'Refer & Earn', () {}),
+              child: _MenuTile(
+                Icons.share_outlined,
+                'Refer & Earn',
+                () => context.push('/refer-earn'),
+              ),
             ),
             SliverToBoxAdapter(child: _SectionHeader('Settings')),
             SliverToBoxAdapter(

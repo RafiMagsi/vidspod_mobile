@@ -214,7 +214,9 @@ class _ActionButtons extends StatelessWidget {
     return Column(
       children: [
         GestureDetector(
-          onTap: () {},
+          onTap: () => ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Processing upload...'))),
           child: Container(
             width: double.infinity,
             height: 54,
@@ -245,7 +247,9 @@ class _ActionButtons extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         OutlinedButton(
-          onPressed: () {},
+          onPressed: () => ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Re-recording upload'))),
           style: OutlinedButton.styleFrom(
             side: BorderSide(color: Colors.white.withAlpha(30)),
             shape: RoundedRectangleBorder(

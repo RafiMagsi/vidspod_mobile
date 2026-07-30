@@ -325,7 +325,9 @@ class _FormatCard extends StatelessWidget {
     final isVideo = item.type == 'video';
     final accentColor = isVideo ? CreatiTheme.purple : CreatiTheme.green;
     return GestureDetector(
-      onTap: () {},
+      onTap: () => ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Downloading ${item.title}...'))),
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(

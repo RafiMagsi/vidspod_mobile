@@ -38,7 +38,7 @@ class ResearchDetailScreen extends ConsumerWidget {
                         size: 20,
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () => Navigator.of(context).pop(),
                   ),
               ],
             ),

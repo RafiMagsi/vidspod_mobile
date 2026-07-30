@@ -16,7 +16,9 @@ class ProductUploadScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.more_vert, color: Colors.white),
-            onPressed: () {},
+            onPressed: () => ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('More options'))),
           ),
         ],
       ),
@@ -29,7 +31,7 @@ class ProductUploadScreen extends StatelessWidget {
             const SizedBox(height: 20),
             _buildProductInfo(),
             const SizedBox(height: 28),
-            _buildUploadButton(),
+            _buildUploadButton(context),
             const SizedBox(height: 12),
             _buildCreditsDisplay(),
           ],
@@ -114,9 +116,11 @@ class ProductUploadScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildUploadButton() {
+  Widget _buildUploadButton(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () => ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('File upload started'))),
       child: Container(
         height: 54,
         decoration: BoxDecoration(

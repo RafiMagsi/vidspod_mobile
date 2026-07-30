@@ -30,7 +30,9 @@ class ResearchListScreen extends ConsumerWidget {
                 size: 20,
               ),
             ),
-            onPressed: () {},
+            onPressed: () => ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('New research topic'))),
           ),
         ],
       ),

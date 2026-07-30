@@ -34,7 +34,9 @@ class CreatorScreen extends ConsumerWidget {
               ),
               child: const Icon(Icons.search, color: Colors.white, size: 20),
             ),
-            onPressed: () {},
+            onPressed: () => ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('Search creators'))),
           ),
         ],
       ),

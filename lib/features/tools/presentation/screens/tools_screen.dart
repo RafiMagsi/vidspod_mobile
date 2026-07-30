@@ -36,6 +36,12 @@ class ToolsScreen extends StatelessWidget {
       Icons.download_outlined,
       '/youtube-download',
     ),
+    _ToolItem(
+      'Publishing',
+      'Publish to social platforms',
+      Icons.share_outlined,
+      '/publishing',
+    ),
   ];
 
   @override
@@ -93,6 +99,7 @@ class _ToolCard extends StatelessWidget {
     LinearGradient(colors: [Color(0xFF00B4DB), Color(0xFF0083B0)]),
     LinearGradient(colors: [Color(0xFFF857A6), Color(0xFFFF5858)]),
     LinearGradient(colors: [Color(0xFF4CB8C4), Color(0xFF3CD3AD)]),
+    LinearGradient(colors: [Color(0xFF667eea), Color(0xFF764ba2)]),
   ];
 
   @override

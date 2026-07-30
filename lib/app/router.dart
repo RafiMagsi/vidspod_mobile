@@ -4,8 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vidspod_mobile/app/app_scaffold.dart';
 import 'package:vidspod_mobile/features/auth/application/auth_service.dart';
 import 'package:vidspod_mobile/features/auth/presentation/screens/login_screen.dart';
+import 'package:vidspod_mobile/features/billing/presentation/screens/plan_billing_screen.dart';
+import 'package:vidspod_mobile/features/billing/presentation/screens/transaction_history_screen.dart';
+import 'package:vidspod_mobile/features/brand_kits/presentation/screens/brand_kit_screen.dart';
 import 'package:vidspod_mobile/features/business/presentation/screens/business_screen.dart';
 import 'package:vidspod_mobile/features/business/presentation/screens/product_upload_screen.dart';
+import 'package:vidspod_mobile/features/connections/presentation/screens/connected_accounts_screen.dart';
 import 'package:vidspod_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:vidspod_mobile/features/generations/presentation/screens/generation_detail_screen.dart';
 import 'package:vidspod_mobile/features/generations/presentation/screens/generation_list_screen.dart';
@@ -13,6 +17,8 @@ import 'package:vidspod_mobile/features/history/presentation/screens/history_scr
 import 'package:vidspod_mobile/features/motions/presentation/screens/motion_detail_screen.dart';
 import 'package:vidspod_mobile/features/motions/presentation/screens/motion_list_screen.dart';
 import 'package:vidspod_mobile/features/profile/presentation/screens/profile_screen.dart';
+import 'package:vidspod_mobile/features/publishing/presentation/screens/publishing_screen.dart';
+import 'package:vidspod_mobile/features/referrals/presentation/screens/refer_earn_screen.dart';
 import 'package:vidspod_mobile/features/research/presentation/screens/research_detail_screen.dart';
 import 'package:vidspod_mobile/features/research/presentation/screens/research_list_screen.dart';
 import 'package:vidspod_mobile/features/settings/presentation/screens/settings_screen.dart';
@@ -210,6 +216,36 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/settings',
         pageBuilder: (context, state) =>
             _slideRight(const SettingsScreen(), state),
+      ),
+      GoRoute(
+        path: '/brand-kits',
+        pageBuilder: (context, state) =>
+            _slideRight(const BrandKitScreen(), state),
+      ),
+      GoRoute(
+        path: '/plan-billing',
+        pageBuilder: (context, state) =>
+            _slideRight(const PlanBillingScreen(), state),
+      ),
+      GoRoute(
+        path: '/transactions',
+        pageBuilder: (context, state) =>
+            _slideRight(const TransactionHistoryScreen(), state),
+      ),
+      GoRoute(
+        path: '/publishing',
+        pageBuilder: (context, state) =>
+            _slideRight(const PublishingScreen(), state),
+      ),
+      GoRoute(
+        path: '/connections',
+        pageBuilder: (context, state) =>
+            _slideRight(const ConnectedAccountsScreen(), state),
+      ),
+      GoRoute(
+        path: '/refer-earn',
+        pageBuilder: (context, state) =>
+            _slideRight(const ReferEarnScreen(), state),
       ),
       ShellRoute(
         builder: (context, state, child) => AppScaffold(child: child),

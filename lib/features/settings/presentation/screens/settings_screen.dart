@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vidspod_mobile/app/creati_theme.dart';
 import 'package:vidspod_mobile/core/utils/platform_utils.dart';
 import 'package:vidspod_mobile/features/settings/settings_providers.dart';
@@ -26,6 +27,27 @@ class SettingsScreen extends ConsumerWidget {
                 Icons.account_circle_outlined,
                 'Account Settings',
                 'Manage your account details',
+                () {},
+              ),
+              _SettingTile(
+                Icons.link_outlined,
+                'Connected Accounts',
+                'YouTube, LinkedIn, Facebook, etc.',
+                () => context.push('/connections'),
+              ),
+              const _Divider(),
+              _SectionHeader('Voice & AI'),
+              _SettingTile(
+                Icons.record_voice_over_outlined,
+                'Voice Provider',
+                'ElevenLabs (default)',
+                () {},
+              ),
+              _SettingTile(
+                Icons.design_services_outlined,
+                'AI Model Preferences',
+                'GPT-4o, DALL-E 3',
+                () {},
               ),
               const _Divider(),
               _SectionHeader('Preferences'),
@@ -44,7 +66,14 @@ class SettingsScreen extends ConsumerWidget {
               _SettingTile(
                 Icons.notifications_outlined,
                 'Notification Preferences',
-                null,
+                'Push, email, and in-app',
+                () {},
+              ),
+              _SettingTile(
+                Icons.storage_outlined,
+                'Storage Management',
+                'Cache: 245 MB used',
+                () {},
               ),
               const _Divider(),
               _SectionHeader('Appearance'),
@@ -54,16 +83,87 @@ class SettingsScreen extends ConsumerWidget {
                 true,
                 (_) {},
               ),
-              _SettingTile(Icons.language_outlined, 'Language', 'English'),
+              _SettingTile(
+                Icons.language_outlined,
+                'Language',
+                'English',
+                () {},
+              ),
+              const _Divider(),
+              _SectionHeader('Privacy & Security'),
+              _SettingTile(Icons.lock_outlined, 'Change Password', null, () {}),
+              _SettingTile(
+                Icons.fingerprint_outlined,
+                'Biometric Auth',
+                'Enabled',
+                () {},
+              ),
+              _SettingTile(
+                Icons.privacy_tip_outlined,
+                'Privacy Policy',
+                null,
+                () {},
+              ),
+              _SettingTile(
+                Icons.gavel_outlined,
+                'Terms of Service',
+                null,
+                () {},
+              ),
               const _Divider(),
               _SectionHeader('About'),
-              _SettingTile(Icons.privacy_tip_outlined, 'Privacy Policy', null),
-              _SettingTile(Icons.gavel_outlined, 'Terms of Service', null),
+              _SettingTile(
+                Icons.info_outlined,
+                'App Version',
+                '1.0.0 (build 1)',
+                () {},
+              ),
+              _SettingTile(
+                Icons.code_outlined,
+                'Licenses',
+                'Open source notices',
+                () => showLicensePage(context: context),
+              ),
               const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 40),
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        backgroundColor: CreatiTheme.surfaceDark,
+                        title: const Text(
+                          'Delete Account',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        content: const Text(
+                          'This action cannot be undone. All your data will be permanently removed.',
+                          style: TextStyle(color: Colors.white70),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(ctx).pop(),
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(ctx).pop();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Account deletion requested'),
+                                ),
+                              );
+                            },
+                            child: const Text(
+                              'Delete',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                   child: Container(
                     height: 50,
                     decoration: BoxDecoration(
@@ -136,47 +236,51 @@ class _SettingTile extends StatelessWidget {
   final IconData icon;
   final String title;
   final String? subtitle;
-  const _SettingTile(this.icon, this.title, this.subtitle);
+  final VoidCallback onTap;
+  const _SettingTile(this.icon, this.title, this.subtitle, this.onTap);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 4),
-        child: Row(
-          children: [
-            Icon(icon, color: Colors.white.withAlpha(150), size: 22),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: CreatiTheme.bodyMedium(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 15,
-                    ),
-                  ),
-                  if (subtitle != null) ...[
-                    const SizedBox(height: 2),
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 4),
+          child: Row(
+            children: [
+              Icon(icon, color: Colors.white.withAlpha(150), size: 22),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Text(
-                      subtitle!,
-                      style: CreatiTheme.caption(
-                        color: Colors.white.withAlpha(80),
+                      title,
+                      style: CreatiTheme.bodyMedium(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 15,
                       ),
                     ),
+                    if (subtitle != null) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle!,
+                        style: CreatiTheme.caption(
+                          color: Colors.white.withAlpha(80),
+                        ),
+                      ),
+                    ],
                   ],
-                ],
+                ),
               ),
-            ),
-            Icon(
-              Icons.chevron_right,
-              color: Colors.white.withAlpha(80),
-              size: 20,
-            ),
-          ],
+              Icon(
+                Icons.chevron_right,
+                color: Colors.white.withAlpha(80),
+                size: 20,
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -170,7 +170,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 const SizedBox(height: 16),
                 Center(
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Password reset flow')),
+                    ),
                     child: Text(
                       'Forgot Password?',
                       style: CreatiTheme.bodySmall(
@@ -191,7 +193,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                     const SizedBox(width: 4),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () =>
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Sign up flow')),
+                          ),
                       child: Text(
                         'Sign Up',
                         style: CreatiTheme.bodySmall(
