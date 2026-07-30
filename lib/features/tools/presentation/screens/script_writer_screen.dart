@@ -136,6 +136,12 @@ class ScriptWriterScreen extends StatelessWidget {
   }
 }
 
+void _snack(BuildContext context, String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text(message), duration: const Duration(seconds: 2)),
+  );
+}
+
 class _ScriptTemplate {
   final String title;
   final String subtitle;
@@ -203,7 +209,7 @@ class _PromptInput extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             GestureDetector(
-              onTap: () {},
+              onTap: () => _snack(context, 'Generating script...'),
               child: Container(
                 height: 44,
                 decoration: BoxDecoration(

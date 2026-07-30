@@ -225,7 +225,15 @@ class _HistoryGrid extends StatelessWidget {
             'Voice': Icons.record_voice_over_outlined,
           };
           return GestureDetector(
-            onTap: () => context.push('/motions/history-${i + 1}'),
+            onTap: () {
+              if (type == 'Image' || type == 'Video') {
+                context.push('/generations/history-${i + 1}');
+              } else if (type == 'Script') {
+                context.push('/script-writer');
+              } else if (type == 'Voice') {
+                context.push('/voice-studio');
+              }
+            },
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),

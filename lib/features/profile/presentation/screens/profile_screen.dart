@@ -25,6 +25,13 @@ class ProfileScreen extends ConsumerWidget {
               pinned: true,
               backgroundColor: CreatiTheme.black,
               surfaceTintColor: Colors.transparent,
+              automaticallyImplyLeading: false,
+              leading: GoRouter.of(context).canPop()
+                  ? IconButton(
+                      icon: const Icon(Icons.arrow_back, color: Colors.white),
+                      onPressed: () => context.pop(),
+                    )
+                  : null,
               title: Text('Profile', style: CreatiTheme.headingLarge()),
             ),
             SliverToBoxAdapter(
@@ -173,14 +180,14 @@ class ProfileScreen extends ConsumerWidget {
               child: _MenuTile(
                 Icons.history_outlined,
                 'Generation History',
-                () => context.go('/generations'),
+                () => context.push('/generations'),
               ),
             ),
             SliverToBoxAdapter(
               child: _MenuTile(
                 Icons.favorite_border,
                 'Saved Motions',
-                () => context.go('/motions'),
+                () => context.push('/motions'),
               ),
             ),
             SliverToBoxAdapter(
@@ -217,11 +224,17 @@ class ProfileScreen extends ConsumerWidget {
               child: _MenuTile(
                 Icons.settings_outlined,
                 'Settings',
-                () => context.go('/settings'),
+                () => context.push('/settings'),
               ),
             ),
             SliverToBoxAdapter(
-              child: _MenuTile(Icons.help_outline, 'Help & Support', () {}),
+              child: _MenuTile(
+                Icons.help_outline,
+                'Help & Support',
+                () => ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(const SnackBar(content: Text('Help & Support'))),
+              ),
             ),
             SliverToBoxAdapter(
               child: Padding(

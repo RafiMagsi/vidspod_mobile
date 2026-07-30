@@ -132,6 +132,12 @@ class YouTubeDownloadScreen extends StatelessWidget {
   }
 }
 
+void _snack(BuildContext context, String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text(message), duration: const Duration(seconds: 2)),
+  );
+}
+
 class _FormatItem {
   final String title;
   final String subtitle;
@@ -213,7 +219,7 @@ class _UrlInput extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             GestureDetector(
-              onTap: () {},
+              onTap: () => _snack(context, 'Fetching formats...'),
               child: Container(
                 height: 44,
                 decoration: BoxDecoration(

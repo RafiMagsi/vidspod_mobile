@@ -77,8 +77,19 @@ class _AppBar extends StatelessWidget {
         ],
       ),
       actions: [
+        IconButton(
+          icon: Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: CreatiTheme.darkSurface,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(Icons.person_outline, size: 20),
+          ),
+          onPressed: () => context.push('/profile'),
+        ),
         Container(
-          margin: const EdgeInsets.only(right: 12),
+          margin: const EdgeInsets.only(right: 8),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
           decoration: BoxDecoration(
             gradient: CreatiTheme.proGradient,

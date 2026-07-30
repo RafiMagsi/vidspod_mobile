@@ -95,7 +95,7 @@ class GenerationDetailScreen extends ConsumerWidget {
                       child: _ActionChip(
                         Icons.download_outlined,
                         'Download',
-                        () {},
+                        () => _snack(context, 'Downloading...'),
                         outlined: false,
                       ),
                     ),
@@ -104,7 +104,7 @@ class GenerationDetailScreen extends ConsumerWidget {
                       child: _ActionChip(
                         Icons.share_outlined,
                         'Share',
-                        () {},
+                        () => _snack(context, 'Share'),
                         outlined: true,
                       ),
                     ),
@@ -114,7 +114,7 @@ class GenerationDetailScreen extends ConsumerWidget {
                         child: _ActionChip(
                           Icons.refresh_outlined,
                           'Retry',
-                          () {},
+                          () => _snack(context, 'Retrying...'),
                           outlined: false,
                           danger: true,
                         ),
@@ -136,6 +136,12 @@ class GenerationDetailScreen extends ConsumerWidget {
       ),
     );
   }
+}
+
+void _snack(BuildContext context, String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text(message), duration: const Duration(seconds: 2)),
+  );
 }
 
 class _DetailRow extends StatelessWidget {

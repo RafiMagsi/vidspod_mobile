@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vidspod_mobile/app/creati_theme.dart';
 import 'package:vidspod_mobile/core/utils/platform_utils.dart';
 import 'package:vidspod_mobile/core/widgets/app_motion_card.dart';
@@ -14,7 +15,16 @@ class MotionListScreen extends ConsumerWidget {
     final motions = ref.watch(motionListProvider);
     return Scaffold(
       backgroundColor: CreatiTheme.black,
-      appBar: AppBar(title: Text('Motions', style: CreatiTheme.headingLarge())),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: GoRouter.of(context).canPop()
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () => context.pop(),
+              )
+            : null,
+        title: Text('Motions', style: CreatiTheme.headingLarge()),
+      ),
       body: motions.when(
         data: (motions) => Scrollbar(
           child: GridView.builder(

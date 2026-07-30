@@ -125,14 +125,17 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: <RouteBase>[
       GoRoute(
         path: '/splash',
+        parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) => _fadeIn(const SplashScreen(), state),
       ),
       GoRoute(
         path: '/login',
+        parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) => _fadeIn(LoginScreen(), state),
       ),
       GoRoute(
         path: '/get-started',
+        parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) {
           final extra = state.extra as Map<String, String?>?;
           return _slideUp(
@@ -146,16 +149,19 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/upload-suggestions',
+        parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) =>
             _slideUp(const UploadSuggestionsScreen(), state),
       ),
       GoRoute(
         path: '/product-upload',
+        parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) =>
             _slideUp(const ProductUploadScreen(), state),
       ),
       GoRoute(
         path: '/motions/:public_guid',
+        parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) => _slideRight(
           MotionDetailScreen(publicGuid: state.pathParameters['public_guid']!),
           state,
@@ -163,11 +169,13 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/studio',
+        parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) =>
             _slideRight(const ShortsStudioScreen(), state),
       ),
       GoRoute(
         path: '/studio/generation/:id',
+        parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) => _slideRight(
           StudioGenerationScreen(id: state.pathParameters['id']!),
           state,
@@ -175,26 +183,31 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/image-studio',
+        parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) =>
             _slideRight(const ImageStudioScreen(), state),
       ),
       GoRoute(
         path: '/voice-studio',
+        parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) =>
             _slideRight(const VoiceStudioScreen(), state),
       ),
       GoRoute(
         path: '/script-writer',
+        parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) =>
             _slideRight(const ScriptWriterScreen(), state),
       ),
       GoRoute(
         path: '/youtube-download',
+        parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) =>
             _slideRight(const YouTubeDownloadScreen(), state),
       ),
       GoRoute(
         path: '/generations/:id',
+        parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) => _slideRight(
           GenerationDetailScreen(id: state.pathParameters['id']!),
           state,
@@ -202,11 +215,13 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/research',
+        parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) =>
             _slideRight(const ResearchListScreen(), state),
       ),
       GoRoute(
         path: '/research/:id',
+        parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) => _slideRight(
           ResearchDetailScreen(id: state.pathParameters['id']!),
           state,
@@ -214,36 +229,43 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/settings',
+        parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) =>
             _slideRight(const SettingsScreen(), state),
       ),
       GoRoute(
         path: '/brand-kits',
+        parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) =>
             _slideRight(const BrandKitScreen(), state),
       ),
       GoRoute(
         path: '/plan-billing',
+        parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) =>
             _slideRight(const PlanBillingScreen(), state),
       ),
       GoRoute(
         path: '/transactions',
+        parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) =>
             _slideRight(const TransactionHistoryScreen(), state),
       ),
       GoRoute(
         path: '/publishing',
+        parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) =>
             _slideRight(const PublishingScreen(), state),
       ),
       GoRoute(
         path: '/connections',
+        parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) =>
             _slideRight(const ConnectedAccountsScreen(), state),
       ),
       GoRoute(
         path: '/refer-earn',
+        parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) =>
             _slideRight(const ReferEarnScreen(), state),
       ),

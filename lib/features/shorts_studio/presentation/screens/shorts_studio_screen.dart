@@ -342,7 +342,12 @@ class _StudioBottomNav extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _NavItem(Icons.person, 'Creator', true, () {}),
+              _NavItem(
+                Icons.person,
+                'Creator',
+                true,
+                () => context.go('/dashboard'),
+              ),
               _NavItem(
                 Icons.business_center_outlined,
                 'Business',

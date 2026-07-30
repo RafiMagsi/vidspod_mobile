@@ -125,6 +125,12 @@ class VoiceStudioScreen extends StatelessWidget {
   }
 }
 
+void _snack(BuildContext context, String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text(message), duration: const Duration(seconds: 2)),
+  );
+}
+
 class _VoiceItem {
   final String name;
   final String style;
@@ -314,7 +320,7 @@ class _VoiceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () => _snack(context, '${item.name} voice selected'),
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(

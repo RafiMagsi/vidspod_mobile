@@ -15,6 +15,13 @@ class GenerationListScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: CreatiTheme.black,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: GoRouter.of(context).canPop()
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () => context.pop(),
+              )
+            : null,
         title: Text('Generations', style: CreatiTheme.headingLarge()),
       ),
       body: generations.when(

@@ -161,7 +161,7 @@ class ResearchDetailScreen extends ConsumerWidget {
                       child: _ActionChip(
                         Icons.save_alt_outlined,
                         'Save',
-                        () {},
+                        () => _snack(context, 'Saved'),
                         outlined: false,
                       ),
                     ),
@@ -170,7 +170,7 @@ class ResearchDetailScreen extends ConsumerWidget {
                       child: _ActionChip(
                         Icons.share_outlined,
                         'Share',
-                        () {},
+                        () => _snack(context, 'Share'),
                         outlined: true,
                       ),
                     ),
@@ -179,7 +179,7 @@ class ResearchDetailScreen extends ConsumerWidget {
                       child: _ActionChip(
                         Icons.upload_file_outlined,
                         'Export',
-                        () {},
+                        () => _snack(context, 'Export'),
                         outlined: true,
                       ),
                     ),
@@ -199,6 +199,12 @@ class ResearchDetailScreen extends ConsumerWidget {
       ),
     );
   }
+}
+
+void _snack(BuildContext context, String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text(message), duration: const Duration(seconds: 2)),
+  );
 }
 
 class _DetailRow extends StatelessWidget {

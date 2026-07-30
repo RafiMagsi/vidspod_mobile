@@ -132,6 +132,12 @@ class ImageStudioScreen extends StatelessWidget {
   }
 }
 
+void _snack(BuildContext context, String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text(message), duration: const Duration(seconds: 2)),
+  );
+}
+
 class _GenMode {
   final String title;
   final String subtitle;
@@ -189,9 +195,17 @@ class _UploadPrompt extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _SmallChip(Icons.upload_outlined, 'Upload', () {}),
+                _SmallChip(
+                  Icons.upload_outlined,
+                  'Upload',
+                  () => _snack(context, 'Upload image'),
+                ),
                 const SizedBox(width: 10),
-                _SmallChip(Icons.auto_awesome, 'Generate', () {}),
+                _SmallChip(
+                  Icons.auto_awesome,
+                  'Generate',
+                  () => _snack(context, 'Generate from prompt'),
+                ),
               ],
             ),
           ],

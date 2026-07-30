@@ -27,7 +27,7 @@ class SettingsScreen extends ConsumerWidget {
                 Icons.account_circle_outlined,
                 'Account Settings',
                 'Manage your account details',
-                () {},
+                () => _snack(context, 'Account settings'),
               ),
               _SettingTile(
                 Icons.link_outlined,
@@ -41,13 +41,13 @@ class SettingsScreen extends ConsumerWidget {
                 Icons.record_voice_over_outlined,
                 'Voice Provider',
                 'ElevenLabs (default)',
-                () {},
+                () => _snack(context, 'Voice provider settings'),
               ),
               _SettingTile(
                 Icons.design_services_outlined,
                 'AI Model Preferences',
                 'GPT-4o, DALL-E 3',
-                () {},
+                () => _snack(context, 'AI model preferences'),
               ),
               const _Divider(),
               _SectionHeader('Preferences'),
@@ -67,13 +67,13 @@ class SettingsScreen extends ConsumerWidget {
                 Icons.notifications_outlined,
                 'Notification Preferences',
                 'Push, email, and in-app',
-                () {},
+                () => _snack(context, 'Notification preferences'),
               ),
               _SettingTile(
                 Icons.storage_outlined,
                 'Storage Management',
                 'Cache: 245 MB used',
-                () {},
+                () => _snack(context, 'Storage management'),
               ),
               const _Divider(),
               _SectionHeader('Appearance'),
@@ -87,28 +87,33 @@ class SettingsScreen extends ConsumerWidget {
                 Icons.language_outlined,
                 'Language',
                 'English',
-                () {},
+                () => _snack(context, 'Language settings'),
               ),
               const _Divider(),
               _SectionHeader('Privacy & Security'),
-              _SettingTile(Icons.lock_outlined, 'Change Password', null, () {}),
+              _SettingTile(
+                Icons.lock_outlined,
+                'Change Password',
+                null,
+                () => _snack(context, 'Change password'),
+              ),
               _SettingTile(
                 Icons.fingerprint_outlined,
                 'Biometric Auth',
                 'Enabled',
-                () {},
+                () => _snack(context, 'Biometric auth settings'),
               ),
               _SettingTile(
                 Icons.privacy_tip_outlined,
                 'Privacy Policy',
                 null,
-                () {},
+                () => _snack(context, 'Privacy Policy'),
               ),
               _SettingTile(
                 Icons.gavel_outlined,
                 'Terms of Service',
                 null,
-                () {},
+                () => _snack(context, 'Terms of Service'),
               ),
               const _Divider(),
               _SectionHeader('About'),
@@ -209,6 +214,12 @@ class SettingsScreen extends ConsumerWidget {
       ),
     );
   }
+}
+
+void _snack(BuildContext context, String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text(message), duration: const Duration(seconds: 2)),
+  );
 }
 
 class _SectionHeader extends StatelessWidget {
