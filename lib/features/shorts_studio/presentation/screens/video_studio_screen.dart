@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vidspod_mobile/core/theme/vr_theme.dart';
 import 'package:vidspod_mobile/core/utils/platform_utils.dart';
 import 'package:vidspod_mobile/core/widgets/app_category_section.dart';
-import 'package:vidspod_mobile/core/widgets/app_motion_card.dart';
 import 'package:vidspod_mobile/features/billing/credit_gate.dart';
 import 'package:vidspod_mobile/features/shorts_studio/domain/generate_hub.dart';
+import 'package:vidspod_mobile/features/shorts_studio/presentation/widgets/motion_preset_card.dart';
 import 'package:vidspod_mobile/features/shorts_studio/shorts_studio_providers.dart';
 
 /// Generic video studio per docs/MOBILE_APP_GUIDE.md §5.5.
@@ -31,6 +31,7 @@ class _VideoStudioScreenState extends ConsumerState<VideoStudioScreen> {
   final _promptController = TextEditingController();
   String? _stylePack;
   String? _aspectRatio;
+  String? _cameraMovement;
 
   @override
   void dispose() {
@@ -53,8 +54,10 @@ class _VideoStudioScreenState extends ConsumerState<VideoStudioScreen> {
           promptController: _promptController,
           stylePack: _stylePack,
           aspectRatio: _aspectRatio,
+          cameraMovement: _cameraMovement,
           onStylePack: (v) => setState(() => _stylePack = v),
           onAspectRatio: (v) => setState(() => _aspectRatio = v),
+          onCameraMovement: (v) => setState(() => _cameraMovement = v),
         ),
         loading: () => Center(child: platformLoader(size: 28)),
         error: (error, _) => Center(
@@ -73,15 +76,19 @@ class _StudioBody extends ConsumerWidget {
   final TextEditingController promptController;
   final String? stylePack;
   final String? aspectRatio;
+  final String? cameraMovement;
   final ValueChanged<String> onStylePack;
   final ValueChanged<String> onAspectRatio;
+  final ValueChanged<String> onCameraMovement;
   const _StudioBody({
     required this.hub,
     required this.promptController,
     required this.stylePack,
     required this.aspectRatio,
+    required this.cameraMovement,
     required this.onStylePack,
     required this.onAspectRatio,
+    required this.onCameraMovement,
   });
 
   @override
@@ -151,6 +158,12 @@ class _StudioBody extends ConsumerWidget {
             'Duration: ~${(hub.flowMeta['default_duration_seconds'] as int?) ?? 15}s',
             style: VrTheme.caption(color: Colors.white.withAlpha(80)),
           ),
+          const SizedBox(height: 12),
+          _AdvancedPanel(
+            cameraMovements: hub.cameraMovements,
+            cameraMovement: cameraMovement,
+            onCameraMovement: onCameraMovement,
+          ),
           const SizedBox(height: 16),
           SizedBox(
             width: double.infinity,
@@ -171,11 +184,7 @@ class _StudioBody extends ConsumerWidget {
               itemCount: hub.formatPresets.length,
               itemBuilder: (_, i) {
                 final preset = hub.formatPresets[i];
-                return AppMotionCard(
-                  imageUrl: preset.imageUrl ?? '',
-                  label: preset.label,
-                  route: '/get-started',
-                );
+                return MotionPresetCard(preset: preset, autoPlay: false);
               },
             ),
           ],
@@ -226,4 +235,150 @@ class _StudioBody extends ConsumerWidget {
     if (!ok || !context.mounted) return;
     _snack(context, 'Generation coming soon');
   }
+}
+
+/// Collapsible production controls (§5.5 "hidden behind Advanced"). Options
+/// come from the hub payload — never hardcoded.
+class _AdvancedPanel extends StatefulWidget {
+  final List<String> cameraMovements;
+  final String? cameraMovement;
+  final ValueChanged<String> onCameraMovement;
+  const _AdvancedPanel({
+    required this.cameraMovements,
+    required this.cameraMovement,
+    required this.onCameraMovement,
+  });
+
+  @override
+  State<_AdvancedPanel> createState() => _AdvancedPanelState();
+}
+
+class _AdvancedPanelState extends State<_AdvancedPanel> {
+  bool _expanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final hasCamera = widget.cameraMovements.isNotEmpty;
+    return Container(
+      decoration: BoxDecoration(
+        color: VrTheme.darkSurface,
+        borderRadius: BorderRadius.circular(VrTheme.radiusLg),
+        border: Border.all(color: VrTheme.cardBorder.withAlpha(60)),
+      ),
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: () => setState(() => _expanded = !_expanded),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.tune,
+                    color: Colors.white.withAlpha(140),
+                    size: 18,
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    'Advanced',
+                    style: VrTheme.bodyMedium(fontWeight: FontWeight.w500),
+                  ),
+                  const Spacer(),
+                  Icon(
+                    _expanded
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
+                    color: Colors.white.withAlpha(80),
+                    size: 20,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          AnimatedCrossFade(
+            duration: const Duration(milliseconds: 250),
+            crossFadeState: _expanded
+                ? CrossFadeState.showSecond
+                : CrossFadeState.showFirst,
+            firstChild: const SizedBox(width: double.infinity),
+            secondChild: hasCamera
+                ? Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Camera movement',
+                          style: VrTheme.caption(
+                            color: Colors.white.withAlpha(100),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: [
+                            for (final move in widget.cameraMovements)
+                              _advancedChip(
+                                label: _humanize(move),
+                                selected: widget.cameraMovement == move,
+                                onTap: () => widget.onCameraMovement(move),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                : const Padding(
+                    padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+                    child: Text(
+                      'No advanced options for this studio.',
+                      style: TextStyle(color: Colors.white38, fontSize: 13),
+                    ),
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _humanize(String value) => value
+      .split('-')
+      .map(
+        (part) =>
+            part.isEmpty ? part : part[0].toUpperCase() + part.substring(1),
+      )
+      .join(' ');
+}
+
+Widget _advancedChip({
+  required String label,
+  required bool selected,
+  required VoidCallback onTap,
+}) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: selected
+            ? VrTheme.purple.withAlpha(30)
+            : Colors.white.withAlpha(10),
+        borderRadius: BorderRadius.circular(VrTheme.radiusFull),
+        border: Border.all(
+          color: selected
+              ? VrTheme.purple.withAlpha(90)
+              : VrTheme.cardBorder.withAlpha(60),
+        ),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: selected ? VrTheme.purple : Colors.white.withAlpha(90),
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    ),
+  );
 }

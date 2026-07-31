@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vidspod_mobile/core/theme/vr_theme.dart';
-import 'package:vidspod_mobile/core/models/format_preset.dart';
 import 'package:vidspod_mobile/core/utils/platform_utils.dart';
 import 'package:vidspod_mobile/core/widgets/app_category_section.dart';
 import 'package:vidspod_mobile/core/widgets/app_motion_card.dart';
-import 'package:vidspod_mobile/core/widgets/app_network_image.dart';
 import 'package:vidspod_mobile/core/widgets/gradient_button.dart';
+import 'package:vidspod_mobile/core/widgets/hero_video_background.dart';
+import 'package:vidspod_mobile/features/shorts_studio/presentation/widgets/motion_preset_card.dart';
 import 'package:vidspod_mobile/features/shorts_studio/shorts_studio_providers.dart';
 
 /// Shorts Studio ⭐ per docs/MOBILE_APP_GUIDE.md §5.2.
@@ -39,120 +39,93 @@ class ShortsStudioScreen extends ConsumerWidget {
                 title: 'Motions',
                 itemCount: items.length,
                 itemHeight: _kMotionCardHeight,
-                itemBuilder: (_, i) => _MotionPresetCard(preset: items[i]),
+                onAllTap: () => context.push('/studio/motions'),
+                itemBuilder: (_, i) =>
+                    MotionPresetCard(preset: items[i], autoPlay: false),
               ),
               loading: () => _HubLoading(),
               error: (_, _) => AppCategorySection(
                 title: 'Motions',
                 itemCount: 3,
                 itemHeight: _kMotionCardHeight,
+                onAllTap: () => context.push('/studio/motions'),
                 itemBuilder: (_, i) => AppMotionCard(
                   imageUrl: '',
                   label: 'Motion ${i + 1}',
                   height: _kMotionCardHeight,
-                  route: '/motions/placeholder-$i',
+                  route: '/motions',
                 ),
               ),
             ),
           ),
+          const SliverToBoxAdapter(child: _MoreStudiosSection()),
           const SliverToBoxAdapter(child: SizedBox(height: 24)),
         ],
       ),
-      bottomNavigationBar: _StudioBottomNav(),
     );
   }
 }
 
-class _MotionPresetCard extends StatelessWidget {
-  final FormatPreset preset;
-  const _MotionPresetCard({required this.preset});
+/// Quick entry into the other hub-driven studios (§5.5). The list is the
+/// well-known set of flow categories until `/dashboard → studios[]` drives it.
+class _MoreStudiosSection extends StatelessWidget {
+  const _MoreStudiosSection();
+
+  static const _studios = [
+    (Icons.auto_awesome, 'ai-video-studio', 'AI Video'),
+    (Icons.movie_creation_outlined, 'full-auto-studio', 'Full Auto'),
+    (Icons.theaters_outlined, 'cinema-studio', 'Cinema'),
+    (Icons.shopping_bag_outlined, 'marketing-studio', 'Marketing'),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    final isClone = preset.isCloneMotion;
-    return GestureDetector(
-      onTap: () => context.push(
-        '/get-started',
-        extra: {'motionId': preset.key, 'motionTitle': preset.label},
-      ),
-      child: Container(
-        width: _kMotionCardWidth,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(VrTheme.radiusLg),
-          border: Border.all(color: VrTheme.cardBorder.withAlpha(60)),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 10),
+          child: Text('More ways to create', style: VrTheme.headingMedium()),
         ),
-        clipBehavior: Clip.antiAlias,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  AppNetworkImage(
-                    url: preset.imageUrl,
-                    placeholderIcon: Icons.movie_creation_outlined,
+        SizedBox(
+          height: 104,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemCount: _studios.length,
+            separatorBuilder: (_, _) => const SizedBox(width: 10),
+            itemBuilder: (_, i) {
+              final (icon, category, label) = _studios[i];
+              return GestureDetector(
+                onTap: () => context.push(
+                  '/studio/$category/${Uri.encodeComponent(label)}',
+                ),
+                child: Container(
+                  width: 120,
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: VrTheme.surfaceDark,
+                    borderRadius: BorderRadius.circular(VrTheme.radiusLg),
+                    border: Border.all(color: VrTheme.cardBorder.withAlpha(60)),
                   ),
-                  Positioned(
-                    top: 8,
-                    left: 8,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(icon, color: VrTheme.purple, size: 28),
+                      const SizedBox(height: 8),
+                      Text(
+                        label,
+                        textAlign: TextAlign.center,
+                        style: VrTheme.bodySmall(fontWeight: FontWeight.w600),
                       ),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withAlpha(140),
-                        borderRadius: BorderRadius.circular(VrTheme.radiusFull),
-                      ),
-                      child: Text(
-                        isClone ? 'One-click clone' : 'Style reference',
-                        style: VrTheme.caption(fontSize: 10),
-                      ),
-                    ),
+                    ],
                   ),
-                  Positioned(
-                    top: 8,
-                    right: 8,
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withAlpha(140),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Icon(
-                        Icons.play_circle_outline,
-                        color: Colors.white.withAlpha(220),
-                        size: 16,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    preset.label,
-                    style: VrTheme.bodySmall(fontWeight: FontWeight.w600),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    preset.aspectRatio ?? '9:16',
-                    style: VrTheme.caption(color: Colors.white.withAlpha(80)),
-                  ),
-                ],
-              ),
-            ),
-          ],
+                ),
+              );
+            },
+          ),
         ),
-      ),
+      ],
     );
   }
 }
@@ -167,9 +140,11 @@ class _HubLoading extends StatelessWidget {
   }
 }
 
-class _StudioAppBar extends StatelessWidget {
+class _StudioAppBar extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final hub = ref.watch(generateHubProvider('short-studio'));
+    final heroVideo = hub.valueOrNull?.heroBackgroundVideo;
     return SliverAppBar(
       expandedHeight: 240,
       backgroundColor: VrTheme.black,
@@ -180,8 +155,9 @@ class _StudioAppBar extends StatelessWidget {
         background: Stack(
           fit: StackFit.expand,
           children: [
-            AppNetworkImage(
-              url: 'https://picsum.photos/seed/studio/800/1200',
+            HeroVideoBackground(
+              videoUrl: heroVideo,
+              fallbackImageUrl: 'https://picsum.photos/seed/studio/800/1200',
               placeholderIcon: Icons.movie_creation_outlined,
             ),
             Container(
@@ -234,103 +210,6 @@ class _StartButton extends StatelessWidget {
         onPressed: () => context.push('/get-started'),
         icon: Icons.photo_camera_outlined,
         height: 58,
-      ),
-    );
-  }
-}
-
-class _StudioBottomNav extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        border: Border(top: BorderSide(color: VrTheme.surfaceDark, width: 0.5)),
-        color: Color(0xFF0C0C0C),
-      ),
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _NavItem(
-                Icons.person,
-                'Creator',
-                true,
-                () => context.go('/dashboard'),
-              ),
-              _NavItem(
-                Icons.business_center_outlined,
-                'Business',
-                false,
-                () => context.go('/business'),
-              ),
-              _NavItem(
-                Icons.record_voice_over_outlined,
-                'Speak',
-                false,
-                () => context.go('/speak'),
-              ),
-              _NavItem(
-                Icons.build_outlined,
-                'Tools',
-                false,
-                () => context.go('/tools'),
-              ),
-              _NavItem(
-                Icons.history_outlined,
-                'History',
-                false,
-                () => context.go('/history'),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _NavItem extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-  const _NavItem(this.icon, this.label, this.selected, this.onTap);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.easeOutCubic,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-        decoration: BoxDecoration(
-          color: selected ? VrTheme.purple.withAlpha(30) : Colors.transparent,
-          borderRadius: BorderRadius.circular(VrTheme.radiusMd),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              color: selected ? VrTheme.purple : VrTheme.textSecondary,
-              size: 22,
-            ),
-            const SizedBox(height: 2),
-            Text(
-              label,
-              style: TextStyle(
-                color: selected ? VrTheme.purple : VrTheme.textSecondary,
-                fontSize: 10,
-                fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
-                letterSpacing: 0.3,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

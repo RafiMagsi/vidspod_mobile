@@ -225,7 +225,7 @@ class _HistoryGrid extends StatelessWidget {
           return GestureDetector(
             onTap: () {
               if (type == 'Image' || type == 'Video') {
-                context.push('/generations/history-${i + 1}');
+                context.push('/generations');
               } else if (type == 'Script') {
                 context.push('/script-writer');
               } else if (type == 'Voice') {

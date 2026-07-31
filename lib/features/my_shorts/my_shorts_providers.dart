@@ -23,3 +23,15 @@ final shortRunsProvider = FutureProvider.autoDispose
           .getRuns(status: status)
           .then((page) => page.items);
     });
+
+/// A single run, fetched for progress polling (§5.3/§9).
+final shortRunProvider = FutureProvider.autoDispose.family<ShortRun, String>((
+  ref,
+  runId,
+) {
+  if (Config.previewMode) {
+    return Future.value(PreviewData.shortRun(runId));
+  }
+  final myShortsRepository = ref.watch(myShortsRepositoryProvider);
+  return myShortsRepository.getRun(runId);
+});

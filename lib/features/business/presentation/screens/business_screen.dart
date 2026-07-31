@@ -64,7 +64,7 @@ class _BusinessCategory extends StatelessWidget {
       itemBuilder: (_, i) => AppMotionCard(
         imageUrl: 'https://picsum.photos/seed/$seed$i/300/400',
         label: title,
-        route: '/motions/business-$seed$i',
+        route: '/motions',
         icon: Icons.business_center_outlined,
       ),
     );

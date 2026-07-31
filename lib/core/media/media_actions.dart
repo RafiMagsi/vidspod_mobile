@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:gal/gal.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 /// Save-to-gallery + share per docs/MOBILE_APP_GUIDE.md §8.
@@ -8,9 +12,16 @@ import 'package:share_plus/share_plus.dart';
 abstract final class MediaActions {
   /// Saves a local file to the gallery. Returns an error message on failure,
   /// or null on success.
-  static Future<String?> saveToGallery(String filePath) async {
+  static Future<String?> saveToGallery(
+    String filePath, {
+    bool isVideo = false,
+  }) async {
     try {
-      await Gal.putImage(filePath);
+      if (isVideo) {
+        await Gal.putVideo(filePath);
+      } else {
+        await Gal.putImage(filePath);
+      }
       return null;
     } on GalException catch (e) {
       return switch (e.type) {
@@ -21,6 +32,27 @@ abstract final class MediaActions {
       };
     } catch (_) {
       return 'Could not save to gallery';
+    }
+  }
+
+  /// Downloads [url] to a temp file and saves it to the gallery in one step.
+  /// Returns an error message on failure, or null on success.
+  static Future<String?> downloadAndSave(
+    String url, {
+    bool isVideo = false,
+    Dio? dio,
+  }) async {
+    try {
+      final dir = await getTemporaryDirectory();
+      final extension = isVideo ? '.mp4' : '.jpg';
+      final path =
+          '${dir.path}${Platform.pathSeparator}vsp_'
+          '${DateTime.now().millisecondsSinceEpoch}$extension';
+      final client = dio ?? Dio();
+      await client.download(url, path);
+      return saveToGallery(path, isVideo: isVideo);
+    } catch (_) {
+      return 'Could not download the file';
     }
   }
 

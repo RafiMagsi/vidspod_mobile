@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vidspod_mobile/core/theme/vr_theme.dart';
 import 'package:vidspod_mobile/core/models/short_run.dart';
 import 'package:vidspod_mobile/core/widgets/async_state_view.dart';
@@ -80,87 +81,95 @@ class _RunCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final primary = _statusColor(run.status);
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: VrTheme.surfaceDark,
-        borderRadius: BorderRadius.circular(VrTheme.radiusLg),
-        border: Border.all(color: VrTheme.cardBorder.withAlpha(60)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: primary.withAlpha(40),
-                  borderRadius: BorderRadius.circular(10),
+    return GestureDetector(
+      onTap: () => context.push('/my-shorts/${run.id}'),
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: VrTheme.surfaceDark,
+          borderRadius: BorderRadius.circular(VrTheme.radiusLg),
+          border: Border.all(color: VrTheme.cardBorder.withAlpha(60)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: primary.withAlpha(40),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(
+                    _statusIcon(run.status),
+                    color: primary,
+                    size: 20,
+                  ),
                 ),
-                child: Icon(_statusIcon(run.status), color: primary, size: 20),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        run.presetName,
+                        style: VrTheme.bodyMedium(fontWeight: FontWeight.w600),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        run.statusLabel,
+                        style: VrTheme.caption(color: primary),
+                      ),
+                    ],
+                  ),
+                ),
+                Text(
+                  run.aspectRatio,
+                  style: VrTheme.caption(color: Colors.white.withAlpha(70)),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              run.stageMessage,
+              style: VrTheme.bodySmall(color: Colors.white.withAlpha(90)),
+            ),
+            const SizedBox(height: 6),
+            LinearProgressIndicator(
+              value: run.playbackReady ? 1 : null,
+              backgroundColor: VrTheme.cardBorder.withAlpha(50),
+              color: primary,
+              minHeight: 3,
+              borderRadius: BorderRadius.circular(2),
+            ),
+            if (run.canRetry || run.canCancel)
+              Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: Row(
                   children: [
-                    Text(
-                      run.presetName,
-                      style: VrTheme.bodyMedium(fontWeight: FontWeight.w600),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      run.statusLabel,
-                      style: VrTheme.caption(color: primary),
-                    ),
+                    if (run.canCancel)
+                      _ActionButton(
+                        label: 'Cancel',
+                        icon: Icons.close,
+                        color: VrTheme.orange,
+                        onTap: () => _cancel(context, ref),
+                      ),
+                    if (run.canRetry)
+                      _ActionButton(
+                        label: 'Retry',
+                        icon: Icons.refresh,
+                        color: VrTheme.green,
+                        onTap: () => _retry(context, ref),
+                      ),
                   ],
                 ),
               ),
-              Text(
-                run.aspectRatio,
-                style: VrTheme.caption(color: Colors.white.withAlpha(70)),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Text(
-            run.stageMessage,
-            style: VrTheme.bodySmall(color: Colors.white.withAlpha(90)),
-          ),
-          const SizedBox(height: 6),
-          LinearProgressIndicator(
-            value: run.playbackReady ? 1 : null,
-            backgroundColor: VrTheme.cardBorder.withAlpha(50),
-            color: primary,
-            minHeight: 3,
-            borderRadius: BorderRadius.circular(2),
-          ),
-          if (run.canRetry || run.canCancel)
-            Padding(
-              padding: const EdgeInsets.only(top: 12),
-              child: Row(
-                children: [
-                  if (run.canCancel)
-                    _ActionButton(
-                      label: 'Cancel',
-                      icon: Icons.close,
-                      color: VrTheme.orange,
-                      onTap: () => _cancel(context, ref),
-                    ),
-                  if (run.canRetry)
-                    _ActionButton(
-                      label: 'Retry',
-                      icon: Icons.refresh,
-                      color: VrTheme.green,
-                      onTap: () => _retry(context, ref),
-                    ),
-                ],
-              ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

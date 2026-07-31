@@ -48,7 +48,9 @@ class DashboardScreen extends ConsumerWidget {
                     label: gen.isNotEmpty
                         ? gen[i % gen.length].status
                         : 'AI Generated',
-                    route: '/generations/history-${i + 1}',
+                    route: gen.isNotEmpty
+                        ? '/generations/${gen[i % gen.length].id}'
+                        : '/generations',
                   );
                 },
               ),
@@ -58,7 +60,7 @@ class DashboardScreen extends ConsumerWidget {
                 itemBuilder: (_, i) => AppMotionCard(
                   imageUrl: '',
                   label: 'AI Generated',
-                  route: '/motions/placeholder-$i',
+                  route: '/generations',
                 ),
               ),
               error: (_, _) => AppCategorySection(
@@ -67,7 +69,7 @@ class DashboardScreen extends ConsumerWidget {
                 itemBuilder: (_, i) => AppMotionCard(
                   imageUrl: '',
                   label: 'AI Generated',
-                  route: '/motions/placeholder-$i',
+                  route: '/generations',
                 ),
               ),
             ),
@@ -239,7 +241,7 @@ class _InFlightRuns extends StatelessWidget {
               itemBuilder: (_, i) {
                 final run = inFlight[i];
                 return GestureDetector(
-                  onTap: () => context.push('/my-shorts'),
+                  onTap: () => context.push('/my-shorts/${run.id}'),
                   child: Container(
                     width: 240,
                     padding: const EdgeInsets.all(12),

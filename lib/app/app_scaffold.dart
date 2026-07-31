@@ -78,6 +78,7 @@ class AppScaffold extends StatelessWidget {
     final location = GoRouterState.of(context).matchedLocation;
     if (location.startsWith('/profile')) return 0;
     if (location.startsWith('/dashboard')) return 0;
+    if (location.startsWith('/studio')) return 0;
     if (location.startsWith('/business')) return 1;
     if (location.startsWith('/speak')) return 2;
     if (location.startsWith('/tools')) return 3;
@@ -88,7 +89,7 @@ class AppScaffold extends StatelessWidget {
   void _onTap(int index, BuildContext context) {
     switch (index) {
       case 0:
-        context.go('/dashboard');
+        context.go('/studio');
       case 1:
         context.go('/business');
       case 2:

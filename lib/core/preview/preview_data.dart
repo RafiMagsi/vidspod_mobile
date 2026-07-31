@@ -161,7 +161,7 @@ abstract final class PreviewData {
         label: 'Cinematic Vertical',
         description: 'A cinematic look for vertical short-form video.',
         imageUrl: 'https://picsum.photos/seed/cinematic-9x16/400/600',
-        previewVideoUrl: '',
+        previewVideoUrl: 'https://media.w3.org/2010/05/sintel/trailer.mp4',
         aspectRatio: '9:16',
         durationSeconds: 21,
         sceneCount: 3,
@@ -183,6 +183,7 @@ abstract final class PreviewData {
         label: 'Product Spotlight',
         description: 'Product-focused 9:16 with a clean background.',
         imageUrl: 'https://picsum.photos/seed/product-focus/400/600',
+        previewVideoUrl: 'https://media.w3.org/2010/05/bunny/trailer.mp4',
         aspectRatio: '9:16',
         durationSeconds: 18,
         sceneCount: 2,
@@ -215,7 +216,8 @@ abstract final class PreviewData {
     cameraMovements: ['static', 'slow-pan', 'orbit', 'push-in'],
     aspectRatios: ['9:16'],
     userElements: [],
-    heroBackgroundVideo: 'https://picsum.photos/seed/studio-hero/800/1200',
+    heroBackgroundVideo:
+        'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
     generationCost: 25,
   );
 
@@ -244,7 +246,9 @@ abstract final class PreviewData {
     presetKey: 'cinematic-9x16',
     aspectRatio: '9:16',
     referenceImageUrl: 'https://picsum.photos/seed/$id/300/400',
-    playbackUrl: 'https://picsum.photos/seed/$id-play/300/400',
+    playbackUrl: status == 'completed'
+        ? 'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'
+        : null,
     playbackReady: status == 'completed',
     canRetry: canRetry,
     canCancel: status == 'generating',
@@ -287,6 +291,7 @@ abstract final class PreviewData {
     label: label,
     description: 'A $label preset for vertical short-form video.',
     imageUrl: 'https://picsum.photos/seed/$key/400/600',
+    previewVideoUrl: 'https://media.w3.org/2010/05/sintel/trailer.mp4',
     aspectRatio: '9:16',
     durationSeconds: 21,
     sceneCount: 3,
@@ -308,7 +313,8 @@ abstract final class PreviewData {
     title: id.replaceAll('-', ' ').toUpperCase(),
     description: 'A production-ready motion preset for your next social video.',
     thumbnailUrl: 'https://picsum.photos/seed/$id/600/360',
-    previewVideoUrl: '',
+    previewVideoUrl:
+        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
     referenceType: 'image',
     creditPrice: 25,
     supportedAspectRatios: const ['9:16', '1:1', '16:9'],

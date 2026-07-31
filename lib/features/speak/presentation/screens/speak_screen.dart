@@ -137,7 +137,7 @@ class _SpeakCategory extends StatelessWidget {
       itemBuilder: (_, i) => AppMotionCard(
         imageUrl: 'https://picsum.photos/seed/speak-$seed$i/300/400',
         label: title,
-        route: '/motions/speak-$seed$i',
+        route: '/motions',
         icon: Icons.record_voice_over_outlined,
       ),
     );

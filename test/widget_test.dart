@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:vidspod_mobile/app/app.dart';
 
 void main() {
-  testWidgets('preview app shell renders the dashboard', (
+  testWidgets('preview app shell renders the shorts studio home', (
     WidgetTester tester,
   ) async {
     GoogleFonts.config.allowRuntimeFetching = false;
@@ -18,6 +18,7 @@ void main() {
     // Suppress google_fonts exceptions (fonts not bundled in tests)
     while (tester.takeException() != null) {}
 
-    expect(find.text('Create a Short'), findsOneWidget);
+    expect(find.text('Shorts Studio'), findsOneWidget);
+    expect(find.text('Start From Photo'), findsOneWidget);
   });
 }

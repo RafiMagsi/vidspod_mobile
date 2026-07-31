@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vidspod_mobile/core/media/media_actions.dart';
 import 'package:vidspod_mobile/core/theme/vr_theme.dart';
 import 'package:vidspod_mobile/core/utils/platform_utils.dart';
+import 'package:vidspod_mobile/features/generations/domain/generation.dart';
 import 'package:vidspod_mobile/features/generations/generation_providers.dart';
 import 'package:vidspod_mobile/features/generations/presentation/widgets/video_player_widget.dart';
 
@@ -93,7 +95,7 @@ class GenerationDetailScreen extends ConsumerWidget {
                       child: _ActionChip(
                         Icons.download_outlined,
                         'Download',
-                        () => _snack(context, 'Downloading...'),
+                        () => _save(context, gen.videoUrl),
                         outlined: false,
                       ),
                     ),
@@ -102,7 +104,7 @@ class GenerationDetailScreen extends ConsumerWidget {
                       child: _ActionChip(
                         Icons.share_outlined,
                         'Share',
-                        () => _snack(context, 'Share'),
+                        () => _share(context, gen.videoUrl, gen),
                         outlined: true,
                       ),
                     ),
@@ -140,6 +142,25 @@ void _snack(BuildContext context, String message) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(content: Text(message), duration: const Duration(seconds: 2)),
   );
+}
+
+Future<void> _save(BuildContext context, String? url) async {
+  if (url == null || url.isEmpty) {
+    _snack(context, 'No video available to save');
+    return;
+  }
+  _snack(context, 'Saving to gallery…');
+  final error = await MediaActions.downloadAndSave(url, isVideo: true);
+  if (!context.mounted) return;
+  _snack(context, error ?? 'Saved to gallery');
+}
+
+Future<void> _share(BuildContext context, String? url, Generation gen) async {
+  if (url == null || url.isEmpty) {
+    _snack(context, 'No video available to share');
+    return;
+  }
+  await MediaActions.shareUrl(url, title: gen.id);
 }
 
 class _DetailRow extends StatelessWidget {

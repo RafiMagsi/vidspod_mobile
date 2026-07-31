@@ -17,6 +17,7 @@ import 'package:vidspod_mobile/features/history/presentation/screens/history_scr
 import 'package:vidspod_mobile/features/motions/presentation/screens/motion_detail_screen.dart';
 import 'package:vidspod_mobile/features/motions/presentation/screens/motion_list_screen.dart';
 import 'package:vidspod_mobile/features/my_shorts/presentation/screens/my_shorts_screen.dart';
+import 'package:vidspod_mobile/features/my_shorts/presentation/screens/run_detail_screen.dart';
 import 'package:vidspod_mobile/features/profile/presentation/screens/profile_screen.dart';
 import 'package:vidspod_mobile/features/projects/presentation/screens/project_detail_screen.dart';
 import 'package:vidspod_mobile/features/projects/presentation/screens/projects_screen.dart';
@@ -27,8 +28,8 @@ import 'package:vidspod_mobile/features/research/presentation/screens/research_l
 import 'package:vidspod_mobile/features/research/presentation/screens/research_tool_screen.dart';
 import 'package:vidspod_mobile/features/settings/presentation/screens/settings_screen.dart';
 import 'package:vidspod_mobile/features/shorts_studio/presentation/screens/get_started_screen.dart';
+import 'package:vidspod_mobile/features/shorts_studio/presentation/screens/motion_picker_screen.dart';
 import 'package:vidspod_mobile/features/shorts_studio/presentation/screens/shorts_studio_screen.dart';
-import 'package:vidspod_mobile/features/shorts_studio/presentation/screens/studio_generation_screen.dart';
 import 'package:vidspod_mobile/features/shorts_studio/presentation/screens/upload_suggestions_screen.dart';
 import 'package:vidspod_mobile/features/shorts_studio/presentation/screens/video_studio_screen.dart';
 import 'package:vidspod_mobile/features/speak/presentation/screens/speak_screen.dart';
@@ -109,6 +110,20 @@ Page<void> _fadeIn(Widget child, GoRouterState state) {
   );
 }
 
+/// Instant page swap for shell tabs. Switching Creator/Business/etc. must
+/// keep the persistent bottom bar and swap content without a full-screen
+/// cross-fade, per the tab-transition bug fix.
+Page<void> _tabPage(Widget child, GoRouterState state) {
+  return CustomTransitionPage<void>(
+    key: state.pageKey,
+    child: child,
+    transitionDuration: Duration.zero,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return child;
+    },
+  );
+}
+
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
   return GoRouter(
@@ -123,7 +138,7 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       if (!loggedIn) return '/login';
 
-      if (loggingIn) return '/dashboard';
+      if (loggingIn) return '/studio';
 
       return null;
     },
@@ -173,16 +188,16 @@ final routerProvider = Provider<GoRouter>((ref) {
         ),
       ),
       GoRoute(
-        path: '/studio',
+        path: '/studio/motions',
         parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) =>
-            _slideRight(const ShortsStudioScreen(), state),
+            _slideRight(const MotionPickerScreen(), state),
       ),
       GoRoute(
         path: '/studio/generation/:id',
         parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) => _slideRight(
-          StudioGenerationScreen(id: state.pathParameters['id']!),
+          RunDetailScreen(runId: state.pathParameters['id']!),
           state,
         ),
       ),
@@ -311,29 +326,34 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state, child) => AppScaffold(child: child),
         routes: <GoRoute>[
           GoRoute(
+            path: '/studio',
+            pageBuilder: (context, state) =>
+                _tabPage(const ShortsStudioScreen(), state),
+          ),
+          GoRoute(
             path: '/dashboard',
             pageBuilder: (context, state) =>
-                _slideRight(const DashboardScreen(), state),
+                _tabPage(const DashboardScreen(), state),
           ),
           GoRoute(
             path: '/business',
             pageBuilder: (context, state) =>
-                _slideRight(const BusinessScreen(), state),
+                _tabPage(const BusinessScreen(), state),
           ),
           GoRoute(
             path: '/speak',
             pageBuilder: (context, state) =>
-                _slideRight(const SpeakScreen(), state),
+                _tabPage(const SpeakScreen(), state),
           ),
           GoRoute(
             path: '/tools',
             pageBuilder: (context, state) =>
-                _slideRight(const ToolsScreen(), state),
+                _tabPage(const ToolsScreen(), state),
           ),
           GoRoute(
             path: '/history',
             pageBuilder: (context, state) =>
-                _slideRight(const HistoryScreen(), state),
+                _tabPage(const HistoryScreen(), state),
           ),
           GoRoute(
             path: '/motions',
@@ -349,6 +369,13 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/my-shorts',
             pageBuilder: (context, state) =>
                 _slideRight(const MyShortsScreen(), state),
+          ),
+          GoRoute(
+            path: '/my-shorts/:id',
+            pageBuilder: (context, state) => _slideRight(
+              RunDetailScreen(runId: state.pathParameters['id']!),
+              state,
+            ),
           ),
           GoRoute(
             path: '/profile',
