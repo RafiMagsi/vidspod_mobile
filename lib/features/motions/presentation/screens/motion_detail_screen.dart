@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
+import 'package:vidspod_mobile/core/widgets/app_network_image.dart';
 
 class MotionDetailScreen extends StatelessWidget {
   final String publicGuid;
@@ -78,12 +79,9 @@ class MotionDetailScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          Image.network(
-            'https://picsum.photos/seed/${data['img']}/800/1280',
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: double.infinity,
-            errorBuilder: (_, __, ___) => Container(color: Colors.black),
+          AppNetworkImage(
+            url: 'https://picsum.photos/seed/${data['img']}/800/1280',
+            placeholderIcon: Icons.movie_creation_outlined,
           ),
           Container(
             decoration: BoxDecoration(
@@ -124,9 +122,7 @@ class MotionDetailScreen extends StatelessWidget {
                         ),
                         decoration: BoxDecoration(
                           color: Colors.black.withAlpha(100),
-                          borderRadius: BorderRadius.circular(
-                            CreatiTheme.radiusMd,
-                          ),
+                          borderRadius: BorderRadius.circular(VrTheme.radiusMd),
                         ),
                         child: const Row(
                           mainAxisSize: MainAxisSize.min,
@@ -166,7 +162,7 @@ class MotionDetailScreen extends StatelessWidget {
                       const SizedBox(height: 8),
                       Text(
                         data['desc']!,
-                        style: CreatiTheme.bodyMedium(
+                        style: VrTheme.bodyMedium(
                           color: Colors.white.withAlpha(128),
                         ),
                         textAlign: TextAlign.center,
@@ -190,8 +186,8 @@ class MotionDetailScreen extends StatelessWidget {
                       height: 56,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(28),
-                        gradient: CreatiTheme.brandGradient,
-                        boxShadow: CreatiTheme.buttonShadow(CreatiTheme.purple),
+                        gradient: VrTheme.brandGradient,
+                        boxShadow: VrTheme.buttonShadow(VrTheme.purple),
                       ),
                       child: const Center(
                         child: Text(

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
 import 'package:vidspod_mobile/core/utils/platform_utils.dart';
+import 'package:vidspod_mobile/core/widgets/app_network_image.dart';
 
 class GetStartedScreen extends StatelessWidget {
   final String? motionId;
@@ -20,11 +21,11 @@ class GetStartedScreen extends StatelessWidget {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('SeeDance', style: CreatiTheme.headingSmall()),
+            Text('SeeDance', style: VrTheme.headingSmall()),
             if (motionTitle != null)
               Text(
                 motionTitle!,
-                style: CreatiTheme.caption(color: Colors.white.withAlpha(100)),
+                style: VrTheme.caption(color: Colors.white.withAlpha(100)),
               ),
           ],
         ),
@@ -54,7 +55,7 @@ class GetStartedScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Input', style: CreatiTheme.headingMedium()),
+        Text('Input', style: VrTheme.headingMedium()),
         const SizedBox(height: 12),
         Row(
           children: [
@@ -62,40 +63,46 @@ class GetStartedScreen extends StatelessWidget {
               width: 120,
               height: 160,
               decoration: BoxDecoration(
-                color: CreatiTheme.surfaceDark,
-                borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
-                image: const DecorationImage(
-                  image: NetworkImage(
-                    'https://picsum.photos/seed/face/200/200',
-                  ),
-                  fit: BoxFit.cover,
-                ),
+                color: VrTheme.surfaceDark,
+                borderRadius: BorderRadius.circular(VrTheme.radiusLg),
               ),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
-                  border: Border.all(color: CreatiTheme.purple, width: 2),
-                ),
-                alignment: Alignment.bottomCenter,
-                padding: const EdgeInsets.all(6),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 3,
+              clipBehavior: Clip.antiAlias,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  AppNetworkImage(
+                    url: 'https://picsum.photos/seed/face/200/200',
+                    placeholderIcon: Icons.person_outline,
                   ),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withAlpha(180),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: const Text(
-                    '@image1',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(VrTheme.radiusLg),
+                      border: Border.all(color: VrTheme.purple, width: 2),
                     ),
                   ),
-                ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 6),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 3,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withAlpha(180),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: const Text(
+                        '@image1',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(width: 16),
@@ -107,8 +114,8 @@ class GetStartedScreen extends StatelessWidget {
                 width: 100,
                 height: 130,
                 decoration: BoxDecoration(
-                  color: CreatiTheme.surfaceDark,
-                  borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
+                  color: VrTheme.surfaceDark,
+                  borderRadius: BorderRadius.circular(VrTheme.radiusLg),
                   border: Border.all(color: Colors.white.withAlpha(20)),
                 ),
                 child: Column(
@@ -146,8 +153,8 @@ class GetStartedScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: CreatiTheme.surfaceDark,
-        borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
+        color: VrTheme.surfaceDark,
+        borderRadius: BorderRadius.circular(VrTheme.radiusLg),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,14 +178,14 @@ class GetStartedScreen extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.auto_awesome,
-                    color: CreatiTheme.purple.withAlpha(150),
+                    color: VrTheme.purple.withAlpha(150),
                     size: 14,
                   ),
                   const SizedBox(width: 4),
                   Text(
                     'AI Powered',
                     style: TextStyle(
-                      color: CreatiTheme.purple.withAlpha(150),
+                      color: VrTheme.purple.withAlpha(150),
                       fontSize: 11,
                       fontWeight: FontWeight.w500,
                     ),
@@ -187,7 +194,7 @@ class GetStartedScreen extends StatelessWidget {
               ),
               Text(
                 '2879/1000',
-                style: CreatiTheme.caption(color: Colors.white.withAlpha(60)),
+                style: VrTheme.caption(color: Colors.white.withAlpha(60)),
               ),
             ],
           ),
@@ -205,13 +212,13 @@ class GetStartedScreen extends StatelessWidget {
         height: 54,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(27),
-          gradient: CreatiTheme.brandGradient,
-          boxShadow: CreatiTheme.buttonShadow(CreatiTheme.purple),
+          gradient: VrTheme.brandGradient,
+          boxShadow: VrTheme.buttonShadow(VrTheme.purple),
         ),
         child: Center(
           child: Text(
             'Generate',
-            style: CreatiTheme.bodyMedium(
+            style: VrTheme.bodyMedium(
               fontWeight: FontWeight.w600,
               fontSize: 16,
             ),
@@ -229,7 +236,7 @@ class GetStartedScreen extends StatelessWidget {
         const SizedBox(width: 6),
         Text(
           '50 credits',
-          style: CreatiTheme.bodySmall(color: Colors.white.withAlpha(110)),
+          style: VrTheme.bodySmall(color: Colors.white.withAlpha(110)),
         ),
       ],
     );

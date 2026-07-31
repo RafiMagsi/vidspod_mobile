@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
 
 class AppPlaceholder extends StatelessWidget {
   final IconData icon;
@@ -12,9 +12,9 @@ class AppPlaceholder extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            CreatiTheme.lightSurface,
-            CreatiTheme.mediumSurface,
-            CreatiTheme.darkSurface,
+            VrTheme.lightSurface,
+            VrTheme.mediumSurface,
+            VrTheme.darkSurface,
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,

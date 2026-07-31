@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
 
 class ReferEarnScreen extends StatelessWidget {
   const ReferEarnScreen({super.key});
@@ -8,15 +8,15 @@ class ReferEarnScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CreatiTheme.black,
+      backgroundColor: VrTheme.black,
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
             pinned: true,
-            backgroundColor: CreatiTheme.black,
+            backgroundColor: VrTheme.black,
             surfaceTintColor: Colors.transparent,
-            title: Text('Refer & Earn', style: CreatiTheme.headingLarge()),
+            title: Text('Refer & Earn', style: VrTheme.headingLarge()),
           ),
           SliverToBoxAdapter(child: _HeroSection()),
           SliverToBoxAdapter(child: _ReferralCode()),
@@ -24,7 +24,7 @@ class ReferEarnScreen extends StatelessWidget {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-              child: Text('How it works', style: CreatiTheme.headingMedium()),
+              child: Text('How it works', style: VrTheme.headingMedium()),
             ),
           ),
           SliverToBoxAdapter(
@@ -32,7 +32,7 @@ class ReferEarnScreen extends StatelessWidget {
               1,
               'Share your unique referral link',
               Icons.share_outlined,
-              CreatiTheme.purple,
+              VrTheme.purple,
             ),
           ),
           SliverToBoxAdapter(
@@ -40,7 +40,7 @@ class ReferEarnScreen extends StatelessWidget {
               2,
               'Friends sign up using your link',
               Icons.person_add_outlined,
-              CreatiTheme.blue,
+              VrTheme.blue,
             ),
           ),
           SliverToBoxAdapter(
@@ -48,7 +48,7 @@ class ReferEarnScreen extends StatelessWidget {
               3,
               'Earn 50 credits per referral',
               Icons.auto_awesome,
-              CreatiTheme.pink,
+              VrTheme.pink,
             ),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 24)),
@@ -70,24 +70,24 @@ class _HeroSection extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              CreatiTheme.purple.withAlpha(60),
-              CreatiTheme.pink.withAlpha(30),
+              VrTheme.purple.withAlpha(60),
+              VrTheme.pink.withAlpha(30),
               Colors.transparent,
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(CreatiTheme.radiusXl),
-          border: Border.all(color: CreatiTheme.purple.withAlpha(50)),
+          borderRadius: BorderRadius.circular(VrTheme.radiusXl),
+          border: Border.all(color: VrTheme.purple.withAlpha(50)),
         ),
         child: Column(
           children: [
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                gradient: CreatiTheme.brandGradient,
+                gradient: VrTheme.brandGradient,
                 shape: BoxShape.circle,
-                boxShadow: CreatiTheme.buttonShadow(CreatiTheme.purple),
+                boxShadow: VrTheme.buttonShadow(VrTheme.purple),
               ),
               child: const Icon(
                 Icons.emoji_events,
@@ -98,12 +98,12 @@ class _HeroSection extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               'Earn 50 Free Credits',
-              style: CreatiTheme.headingSmall(fontSize: 22),
+              style: VrTheme.headingSmall(fontSize: 22),
             ),
             const SizedBox(height: 6),
             Text(
               'For every friend who joins using your link',
-              style: CreatiTheme.bodySmall(color: Colors.white.withAlpha(100)),
+              style: VrTheme.bodySmall(color: Colors.white.withAlpha(100)),
             ),
           ],
         ),
@@ -122,16 +122,16 @@ class _ReferralCode extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: CreatiTheme.surfaceDark,
-          borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
-          border: Border.all(color: CreatiTheme.cardBorder.withAlpha(60)),
+          color: VrTheme.surfaceDark,
+          borderRadius: BorderRadius.circular(VrTheme.radiusLg),
+          border: Border.all(color: VrTheme.cardBorder.withAlpha(60)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Your Referral Code',
-              style: CreatiTheme.bodyMedium(fontWeight: FontWeight.w600),
+              style: VrTheme.bodyMedium(fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 10),
             Row(
@@ -143,10 +143,10 @@ class _ReferralCode extends StatelessWidget {
                       vertical: 12,
                     ),
                     decoration: BoxDecoration(
-                      color: CreatiTheme.darkSurface,
-                      borderRadius: BorderRadius.circular(CreatiTheme.radiusMd),
+                      color: VrTheme.darkSurface,
+                      borderRadius: BorderRadius.circular(VrTheme.radiusMd),
                       border: Border.all(
-                        color: CreatiTheme.cardBorder.withAlpha(50),
+                        color: VrTheme.cardBorder.withAlpha(50),
                       ),
                     ),
                     child: Text(
@@ -168,8 +168,8 @@ class _ReferralCode extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      gradient: CreatiTheme.brandGradient,
-                      borderRadius: BorderRadius.circular(CreatiTheme.radiusMd),
+                      gradient: VrTheme.brandGradient,
+                      borderRadius: BorderRadius.circular(VrTheme.radiusMd),
                     ),
                     child: const Icon(
                       Icons.copy,
@@ -191,9 +191,9 @@ class _ReferralCode extends StatelessWidget {
               child: Container(
                 height: 44,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(CreatiTheme.radiusFull),
-                  gradient: CreatiTheme.brandGradient,
-                  boxShadow: CreatiTheme.buttonShadow(CreatiTheme.purple),
+                  borderRadius: BorderRadius.circular(VrTheme.radiusFull),
+                  gradient: VrTheme.brandGradient,
+                  boxShadow: VrTheme.buttonShadow(VrTheme.purple),
                 ),
                 child: Center(
                   child: Row(
@@ -207,9 +207,7 @@ class _ReferralCode extends StatelessWidget {
                       const SizedBox(width: 6),
                       Text(
                         'Share Link',
-                        style: CreatiTheme.bodySmall(
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: VrTheme.bodySmall(fontWeight: FontWeight.w600),
                       ),
                     ],
                   ),
@@ -256,22 +254,19 @@ class _StatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: CreatiTheme.surfaceDark,
-        borderRadius: BorderRadius.circular(CreatiTheme.radiusMd),
-        border: Border.all(color: CreatiTheme.cardBorder.withAlpha(60)),
+        color: VrTheme.surfaceDark,
+        borderRadius: BorderRadius.circular(VrTheme.radiusMd),
+        border: Border.all(color: VrTheme.cardBorder.withAlpha(60)),
       ),
       child: Column(
         children: [
-          Icon(icon, color: CreatiTheme.purple.withAlpha(180), size: 20),
+          Icon(icon, color: VrTheme.purple.withAlpha(180), size: 20),
           const SizedBox(height: 8),
-          Text(
-            value,
-            style: CreatiTheme.headingSmall(fontWeight: FontWeight.w700),
-          ),
+          Text(value, style: VrTheme.headingSmall(fontWeight: FontWeight.w700)),
           const SizedBox(height: 2),
           Text(
             label,
-            style: CreatiTheme.caption(
+            style: VrTheme.caption(
               color: Colors.white.withAlpha(80),
               fontSize: 10,
             ),
@@ -297,9 +292,9 @@ class _StepCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: CreatiTheme.surfaceDark,
-          borderRadius: BorderRadius.circular(CreatiTheme.radiusMd),
-          border: Border.all(color: CreatiTheme.cardBorder.withAlpha(60)),
+          color: VrTheme.surfaceDark,
+          borderRadius: BorderRadius.circular(VrTheme.radiusMd),
+          border: Border.all(color: VrTheme.cardBorder.withAlpha(60)),
         ),
         child: Row(
           children: [
@@ -307,7 +302,7 @@ class _StepCard extends StatelessWidget {
               width: 32,
               height: 32,
               decoration: BoxDecoration(
-                gradient: CreatiTheme.brandGradient,
+                gradient: VrTheme.brandGradient,
                 shape: BoxShape.circle,
               ),
               child: Center(
@@ -325,7 +320,7 @@ class _StepCard extends StatelessWidget {
             Expanded(
               child: Text(
                 description,
-                style: CreatiTheme.bodySmall(fontWeight: FontWeight.w500),
+                style: VrTheme.bodySmall(fontWeight: FontWeight.w500),
               ),
             ),
             Icon(icon, color: color.withAlpha(150), size: 20),

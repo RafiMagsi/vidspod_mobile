@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
 
 class TransactionHistoryScreen extends StatelessWidget {
   const TransactionHistoryScreen({super.key});
@@ -12,7 +12,7 @@ class TransactionHistoryScreen extends StatelessWidget {
       '\$24.99',
       'Completed',
       Icons.add_circle_outline,
-      CreatiTheme.green,
+      VrTheme.green,
     ),
     _TxItem(
       'AI Video Generation',
@@ -21,7 +21,7 @@ class TransactionHistoryScreen extends StatelessWidget {
       '',
       'Completed',
       Icons.videocam_outlined,
-      CreatiTheme.purple,
+      VrTheme.purple,
     ),
     _TxItem(
       'Subscription Renewal',
@@ -30,7 +30,7 @@ class TransactionHistoryScreen extends StatelessWidget {
       '\$19.99',
       'Completed',
       Icons.workspace_premium_outlined,
-      CreatiTheme.blue,
+      VrTheme.blue,
     ),
     _TxItem(
       'Image Generation',
@@ -39,7 +39,7 @@ class TransactionHistoryScreen extends StatelessWidget {
       '',
       'Completed',
       Icons.image_outlined,
-      CreatiTheme.orange,
+      VrTheme.orange,
     ),
     _TxItem(
       'Voice Clone Enrollment',
@@ -48,7 +48,7 @@ class TransactionHistoryScreen extends StatelessWidget {
       '',
       'Completed',
       Icons.record_voice_over_outlined,
-      CreatiTheme.pink,
+      VrTheme.pink,
     ),
     _TxItem(
       'Credit Refund',
@@ -73,15 +73,15 @@ class TransactionHistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CreatiTheme.black,
+      backgroundColor: VrTheme.black,
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
             pinned: true,
-            backgroundColor: CreatiTheme.black,
+            backgroundColor: VrTheme.black,
             surfaceTintColor: Colors.transparent,
-            title: Text('Transactions', style: CreatiTheme.headingLarge()),
+            title: Text('Transactions', style: VrTheme.headingLarge()),
           ),
           SliverToBoxAdapter(
             child: Padding(
@@ -104,14 +104,12 @@ class TransactionHistoryScreen extends StatelessWidget {
                 children: [
                   Text(
                     '1,250 credits',
-                    style: CreatiTheme.bodyMedium(fontWeight: FontWeight.w600),
+                    style: VrTheme.bodyMedium(fontWeight: FontWeight.w600),
                   ),
                   const Spacer(),
                   Text(
                     'Total spent: \$44.98',
-                    style: CreatiTheme.caption(
-                      color: Colors.white.withAlpha(80),
-                    ),
+                    style: VrTheme.caption(color: Colors.white.withAlpha(80)),
                   ),
                 ],
               ),
@@ -162,12 +160,12 @@ class _FilterChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
       decoration: BoxDecoration(
-        gradient: selected ? CreatiTheme.brandGradient : null,
-        color: selected ? null : CreatiTheme.surfaceDark,
-        borderRadius: BorderRadius.circular(CreatiTheme.radiusFull),
+        gradient: selected ? VrTheme.brandGradient : null,
+        color: selected ? null : VrTheme.surfaceDark,
+        borderRadius: BorderRadius.circular(VrTheme.radiusFull),
         border: selected
             ? null
-            : Border.all(color: CreatiTheme.cardBorder.withAlpha(60)),
+            : Border.all(color: VrTheme.cardBorder.withAlpha(60)),
       ),
       child: Text(
         label,
@@ -194,9 +192,9 @@ class _TransactionCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: CreatiTheme.surfaceDark,
-          borderRadius: BorderRadius.circular(CreatiTheme.radiusMd),
-          border: Border.all(color: CreatiTheme.cardBorder.withAlpha(60)),
+          color: VrTheme.surfaceDark,
+          borderRadius: BorderRadius.circular(VrTheme.radiusMd),
+          border: Border.all(color: VrTheme.cardBorder.withAlpha(60)),
         ),
         child: Row(
           children: [
@@ -204,7 +202,7 @@ class _TransactionCard extends StatelessWidget {
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: item.color.withAlpha(20),
-                borderRadius: BorderRadius.circular(CreatiTheme.radiusSm),
+                borderRadius: BorderRadius.circular(VrTheme.radiusSm),
               ),
               child: Icon(item.icon, color: item.color, size: 18),
             ),
@@ -215,12 +213,12 @@ class _TransactionCard extends StatelessWidget {
                 children: [
                   Text(
                     item.title,
-                    style: CreatiTheme.bodySmall(fontWeight: FontWeight.w500),
+                    style: VrTheme.bodySmall(fontWeight: FontWeight.w500),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     item.subtitle,
-                    style: CreatiTheme.caption(
+                    style: VrTheme.caption(
                       color: Colors.white.withAlpha(60),
                       fontSize: 10,
                     ),
@@ -237,7 +235,7 @@ class _TransactionCard extends StatelessWidget {
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                     color: isCredit
-                        ? CreatiTheme.green
+                        ? VrTheme.green
                         : Colors.white.withAlpha(180),
                   ),
                 ),
@@ -257,7 +255,7 @@ class _TransactionCard extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: item.status == 'Completed'
-                        ? CreatiTheme.green.withAlpha(20)
+                        ? VrTheme.green.withAlpha(20)
                         : Colors.amber.withAlpha(20),
                     borderRadius: BorderRadius.circular(4),
                   ),
@@ -267,7 +265,7 @@ class _TransactionCard extends StatelessWidget {
                       fontSize: 8,
                       fontWeight: FontWeight.w600,
                       color: item.status == 'Completed'
-                          ? CreatiTheme.green
+                          ? VrTheme.green
                           : Colors.amber,
                     ),
                   ),

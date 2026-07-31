@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
 
 class ToolsScreen extends StatelessWidget {
   const ToolsScreen({super.key});
@@ -37,6 +37,18 @@ class ToolsScreen extends StatelessWidget {
       '/youtube-download',
     ),
     _ToolItem(
+      'My Shorts',
+      'Track generation runs',
+      Icons.video_library_outlined,
+      '/my-shorts',
+    ),
+    _ToolItem(
+      'Projects',
+      'Read, monitor & share',
+      Icons.folder_outlined,
+      '/projects',
+    ),
+    _ToolItem(
       'Publishing',
       'Publish to social platforms',
       Icons.share_outlined,
@@ -47,16 +59,16 @@ class ToolsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CreatiTheme.black,
+      backgroundColor: VrTheme.black,
       body: Scrollbar(
         child: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
             SliverAppBar(
               pinned: true,
-              backgroundColor: CreatiTheme.black,
+              backgroundColor: VrTheme.black,
               surfaceTintColor: Colors.transparent,
-              title: Text('Tools', style: CreatiTheme.headingLarge()),
+              title: Text('Tools', style: VrTheme.headingLarge()),
             ),
             SliverPadding(
               padding: const EdgeInsets.all(16),
@@ -94,8 +106,8 @@ class _ToolCard extends StatelessWidget {
   const _ToolCard({required this.item, required this.index});
 
   static const _gradients = [
-    CreatiTheme.brandGradient,
-    CreatiTheme.proGradient,
+    VrTheme.brandGradient,
+    VrTheme.proGradient,
     LinearGradient(colors: [Color(0xFF00B4DB), Color(0xFF0083B0)]),
     LinearGradient(colors: [Color(0xFFF857A6), Color(0xFFFF5858)]),
     LinearGradient(colors: [Color(0xFF4CB8C4), Color(0xFF3CD3AD)]),
@@ -113,10 +125,10 @@ class _ToolCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: CreatiTheme.surfaceDark,
-          borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
-          border: Border.all(color: CreatiTheme.cardBorder.withAlpha(60)),
-          boxShadow: CreatiTheme.cardShadow(CreatiTheme.black),
+          color: VrTheme.surfaceDark,
+          borderRadius: BorderRadius.circular(VrTheme.radiusLg),
+          border: Border.all(color: VrTheme.cardBorder.withAlpha(60)),
+          boxShadow: VrTheme.cardShadow(VrTheme.black),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,19 +137,19 @@ class _ToolCard extends StatelessWidget {
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 gradient: _gradients[index % _gradients.length],
-                borderRadius: BorderRadius.circular(CreatiTheme.radiusMd),
+                borderRadius: BorderRadius.circular(VrTheme.radiusMd),
               ),
               child: Icon(item.icon, color: Colors.white, size: 22),
             ),
             const Spacer(),
             Text(
               item.title,
-              style: CreatiTheme.bodyMedium(fontWeight: FontWeight.w600),
+              style: VrTheme.bodyMedium(fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 2),
             Text(
               item.subtitle,
-              style: CreatiTheme.caption(color: Colors.white.withAlpha(80)),
+              style: VrTheme.caption(color: Colors.white.withAlpha(80)),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),

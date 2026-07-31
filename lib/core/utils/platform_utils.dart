@@ -2,7 +2,7 @@ import 'dart:io' show Platform;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
 
 void hapticTap() => HapticFeedback.lightImpact();
 void hapticSelection() => HapticFeedback.selectionClick();
@@ -21,7 +21,7 @@ Widget platformLoader({double size = 24}) {
     height: size,
     child: const CircularProgressIndicator(
       strokeWidth: 2.5,
-      color: CreatiTheme.purple,
+      color: VrTheme.purple,
     ),
   );
 }

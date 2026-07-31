@@ -14,8 +14,11 @@ class AppCategorySection extends StatelessWidget {
     required this.itemCount,
     required this.itemBuilder,
     this.onAllTap,
-    this.itemHeight = 190,
+    this.itemHeight = _kDefaultItemHeight,
   });
+
+  /// 9:16 ratio for the 150px-wide motion cards.
+  static const double _kDefaultItemHeight = 267;
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +78,7 @@ class AppCategorySection extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             itemCount: itemCount,
-            separatorBuilder: (_, __) => const SizedBox(width: 10),
+            separatorBuilder: (_, _) => const SizedBox(width: 10),
             itemBuilder: itemBuilder,
           ),
         ),

@@ -1,317 +1,366 @@
-import 'package:flutter/material.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
-import 'package:vidspod_mobile/core/widgets/app_motion_card.dart';
-import 'package:vidspod_mobile/core/widgets/app_category_section.dart';
+import 'dart:io';
 
-class ImageStudioScreen extends StatelessWidget {
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
+import 'package:vidspod_mobile/core/utils/platform_utils.dart';
+import 'package:vidspod_mobile/features/billing/credit_gate.dart';
+import 'package:vidspod_mobile/features/tools/tools_providers.dart';
+
+/// Image Generator per docs/MOBILE_APP_GUIDE.md §5.4.
+///
+/// Modes are **Reference Edit** (`image_to_image`) and **Improve** (`improve`).
+/// Cost = `cost_per_image × variation_count`; ≤10 MB source image.
+class ImageStudioScreen extends ConsumerStatefulWidget {
   const ImageStudioScreen({super.key});
 
-  static const _generationModes = [
-    _GenMode(
-      'Text to Image',
-      'Generate from text prompt',
-      Icons.text_fields,
-      CreatiTheme.purple,
-      'text-to-image',
-    ),
-    _GenMode(
-      'Image to Image',
-      'Transform an existing image',
-      Icons.swap_horiz,
-      CreatiTheme.blue,
-      'image-to-image',
-    ),
-    _GenMode(
-      'Upscale',
-      'Enhance resolution',
-      Icons.zoom_out_map,
-      CreatiTheme.green,
-      'upscale',
-    ),
-    _GenMode(
-      'Inpaint',
-      'Edit specific areas',
-      Icons.edit_outlined,
-      CreatiTheme.pink,
-      'inpaint',
-    ),
-    _GenMode(
-      'Outpaint',
-      'Extend image canvas',
-      Icons.expand,
-      CreatiTheme.orange,
-      'outpaint',
-    ),
-    _GenMode(
-      'Variations',
-      'Create style variations',
-      Icons.style_outlined,
-      Colors.teal,
-      'variations',
-    ),
-  ];
+  @override
+  ConsumerState<ImageStudioScreen> createState() => _ImageStudioScreenState();
+}
+
+class _ImageStudioScreenState extends ConsumerState<ImageStudioScreen> {
+  static const _sizes = ['1024x1024', '1024x1536', '1536x1024'];
+
+  final _picker = ImagePicker();
+  File? _sourceImage;
+  String _mode = 'image_to_image'; // Reference Edit
+  String _size = '1024x1024';
+  int _variations = 1;
+  final _promptController = TextEditingController();
+  bool _generating = false;
+  List<String>? _results;
+
+  @override
+  void dispose() {
+    _promptController.dispose();
+    super.dispose();
+  }
+
+  bool get _isImprove => _mode == 'improve';
+
+  Future<void> _pickImage() async {
+    final picked = await _picker.pickImage(source: ImageSource.gallery);
+    if (picked != null) {
+      setState(() => _sourceImage = File(picked.path));
+    }
+  }
+
+  Future<void> _generate() async {
+    // Client validation (§5.4): source image required; prompt required unless
+    // improve; ≤10 MB.
+    if (_sourceImage == null) {
+      _snack('Add a reference photo first');
+      return;
+    }
+    if (!_isImprove && _promptController.text.trim().isEmpty) {
+      _snack('Add a prompt for Reference Edit');
+      return;
+    }
+    if (_sourceImage!.lengthSync() > 10 * 1024 * 1024) {
+      _snack('Image must be under 10 MB');
+      return;
+    }
+
+    setState(() {
+      _generating = true;
+      _results = null;
+    });
+
+    try {
+      final repository = ref.read(imageGeneratorRepositoryProvider);
+      final formData = _buildFormData();
+      await repository.generate(mode: _mode, formData: formData);
+      // Placeholder result until the backend returns real URLs (§5.4 🔴).
+      setState(() => _results = ['Image generated — $_size']);
+    } catch (e) {
+      if (!mounted) return;
+      if (!CreditGate.onApiError(context, e)) {
+        _snack('Generation failed: $e');
+      }
+    } finally {
+      if (mounted) setState(() => _generating = false);
+    }
+  }
+
+  FormData _buildFormData() {
+    return FormData.fromMap({
+      'mode': _mode,
+      if (!_isImprove) 'prompt': _promptController.text.trim(),
+      'size': _size,
+      'variation_count': _variations,
+      if (_sourceImage != null)
+        'source_image': MultipartFile.fromFileSync(
+          _sourceImage!.path,
+          filename: _sourceImage!.path.split('/').last,
+        ),
+    });
+  }
+
+  void _snack(String message) {
+    ScaffoldMessenger.of(context)
+      ..clearSnackBars()
+      ..showSnackBar(SnackBar(content: Text(message)));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CreatiTheme.black,
-      body: CustomScrollView(
-        physics: const BouncingScrollPhysics(),
-        slivers: [
-          SliverAppBar(
-            pinned: true,
-            backgroundColor: CreatiTheme.black,
-            surfaceTintColor: Colors.transparent,
-            title: Text('Image Studio', style: CreatiTheme.headingLarge()),
-            actions: [
-              Container(
-                margin: const EdgeInsets.only(right: 12),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 5,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.white.withAlpha(20),
-                  borderRadius: BorderRadius.circular(CreatiTheme.radiusFull),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.auto_awesome,
-                      color: CreatiTheme.purple.withAlpha(200),
-                      size: 14,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      'AI',
-                      style: CreatiTheme.caption(
-                        color: Colors.white.withAlpha(180),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SliverToBoxAdapter(child: _UploadPrompt()),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-              child: Text(
-                'Generation Modes',
-                style: CreatiTheme.headingMedium(),
-              ),
-            ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            sliver: SliverGrid(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 1.0,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (_, i) => _ModeCard(mode: _generationModes[i], index: i),
-                childCount: _generationModes.length,
-              ),
-            ),
-          ),
-          const SliverToBoxAdapter(
-            child: _StudioCategory('Style Transfer', 'style'),
-          ),
-          const SliverToBoxAdapter(
-            child: _StudioCategory('Recent Generations', 'igen'),
-          ),
-          const SliverToBoxAdapter(child: SizedBox(height: 24)),
-        ],
+      backgroundColor: VrTheme.black,
+      appBar: AppBar(
+        backgroundColor: VrTheme.black,
+        title: Text('Image Generator', style: VrTheme.headingLarge()),
       ),
-    );
-  }
-}
-
-void _snack(BuildContext context, String message) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(content: Text(message), duration: const Duration(seconds: 2)),
-  );
-}
-
-class _GenMode {
-  final String title;
-  final String subtitle;
-  final IconData icon;
-  final Color color;
-  final String id;
-  const _GenMode(this.title, this.subtitle, this.icon, this.color, this.id);
-}
-
-class _UploadPrompt extends StatelessWidget {
-  const _UploadPrompt();
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: CreatiTheme.surfaceDark,
-          borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
-          border: Border.all(color: CreatiTheme.cardBorder.withAlpha(60)),
-          boxShadow: CreatiTheme.cardShadow(CreatiTheme.black),
-        ),
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.all(16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            _photoSlot(),
+            const SizedBox(height: 20),
+            Text('Mode', style: VrTheme.headingMedium()),
+            const SizedBox(height: 10),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    gradient: CreatiTheme.brandGradient,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.image_outlined,
-                    color: Colors.white,
-                    size: 28,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 14),
-            Text(
-              'Upload or generate an image',
-              style: CreatiTheme.bodyMedium(fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'Create stunning AI-powered visuals',
-              style: CreatiTheme.bodySmall(color: Colors.white.withAlpha(80)),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _SmallChip(
-                  Icons.upload_outlined,
-                  'Upload',
-                  () => _snack(context, 'Upload image'),
+                _modeChip(
+                  'image_to_image',
+                  'Reference Edit',
+                  Icons.edit_outlined,
                 ),
                 const SizedBox(width: 10),
-                _SmallChip(
-                  Icons.auto_awesome,
-                  'Generate',
-                  () => _snack(context, 'Generate from prompt'),
-                ),
+                _modeChip('improve', 'Improve', Icons.auto_fix_high),
               ],
             ),
+            const SizedBox(height: 20),
+            Text('Size', style: VrTheme.headingMedium()),
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 8,
+              children: [for (final size in _sizes) _sizeChip(size)],
+            ),
+            const SizedBox(height: 20),
+            Text('Variations', style: VrTheme.headingMedium()),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                for (var n = 1; n <= 4; n++)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: ChoiceChip(
+                      label: Text('$n'),
+                      selected: _variations == n,
+                      onSelected: (_) => setState(() => _variations = n),
+                      selectedColor: VrTheme.purple,
+                      labelStyle: TextStyle(
+                        color: _variations == n ? Colors.white : Colors.white70,
+                      ),
+                      backgroundColor: VrTheme.darkSurface,
+                      side: BorderSide.none,
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              controller: _promptController,
+              enabled: !_isImprove,
+              style: const TextStyle(color: Colors.white),
+              maxLines: 4,
+              decoration: InputDecoration(
+                hintText: _isImprove
+                    ? 'Improve will enhance automatically (no prompt)'
+                    : 'Describe the edit you want…',
+                hintStyle: TextStyle(color: Colors.white.withAlpha(80)),
+                filled: true,
+                fillColor: VrTheme.darkSurface,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(VrTheme.radiusLg),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            if (_generating)
+              Center(child: platformLoader(size: 28))
+            else
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton.icon(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: VrTheme.purple,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
+                  onPressed: _generate,
+                  icon: const Icon(Icons.auto_awesome),
+                  label: const Text('Generate'),
+                ),
+              ),
+            if (_results != null) ...[
+              const SizedBox(height: 24),
+              Text('Results', style: VrTheme.headingMedium()),
+              const SizedBox(height: 12),
+              _resultsCarousel(),
+            ],
           ],
         ),
       ),
     );
   }
-}
 
-class _SmallChip extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-  const _SmallChip(this.icon, this.label, this.onTap);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _photoSlot() {
     return GestureDetector(
-      onTap: onTap,
+      onTap: _pickImage,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        height: 220,
+        width: double.infinity,
         decoration: BoxDecoration(
-          gradient: CreatiTheme.brandGradient,
-          borderRadius: BorderRadius.circular(CreatiTheme.radiusFull),
-          boxShadow: CreatiTheme.buttonShadow(CreatiTheme.purple),
+          color: VrTheme.darkSurface,
+          borderRadius: BorderRadius.circular(VrTheme.radiusLg),
+          border: Border.all(color: VrTheme.cardBorder.withAlpha(60)),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: _sourceImage != null
+            ? Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.file(_sourceImage!, fit: BoxFit.cover),
+                  Positioned(
+                    right: 8,
+                    bottom: 8,
+                    child: Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withAlpha(150),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.edit_outlined,
+                        color: Colors.white,
+                        size: 18,
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.add_photo_alternate_outlined,
+                    size: 40,
+                    color: Colors.white.withAlpha(70),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Add a reference photo',
+                    style: VrTheme.bodyMedium(
+                      color: Colors.white.withAlpha(90),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Camera or gallery · ≤10 MB',
+                    style: VrTheme.caption(color: Colors.white.withAlpha(60)),
+                  ),
+                ],
+              ),
+      ),
+    );
+  }
+
+  Widget _modeChip(String value, String label, IconData icon) {
+    final selected = _mode == value;
+    return GestureDetector(
+      onTap: () => setState(() => _mode = value),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: selected ? VrTheme.purple.withAlpha(30) : VrTheme.darkSurface,
+          borderRadius: BorderRadius.circular(VrTheme.radiusLg),
+          border: Border.all(
+            color: selected
+                ? VrTheme.purple.withAlpha(90)
+                : VrTheme.cardBorder.withAlpha(60),
+          ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: Colors.white.withAlpha(230), size: 14),
-            const SizedBox(width: 6),
+            Icon(
+              icon,
+              color: selected ? VrTheme.purple : Colors.white.withAlpha(80),
+              size: 18,
+            ),
+            const SizedBox(width: 8),
             Text(
               label,
-              style: CreatiTheme.caption(fontWeight: FontWeight.w600),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ModeCard extends StatelessWidget {
-  final _GenMode mode;
-  final int index;
-  const _ModeCard({required this.mode, required this.index});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('${mode.title} mode selected'))),
-      child: Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: CreatiTheme.surfaceDark,
-          borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
-          border: Border.all(color: mode.color.withAlpha(50)),
-          boxShadow: CreatiTheme.cardShadow(CreatiTheme.black),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: mode.color.withAlpha(25),
-                borderRadius: BorderRadius.circular(CreatiTheme.radiusSm),
+              style: TextStyle(
+                color: selected ? VrTheme.purple : Colors.white.withAlpha(90),
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
               ),
-              child: Icon(mode.icon, color: mode.color, size: 20),
-            ),
-            const Spacer(),
-            Text(
-              mode.title,
-              style: CreatiTheme.bodySmall(fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 2),
-            Text(
-              mode.subtitle,
-              style: CreatiTheme.caption(color: Colors.white.withAlpha(80)),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),
       ),
     );
   }
-}
 
-class _StudioCategory extends StatelessWidget {
-  final String title;
-  final String seed;
-  const _StudioCategory(this.title, this.seed);
+  Widget _sizeChip(String size) {
+    final selected = _size == size;
+    return GestureDetector(
+      onTap: () => setState(() => _size = size),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+        decoration: BoxDecoration(
+          color: selected ? VrTheme.blue.withAlpha(30) : VrTheme.darkSurface,
+          borderRadius: BorderRadius.circular(VrTheme.radiusFull),
+          border: Border.all(
+            color: selected
+                ? VrTheme.blue.withAlpha(90)
+                : VrTheme.cardBorder.withAlpha(60),
+          ),
+        ),
+        child: Text(
+          size,
+          style: TextStyle(
+            color: selected ? VrTheme.blue : Colors.white.withAlpha(90),
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    return AppCategorySection(
-      title: title,
-      itemCount: 4,
-      itemBuilder: (_, i) => AppMotionCard(
-        imageUrl: 'https://picsum.photos/seed/$seed$i/300/400',
-        label: '$title ${i + 1}',
-        route: '/motions/$seed-$i',
-        icon: Icons.image_outlined,
+  Widget _resultsCarousel() {
+    return SizedBox(
+      height: 260,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: _results!.length,
+        separatorBuilder: (_, _) => const SizedBox(width: 10),
+        itemBuilder: (_, i) => Container(
+          width: 200,
+          decoration: BoxDecoration(
+            color: VrTheme.mediumSurface,
+            borderRadius: BorderRadius.circular(VrTheme.radiusLg),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.image_outlined, size: 40, color: Colors.white60),
+              const SizedBox(height: 8),
+              Text(
+                _results![i],
+                style: VrTheme.caption(color: Colors.white.withAlpha(90)),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

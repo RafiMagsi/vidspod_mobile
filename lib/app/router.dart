@@ -16,16 +16,21 @@ import 'package:vidspod_mobile/features/generations/presentation/screens/generat
 import 'package:vidspod_mobile/features/history/presentation/screens/history_screen.dart';
 import 'package:vidspod_mobile/features/motions/presentation/screens/motion_detail_screen.dart';
 import 'package:vidspod_mobile/features/motions/presentation/screens/motion_list_screen.dart';
+import 'package:vidspod_mobile/features/my_shorts/presentation/screens/my_shorts_screen.dart';
 import 'package:vidspod_mobile/features/profile/presentation/screens/profile_screen.dart';
+import 'package:vidspod_mobile/features/projects/presentation/screens/project_detail_screen.dart';
+import 'package:vidspod_mobile/features/projects/presentation/screens/projects_screen.dart';
 import 'package:vidspod_mobile/features/publishing/presentation/screens/publishing_screen.dart';
 import 'package:vidspod_mobile/features/referrals/presentation/screens/refer_earn_screen.dart';
 import 'package:vidspod_mobile/features/research/presentation/screens/research_detail_screen.dart';
 import 'package:vidspod_mobile/features/research/presentation/screens/research_list_screen.dart';
+import 'package:vidspod_mobile/features/research/presentation/screens/research_tool_screen.dart';
 import 'package:vidspod_mobile/features/settings/presentation/screens/settings_screen.dart';
 import 'package:vidspod_mobile/features/shorts_studio/presentation/screens/get_started_screen.dart';
 import 'package:vidspod_mobile/features/shorts_studio/presentation/screens/shorts_studio_screen.dart';
 import 'package:vidspod_mobile/features/shorts_studio/presentation/screens/studio_generation_screen.dart';
 import 'package:vidspod_mobile/features/shorts_studio/presentation/screens/upload_suggestions_screen.dart';
+import 'package:vidspod_mobile/features/shorts_studio/presentation/screens/video_studio_screen.dart';
 import 'package:vidspod_mobile/features/speak/presentation/screens/speak_screen.dart';
 import 'package:vidspod_mobile/features/splash/splash_screen.dart';
 import 'package:vidspod_mobile/features/tools/presentation/screens/image_studio_screen.dart';
@@ -182,6 +187,17 @@ final routerProvider = Provider<GoRouter>((ref) {
         ),
       ),
       GoRoute(
+        path: '/studio/:category/:title',
+        parentNavigatorKey: _rootNavigatorKey,
+        pageBuilder: (context, state) => _slideRight(
+          VideoStudioScreen(
+            flowCategory: state.pathParameters['category']!,
+            title: Uri.decodeComponent(state.pathParameters['title']!),
+          ),
+          state,
+        ),
+      ),
+      GoRoute(
         path: '/image-studio',
         parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) =>
@@ -224,6 +240,28 @@ final routerProvider = Provider<GoRouter>((ref) {
         parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) => _slideRight(
           ResearchDetailScreen(id: state.pathParameters['id']!),
+          state,
+        ),
+      ),
+      GoRoute(
+        path: '/research/tools/:toolKey',
+        parentNavigatorKey: _rootNavigatorKey,
+        pageBuilder: (context, state) => _slideRight(
+          ResearchToolScreen(toolKey: state.pathParameters['toolKey']!),
+          state,
+        ),
+      ),
+      GoRoute(
+        path: '/projects',
+        parentNavigatorKey: _rootNavigatorKey,
+        pageBuilder: (context, state) =>
+            _slideRight(const ProjectsScreen(), state),
+      ),
+      GoRoute(
+        path: '/projects/:id',
+        parentNavigatorKey: _rootNavigatorKey,
+        pageBuilder: (context, state) => _slideRight(
+          ProjectDetailScreen(id: state.pathParameters['id']!),
           state,
         ),
       ),
@@ -306,6 +344,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/generations',
             pageBuilder: (context, state) =>
                 _slideRight(const GenerationListScreen(), state),
+          ),
+          GoRoute(
+            path: '/my-shorts',
+            pageBuilder: (context, state) =>
+                _slideRight(const MyShortsScreen(), state),
           ),
           GoRoute(
             path: '/profile',

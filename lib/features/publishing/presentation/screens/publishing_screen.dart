@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
 
 class PublishingScreen extends StatelessWidget {
   const PublishingScreen({super.key});
@@ -9,7 +9,7 @@ class PublishingScreen extends StatelessWidget {
       'YouTube',
       'youtube',
       Icons.play_circle_fill,
-      const Color(0xFFFF0000),
+      Color(0xFFFF0000),
       true,
       'TechChannel',
     ),
@@ -17,7 +17,7 @@ class PublishingScreen extends StatelessWidget {
       'Facebook',
       'facebook',
       Icons.facebook,
-      const Color(0xFF1877F2),
+      Color(0xFF1877F2),
       true,
       'My Page',
     ),
@@ -25,7 +25,7 @@ class PublishingScreen extends StatelessWidget {
       'Instagram',
       'instagram',
       Icons.photo_camera,
-      const Color(0xFFE4405F),
+      Color(0xFFE4405F),
       true,
       '@myhandle',
     ),
@@ -33,7 +33,7 @@ class PublishingScreen extends StatelessWidget {
       'TikTok',
       'tiktok',
       Icons.music_note,
-      const Color(0xFF000000),
+      Color(0xFF000000),
       false,
       null,
     ),
@@ -41,7 +41,7 @@ class PublishingScreen extends StatelessWidget {
       'LinkedIn',
       'linkedin',
       Icons.business,
-      const Color(0xFF0A66C2),
+      Color(0xFF0A66C2),
       false,
       null,
     ),
@@ -74,22 +74,22 @@ class PublishingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CreatiTheme.black,
+      backgroundColor: VrTheme.black,
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
             pinned: true,
-            backgroundColor: CreatiTheme.black,
+            backgroundColor: VrTheme.black,
             surfaceTintColor: Colors.transparent,
-            title: Text('Publishing', style: CreatiTheme.headingLarge()),
+            title: Text('Publishing', style: VrTheme.headingLarge()),
           ),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
               child: Text(
                 'Connected Platforms',
-                style: CreatiTheme.headingMedium(),
+                style: VrTheme.headingMedium(),
               ),
             ),
           ),
@@ -107,10 +107,7 @@ class PublishingScreen extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
               child: Row(
                 children: [
-                  Text(
-                    'Recent Publications',
-                    style: CreatiTheme.headingMedium(),
-                  ),
+                  Text('Recent Publications', style: VrTheme.headingMedium()),
                   const Spacer(),
                   GestureDetector(
                     onTap: () => ScaffoldMessenger.of(context).showSnackBar(
@@ -122,10 +119,8 @@ class PublishingScreen extends StatelessWidget {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        gradient: CreatiTheme.brandGradient,
-                        borderRadius: BorderRadius.circular(
-                          CreatiTheme.radiusFull,
-                        ),
+                        gradient: VrTheme.brandGradient,
+                        borderRadius: BorderRadius.circular(VrTheme.radiusFull),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -207,12 +202,12 @@ class _PlatformCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: CreatiTheme.surfaceDark,
-          borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
+          color: VrTheme.surfaceDark,
+          borderRadius: BorderRadius.circular(VrTheme.radiusLg),
           border: Border.all(
             color: item.connected
                 ? item.color.withAlpha(40)
-                : CreatiTheme.cardBorder.withAlpha(60),
+                : VrTheme.cardBorder.withAlpha(60),
           ),
         ),
         child: Row(
@@ -221,7 +216,7 @@ class _PlatformCard extends StatelessWidget {
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: item.color.withAlpha(20),
-                borderRadius: BorderRadius.circular(CreatiTheme.radiusMd),
+                borderRadius: BorderRadius.circular(VrTheme.radiusMd),
               ),
               child: Icon(item.icon, color: item.color, size: 22),
             ),
@@ -232,12 +227,12 @@ class _PlatformCard extends StatelessWidget {
                 children: [
                   Text(
                     item.name,
-                    style: CreatiTheme.bodyMedium(fontWeight: FontWeight.w600),
+                    style: VrTheme.bodyMedium(fontWeight: FontWeight.w600),
                   ),
                   if (item.connected && item.accountName != null)
                     Text(
                       item.accountName!,
-                      style: CreatiTheme.caption(
+                      style: VrTheme.caption(
                         color: Colors.white.withAlpha(80),
                         fontSize: 11,
                       ),
@@ -245,7 +240,7 @@ class _PlatformCard extends StatelessWidget {
                   if (!item.connected)
                     Text(
                       'Not connected',
-                      style: CreatiTheme.caption(
+                      style: VrTheme.caption(
                         color: Colors.white.withAlpha(50),
                         fontSize: 11,
                       ),
@@ -260,19 +255,19 @@ class _PlatformCard extends StatelessWidget {
                   vertical: 5,
                 ),
                 decoration: BoxDecoration(
-                  color: CreatiTheme.green.withAlpha(20),
-                  borderRadius: BorderRadius.circular(CreatiTheme.radiusFull),
+                  color: VrTheme.green.withAlpha(20),
+                  borderRadius: BorderRadius.circular(VrTheme.radiusFull),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.check, color: CreatiTheme.green, size: 12),
+                    Icon(Icons.check, color: VrTheme.green, size: 12),
                     SizedBox(width: 4),
                     Text(
                       'Connected',
                       style: TextStyle(
                         fontSize: 10,
-                        color: CreatiTheme.green,
+                        color: VrTheme.green,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -291,7 +286,7 @@ class _PlatformCard extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     border: Border.all(color: item.color.withAlpha(80)),
-                    borderRadius: BorderRadius.circular(CreatiTheme.radiusFull),
+                    borderRadius: BorderRadius.circular(VrTheme.radiusFull),
                   ),
                   child: Text(
                     'Connect',
@@ -317,9 +312,9 @@ class _PublicationCard extends StatelessWidget {
   Color get _statusColor {
     switch (item.status) {
       case 'Published':
-        return CreatiTheme.green;
+        return VrTheme.green;
       case 'Scheduled':
-        return CreatiTheme.blue;
+        return VrTheme.blue;
       case 'Failed':
         return Colors.red;
       default:
@@ -334,9 +329,9 @@ class _PublicationCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: CreatiTheme.surfaceDark,
-          borderRadius: BorderRadius.circular(CreatiTheme.radiusMd),
-          border: Border.all(color: CreatiTheme.cardBorder.withAlpha(60)),
+          color: VrTheme.surfaceDark,
+          borderRadius: BorderRadius.circular(VrTheme.radiusMd),
+          border: Border.all(color: VrTheme.cardBorder.withAlpha(60)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -346,7 +341,7 @@ class _PublicationCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     item.title,
-                    style: CreatiTheme.bodySmall(fontWeight: FontWeight.w500),
+                    style: VrTheme.bodySmall(fontWeight: FontWeight.w500),
                   ),
                 ),
                 Container(
@@ -356,7 +351,7 @@ class _PublicationCard extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: _statusColor.withAlpha(20),
-                    borderRadius: BorderRadius.circular(CreatiTheme.radiusFull),
+                    borderRadius: BorderRadius.circular(VrTheme.radiusFull),
                   ),
                   child: Text(
                     item.status,
@@ -402,7 +397,7 @@ class _PublicationCard extends StatelessWidget {
                 item.analytics,
                 style: TextStyle(
                   fontSize: 10,
-                  color: CreatiTheme.purple.withAlpha(150),
+                  color: VrTheme.purple.withAlpha(150),
                 ),
               ),
             ],

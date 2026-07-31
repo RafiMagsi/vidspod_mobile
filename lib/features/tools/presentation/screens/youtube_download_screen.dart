@@ -1,9 +1,49 @@
 import 'package:flutter/material.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
 import 'package:vidspod_mobile/core/utils/platform_utils.dart';
+import 'package:vidspod_mobile/core/widgets/app_network_image.dart';
+import 'package:vidspod_mobile/features/tools/tools_providers.dart';
 
-class YouTubeDownloadScreen extends StatelessWidget {
+class YouTubeDownloadScreen extends ConsumerStatefulWidget {
   const YouTubeDownloadScreen({super.key});
+
+  @override
+  ConsumerState<YouTubeDownloadScreen> createState() =>
+      _YouTubeDownloadScreenState();
+}
+
+class _YouTubeDownloadScreenState extends ConsumerState<YouTubeDownloadScreen> {
+  final _urlController = TextEditingController();
+  Map<String, dynamic>? _info;
+  bool _fetching = false;
+
+  @override
+  void dispose() {
+    _urlController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _fetchFormats() async {
+    final url = _urlController.text.trim();
+    if (url.isEmpty) {
+      _snack(context, 'Paste a YouTube URL first');
+      return;
+    }
+    setState(() {
+      _fetching = true;
+      _info = null;
+    });
+    try {
+      final repository = ref.read(youtubeDownloadRepositoryProvider);
+      final info = await repository.getInfo(url);
+      if (mounted) setState(() => _info = info);
+    } catch (e) {
+      if (mounted) _snack(context, 'Could not fetch formats: $e');
+    } finally {
+      if (mounted) setState(() => _fetching = false);
+    }
+  }
 
   static const _formats = [
     _FormatItem(
@@ -65,7 +105,7 @@ class YouTubeDownloadScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CreatiTheme.black,
+      backgroundColor: VrTheme.black,
       body: GestureDetector(
         onTap: () => dismissKeyboard(context),
         child: CustomScrollView(
@@ -73,21 +113,24 @@ class YouTubeDownloadScreen extends StatelessWidget {
           slivers: [
             SliverAppBar(
               pinned: true,
-              backgroundColor: CreatiTheme.black,
+              backgroundColor: VrTheme.black,
               surfaceTintColor: Colors.transparent,
-              title: Text(
-                'YouTube Download',
-                style: CreatiTheme.headingLarge(),
+              title: Text('YouTube Download', style: VrTheme.headingLarge()),
+            ),
+            SliverToBoxAdapter(
+              child: _UrlInput(
+                controller: _urlController,
+                fetching: _fetching,
+                onFetch: _fetchFormats,
               ),
             ),
-            const SliverToBoxAdapter(child: _UrlInput()),
-            const SliverToBoxAdapter(child: _VideoInfo()),
+            SliverToBoxAdapter(child: _VideoInfo(info: _info)),
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                 child: Text(
                   'Available Formats',
-                  style: CreatiTheme.headingMedium(),
+                  style: VrTheme.headingMedium(),
                 ),
               ),
             ),
@@ -109,10 +152,7 @@ class YouTubeDownloadScreen extends StatelessWidget {
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                child: Text(
-                  'Recent Downloads',
-                  style: CreatiTheme.headingMedium(),
-                ),
+                child: Text('Recent Downloads', style: VrTheme.headingMedium()),
               ),
             ),
             SliverPadding(
@@ -164,7 +204,14 @@ class _DownloadItem {
 }
 
 class _UrlInput extends StatelessWidget {
-  const _UrlInput();
+  final TextEditingController controller;
+  final bool fetching;
+  final VoidCallback onFetch;
+  const _UrlInput({
+    required this.controller,
+    required this.fetching,
+    required this.onFetch,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -173,10 +220,10 @@ class _UrlInput extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: CreatiTheme.surfaceDark,
-          borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
-          border: Border.all(color: CreatiTheme.cardBorder.withAlpha(60)),
-          boxShadow: CreatiTheme.cardShadow(CreatiTheme.black),
+          color: VrTheme.surfaceDark,
+          borderRadius: BorderRadius.circular(VrTheme.radiusLg),
+          border: Border.all(color: VrTheme.cardBorder.withAlpha(60)),
+          boxShadow: VrTheme.cardShadow(VrTheme.black),
         ),
         child: Column(
           children: [
@@ -186,7 +233,7 @@ class _UrlInput extends StatelessWidget {
                 gradient: const LinearGradient(
                   colors: [Color(0xFFFF0000), Color(0xFFCC0000)],
                 ),
-                borderRadius: BorderRadius.circular(CreatiTheme.radiusMd),
+                borderRadius: BorderRadius.circular(VrTheme.radiusMd),
               ),
               child: const Icon(
                 Icons.play_circle_fill,
@@ -197,33 +244,34 @@ class _UrlInput extends StatelessWidget {
             const SizedBox(height: 14),
             Text(
               'Paste YouTube URL',
-              style: CreatiTheme.bodyMedium(fontWeight: FontWeight.w600),
+              style: VrTheme.bodyMedium(fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 10),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 14),
               decoration: BoxDecoration(
-                color: CreatiTheme.darkSurface,
-                borderRadius: BorderRadius.circular(CreatiTheme.radiusMd),
-                border: Border.all(color: CreatiTheme.cardBorder.withAlpha(50)),
+                color: VrTheme.darkSurface,
+                borderRadius: BorderRadius.circular(VrTheme.radiusMd),
+                border: Border.all(color: VrTheme.cardBorder.withAlpha(50)),
               ),
-              child: const TextField(
-                decoration: InputDecoration(
+              child: TextField(
+                controller: controller,
+                decoration: const InputDecoration(
                   hintText: 'https://youtube.com/watch?v=...',
                   border: InputBorder.none,
                   hintStyle: TextStyle(color: Colors.white24, fontSize: 13),
                   isCollapsed: true,
                 ),
-                style: TextStyle(color: Colors.white, fontSize: 13),
+                style: const TextStyle(color: Colors.white, fontSize: 13),
               ),
             ),
             const SizedBox(height: 12),
             GestureDetector(
-              onTap: () => _snack(context, 'Fetching formats...'),
+              onTap: fetching ? null : onFetch,
               child: Container(
                 height: 44,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(CreatiTheme.radiusFull),
+                  borderRadius: BorderRadius.circular(VrTheme.radiusFull),
                   gradient: const LinearGradient(
                     colors: [Color(0xFFFF0000), Color(0xFFCC0000)],
                   ),
@@ -236,23 +284,32 @@ class _UrlInput extends StatelessWidget {
                   ],
                 ),
                 child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.search,
-                        color: Colors.white.withAlpha(230),
-                        size: 16,
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        'Fetch Formats',
-                        style: CreatiTheme.bodySmall(
-                          fontWeight: FontWeight.w600,
+                  child: fetching
+                      ? SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white.withAlpha(230),
+                          ),
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.search,
+                              color: Colors.white.withAlpha(230),
+                              size: 16,
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              'Fetch Formats',
+                              style: VrTheme.bodySmall(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
                 ),
               ),
             ),
@@ -264,18 +321,25 @@ class _UrlInput extends StatelessWidget {
 }
 
 class _VideoInfo extends StatelessWidget {
-  const _VideoInfo();
+  final Map<String, dynamic>? info;
+  const _VideoInfo({this.info});
 
   @override
   Widget build(BuildContext context) {
+    final title = (info?['title'] as String?) ?? 'Sample Video Title';
+    final thumbnail =
+        (info?['thumbnail'] as String?) ??
+        'https://picsum.photos/seed/yt-demo/120/90';
+    final duration = (info?['duration'] as String?) ?? '12:34';
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: CreatiTheme.surfaceDark,
-          borderRadius: BorderRadius.circular(CreatiTheme.radiusMd),
-          border: Border.all(color: CreatiTheme.cardBorder.withAlpha(60)),
+          color: VrTheme.surfaceDark,
+          borderRadius: BorderRadius.circular(VrTheme.radiusMd),
+          border: Border.all(color: VrTheme.cardBorder.withAlpha(60)),
         ),
         child: Row(
           children: [
@@ -284,12 +348,13 @@ class _VideoInfo extends StatelessWidget {
               height: 48,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),
-                image: const DecorationImage(
-                  image: NetworkImage(
-                    'https://picsum.photos/seed/yt-demo/120/90',
-                  ),
-                  fit: BoxFit.cover,
-                ),
+                color: VrTheme.darkSurface,
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: AppNetworkImage(
+                url: thumbnail,
+                borderRadius: 6,
+                placeholderIcon: Icons.play_circle_outline,
               ),
             ),
             const SizedBox(width: 12),
@@ -298,15 +363,15 @@ class _VideoInfo extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Sample Video Title',
-                    style: CreatiTheme.bodySmall(fontWeight: FontWeight.w500),
+                    title,
+                    style: VrTheme.bodySmall(fontWeight: FontWeight.w500),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    'TechChannel • 12:34 • 2.5M views',
-                    style: CreatiTheme.caption(
+                    '${info == null ? 'TechChannel' : 'YouTube'} • $duration',
+                    style: VrTheme.caption(
                       color: Colors.white.withAlpha(70),
                       fontSize: 10,
                     ),
@@ -329,7 +394,7 @@ class _FormatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isVideo = item.type == 'video';
-    final accentColor = isVideo ? CreatiTheme.purple : CreatiTheme.green;
+    final accentColor = isVideo ? VrTheme.purple : VrTheme.green;
     return GestureDetector(
       onTap: () => ScaffoldMessenger.of(
         context,
@@ -337,10 +402,10 @@ class _FormatCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: CreatiTheme.surfaceDark,
-          borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
+          color: VrTheme.surfaceDark,
+          borderRadius: BorderRadius.circular(VrTheme.radiusLg),
           border: Border.all(color: accentColor.withAlpha(40)),
-          boxShadow: CreatiTheme.cardShadow(CreatiTheme.black),
+          boxShadow: VrTheme.cardShadow(VrTheme.black),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -351,7 +416,7 @@ class _FormatCard extends StatelessWidget {
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: accentColor.withAlpha(25),
-                    borderRadius: BorderRadius.circular(CreatiTheme.radiusSm),
+                    borderRadius: BorderRadius.circular(VrTheme.radiusSm),
                   ),
                   child: Icon(item.icon, color: accentColor, size: 18),
                 ),
@@ -380,12 +445,12 @@ class _FormatCard extends StatelessWidget {
             const Spacer(),
             Text(
               item.title,
-              style: CreatiTheme.bodySmall(fontWeight: FontWeight.w600),
+              style: VrTheme.bodySmall(fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 1),
             Text(
               item.resolution,
-              style: CreatiTheme.caption(
+              style: VrTheme.caption(
                 color: Colors.white.withAlpha(70),
                 fontSize: 10,
               ),
@@ -393,7 +458,7 @@ class _FormatCard extends StatelessWidget {
             const SizedBox(height: 1),
             Text(
               item.size,
-              style: CreatiTheme.caption(
+              style: VrTheme.caption(
                 color: Colors.white.withAlpha(50),
                 fontSize: 9,
               ),
@@ -416,9 +481,9 @@ class _DownloadHistoryCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: CreatiTheme.surfaceDark,
-          borderRadius: BorderRadius.circular(CreatiTheme.radiusMd),
-          border: Border.all(color: CreatiTheme.cardBorder.withAlpha(60)),
+          color: VrTheme.surfaceDark,
+          borderRadius: BorderRadius.circular(VrTheme.radiusMd),
+          border: Border.all(color: VrTheme.cardBorder.withAlpha(60)),
         ),
         child: Row(
           children: [
@@ -426,7 +491,7 @@ class _DownloadHistoryCard extends StatelessWidget {
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: Colors.red.withAlpha(20),
-                borderRadius: BorderRadius.circular(CreatiTheme.radiusSm),
+                borderRadius: BorderRadius.circular(VrTheme.radiusSm),
               ),
               child: const Icon(
                 Icons.play_circle_fill,
@@ -441,12 +506,12 @@ class _DownloadHistoryCard extends StatelessWidget {
                 children: [
                   Text(
                     item.title,
-                    style: CreatiTheme.bodySmall(fontWeight: FontWeight.w500),
+                    style: VrTheme.bodySmall(fontWeight: FontWeight.w500),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     '${item.channel} • ${item.duration}',
-                    style: CreatiTheme.caption(
+                    style: VrTheme.caption(
                       color: Colors.white.withAlpha(60),
                       fontSize: 10,
                     ),
@@ -457,15 +522,15 @@ class _DownloadHistoryCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
               decoration: BoxDecoration(
-                color: CreatiTheme.green.withAlpha(20),
-                borderRadius: BorderRadius.circular(CreatiTheme.radiusFull),
+                color: VrTheme.green.withAlpha(20),
+                borderRadius: BorderRadius.circular(VrTheme.radiusFull),
               ),
               child: Text(
                 item.status,
                 style: TextStyle(
                   fontSize: 9,
                   fontWeight: FontWeight.w600,
-                  color: CreatiTheme.green,
+                  color: VrTheme.green,
                 ),
               ),
             ),

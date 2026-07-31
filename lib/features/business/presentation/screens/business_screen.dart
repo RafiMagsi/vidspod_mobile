@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
 import 'package:vidspod_mobile/core/widgets/app_category_section.dart';
 import 'package:vidspod_mobile/core/widgets/app_motion_card.dart';
 
@@ -15,15 +15,15 @@ class BusinessScreen extends StatelessWidget {
         slivers: [
           SliverAppBar(
             pinned: true,
-            backgroundColor: CreatiTheme.black,
+            backgroundColor: VrTheme.black,
             surfaceTintColor: Colors.transparent,
-            title: Text('Business', style: CreatiTheme.headingLarge()),
+            title: Text('Business', style: VrTheme.headingLarge()),
             actions: [
               IconButton(
                 icon: Container(
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                    color: CreatiTheme.darkSurface,
+                    color: VrTheme.darkSurface,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: const Icon(Icons.add, color: Colors.white, size: 20),

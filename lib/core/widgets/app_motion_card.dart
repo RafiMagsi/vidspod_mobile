@@ -1,10 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
 import 'package:vidspod_mobile/core/utils/platform_utils.dart';
-import 'package:vidspod_mobile/core/widgets/app_placeholder.dart';
-import 'package:vidspod_mobile/core/widgets/shimmer_widget.dart';
+import 'package:vidspod_mobile/core/widgets/app_network_image.dart';
 
 class AppMotionCard extends StatefulWidget {
   final String imageUrl;
@@ -21,7 +19,7 @@ class AppMotionCard extends StatefulWidget {
     this.icon,
     required this.route,
     this.width = 150,
-    this.height = 190,
+    this.height = 267,
   });
 
   @override
@@ -80,35 +78,32 @@ class _AppMotionCardState extends State<AppMotionCard>
           duration: const Duration(milliseconds: 150),
           width: widget.width,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
-            color: CreatiTheme.darkSurface,
+            borderRadius: BorderRadius.circular(VrTheme.radiusLg),
+            color: VrTheme.darkSurface,
             border: Border.all(
               color: _pressed
-                  ? CreatiTheme.purple.withAlpha(100)
-                  : CreatiTheme.cardBorder.withAlpha(80),
+                  ? VrTheme.purple.withAlpha(100)
+                  : VrTheme.cardBorder.withAlpha(80),
             ),
             boxShadow: _pressed
                 ? [
                     BoxShadow(
-                      color: CreatiTheme.purple.withAlpha(15),
+                      color: VrTheme.purple.withAlpha(15),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
                   ]
-                : CreatiTheme.cardShadow(CreatiTheme.black),
+                : VrTheme.cardShadow(VrTheme.black),
           ),
           clipBehavior: Clip.antiAlias,
           child: Stack(
             fit: StackFit.expand,
             children: [
-              CachedNetworkImage(
-                imageUrl: widget.imageUrl,
-                fit: BoxFit.cover,
-                placeholder: (_, __) =>
-                    ShimmerWidget(width: widget.width, height: widget.height),
-                errorWidget: (_, __, ___) => AppPlaceholder(
-                  icon: widget.icon ?? Icons.movie_creation_outlined,
-                ),
+              AppNetworkImage(
+                url: widget.imageUrl,
+                width: widget.width,
+                height: widget.height,
+                placeholderIcon: widget.icon ?? Icons.movie_creation_outlined,
               ),
               Positioned(
                 top: 8,
@@ -116,7 +111,7 @@ class _AppMotionCardState extends State<AppMotionCard>
                 child: Container(
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    gradient: CreatiTheme.brandGradient,
+                    gradient: VrTheme.brandGradient,
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: const Icon(
@@ -136,7 +131,7 @@ class _AppMotionCardState extends State<AppMotionCard>
                     gradient: LinearGradient(
                       colors: [
                         Colors.transparent,
-                        CreatiTheme.black.withAlpha(200),
+                        VrTheme.black.withAlpha(200),
                       ],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
@@ -157,8 +152,8 @@ class _AppMotionCardState extends State<AppMotionCard>
                 Positioned.fill(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: CreatiTheme.purple.withAlpha(10),
-                      borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
+                      color: VrTheme.purple.withAlpha(10),
+                      borderRadius: BorderRadius.circular(VrTheme.radiusLg),
                     ),
                   ),
                 ),

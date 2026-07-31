@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
 import 'package:vidspod_mobile/core/utils/platform_utils.dart';
 
 class AppScaffold extends StatelessWidget {
@@ -18,13 +18,13 @@ class AppScaffold extends StatelessWidget {
         bottomNavigationBar: Container(
           decoration: const BoxDecoration(
             border: Border(
-              top: BorderSide(color: CreatiTheme.surfaceDark, width: 0.5),
+              top: BorderSide(color: VrTheme.surfaceDark, width: 0.5),
             ),
           ),
           child: BottomNavigationBar(
-            backgroundColor: CreatiTheme.nearBlack,
-            selectedItemColor: CreatiTheme.purple,
-            unselectedItemColor: CreatiTheme.textSecondary,
+            backgroundColor: VrTheme.nearBlack,
+            selectedItemColor: VrTheme.purple,
+            unselectedItemColor: VrTheme.textSecondary,
             type: BottomNavigationBarType.fixed,
             elevation: 0,
             selectedLabelStyle: const TextStyle(

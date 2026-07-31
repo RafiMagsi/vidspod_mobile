@@ -1,53 +1,76 @@
 import 'package:dio/dio.dart';
 import 'package:vidspod_mobile/core/api/api_client.dart';
-import 'package:vidspod_mobile/core/errors/api_error.dart';
-import 'package:vidspod_mobile/core/storage/secure_storage_repository.dart';
-import 'package:vidspod_mobile/features/auth/domain/auth_tokens.dart';
+import 'package:vidspod_mobile/core/api/endpoints.dart';
+import 'package:vidspod_mobile/core/api/error_mapper.dart';
+import 'package:vidspod_mobile/core/auth/token_store.dart';
+import 'package:vidspod_mobile/features/auth/domain/user_session.dart';
 
 class AuthRepository {
   final ApiClient _apiClient;
-  final SecureStorageRepository _secureStorageRepository;
+  final TokenStore _tokenStore;
 
-  AuthRepository(this._apiClient, this._secureStorageRepository);
+  AuthRepository(this._apiClient, this._tokenStore);
 
   Future<void> register(String email, String password) async {
     try {
-      await _apiClient.dio.post(
-        '/auth/register',
+      await _apiClient.postObject(
+        Endpoints.register,
         data: {'email': email, 'password': password},
+        decoder: (_) => const {},
       );
     } on DioException catch (e) {
-      throw ApiError.fromJson(e.response!.data);
+      throw mapDioException(e);
     }
   }
 
-  Future<AuthTokens> login(String email, String password) async {
+  /// Mobile login per §4: `{email, password, device_name, platform}` →
+  /// `{access_token, refresh_token, expires_in, user}`.
+  Future<UserSession> login(
+    String email,
+    String password, {
+    String deviceName = 'mobile',
+    String platform = 'mobile',
+  }) async {
     try {
-      final response = await _apiClient.dio.post(
-        '/auth/login',
-        data: {'email': email, 'password': password},
+      final tokens = await _apiClient.postObject(
+        Endpoints.mobileLogin,
+        data: {
+          'email': email,
+          'password': password,
+          'device_name': deviceName,
+          'platform': platform,
+        },
+        decoder: UserSession.fromJson,
       );
-      final tokens = AuthTokens.fromJson(response.data);
-      await _secureStorageRepository.write(
-        key: 'access_token',
-        value: tokens.accessToken,
+      await _tokenStore.writeTokens(
+        access: tokens.accessToken,
+        refresh: tokens.refreshToken,
       );
-      await _secureStorageRepository.write(
-        key: 'refresh_token',
-        value: tokens.refreshToken,
-      );
+      await _tokenStore.writeDeviceName(deviceName);
       return tokens;
     } on DioException catch (e) {
-      throw ApiError.fromJson(e.response!.data);
+      throw mapDioException(e);
     }
   }
 
   Future<void> logout() async {
-    await _secureStorageRepository.delete(key: 'access_token');
-    await _secureStorageRepository.delete(key: 'refresh_token');
+    final refreshToken = await _tokenStore.readRefreshToken();
+    try {
+      if (refreshToken != null) {
+        await _apiClient.postObject(
+          Endpoints.mobileLogout,
+          data: {'refresh_token': refreshToken},
+          decoder: (_) => const {},
+        );
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode != 401) {
+        throw mapDioException(e);
+      }
+    } finally {
+      await _tokenStore.clear();
+    }
   }
 
-  Future<String?> getAccessToken() async {
-    return await _secureStorageRepository.read(key: 'access_token');
-  }
+  Future<String?> getAccessToken() => _tokenStore.readAccessToken();
 }

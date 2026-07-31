@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:vidspod_mobile/core/api/api_client.dart';
-import 'package:vidspod_mobile/core/errors/api_error.dart';
+import 'package:vidspod_mobile/core/api/endpoints.dart';
+import 'package:vidspod_mobile/core/api/error_mapper.dart';
 import 'package:vidspod_mobile/features/dashboard/domain/dashboard_summary.dart';
 import 'package:vidspod_mobile/features/dashboard/domain/recent_generation.dart';
 
+/// Home dashboard per docs/MOBILE_APP_GUIDE.md §5.1. Envelope-typed calls.
 class DashboardRepository {
   final ApiClient _apiClient;
 
@@ -11,22 +13,23 @@ class DashboardRepository {
 
   Future<DashboardSummary> getDashboardSummary() async {
     try {
-      final response = await _apiClient.dio.get('/dashboard/summary');
-      return DashboardSummary.fromJson(response.data);
+      return await _apiClient.getObject(
+        Endpoints.dashboard,
+        decoder: DashboardSummary.fromJson,
+      );
     } on DioException catch (e) {
-      throw ApiError.fromJson(e.response!.data);
+      throw mapDioException(e);
     }
   }
 
   Future<List<RecentGeneration>> getRecentGenerations() async {
     try {
-      final response = await _apiClient.dio.get(
-        '/dashboard/recent-generations',
+      return await _apiClient.getList(
+        Endpoints.dashboardRecent,
+        decoder: RecentGeneration.fromJson,
       );
-      final data = response.data as List;
-      return data.map((item) => RecentGeneration.fromJson(item)).toList();
     } on DioException catch (e) {
-      throw ApiError.fromJson(e.response!.data);
+      throw mapDioException(e);
     }
   }
 }

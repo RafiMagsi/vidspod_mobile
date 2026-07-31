@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
 import 'package:vidspod_mobile/core/utils/platform_utils.dart';
 
 class GradientButton extends StatefulWidget {
@@ -71,10 +71,10 @@ class _GradientButtonState extends State<GradientButton>
           height: widget.height,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(widget.height / 2),
-            gradient: CreatiTheme.brandGradient,
+            gradient: VrTheme.brandGradient,
             boxShadow: _pressed
-                ? CreatiTheme.buttonShadow(CreatiTheme.purple)
-                : CreatiTheme.buttonShadow(CreatiTheme.purple),
+                ? VrTheme.buttonShadow(VrTheme.purple)
+                : VrTheme.buttonShadow(VrTheme.purple),
           ),
           child: Center(
             child: Row(

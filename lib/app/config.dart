@@ -17,7 +17,6 @@ class Config {
       case Environment.production:
         return 'https://api.vidspod.com/api/v1';
       case Environment.development:
-      default:
         return 'http://localhost:8000/api/v1';
     }
   }

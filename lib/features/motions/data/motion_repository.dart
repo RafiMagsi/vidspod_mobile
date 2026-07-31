@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:vidspod_mobile/core/api/api_client.dart';
-import 'package:vidspod_mobile/core/errors/api_error.dart';
+import 'package:vidspod_mobile/core/api/endpoints.dart';
+import 'package:vidspod_mobile/core/api/error_mapper.dart';
 import 'package:vidspod_mobile/features/motions/domain/motion.dart';
 
+/// Motions catalog per docs/MOBILE_APP_GUIDE.md §5.12. Envelope-typed calls.
 class MotionRepository {
   final ApiClient _apiClient;
 
@@ -10,20 +12,23 @@ class MotionRepository {
 
   Future<List<Motion>> getMotions() async {
     try {
-      final response = await _apiClient.dio.get('/motions');
-      final data = response.data as List;
-      return data.map((item) => Motion.fromJson(item)).toList();
+      return await _apiClient.getList(
+        Endpoints.motions,
+        decoder: Motion.fromJson,
+      );
     } on DioException catch (e) {
-      throw ApiError.fromJson(e.response!.data);
+      throw mapDioException(e);
     }
   }
 
   Future<Motion> getMotionDetails(String publicGuid) async {
     try {
-      final response = await _apiClient.dio.get('/motions/$publicGuid');
-      return Motion.fromJson(response.data);
+      return await _apiClient.getObject(
+        Endpoints.motionWith(publicGuid),
+        decoder: Motion.fromJson,
+      );
     } on DioException catch (e) {
-      throw ApiError.fromJson(e.response!.data);
+      throw mapDioException(e);
     }
   }
 }

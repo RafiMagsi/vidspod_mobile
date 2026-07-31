@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
+import 'package:vidspod_mobile/core/widgets/app_network_image.dart';
 
 class UploadSuggestionsScreen extends StatelessWidget {
   const UploadSuggestionsScreen({super.key});
@@ -13,7 +14,7 @@ class UploadSuggestionsScreen extends StatelessWidget {
           icon: const Icon(Icons.close, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text('Upload suggestions', style: CreatiTheme.headingSmall()),
+        title: Text('Upload suggestions', style: VrTheme.headingSmall()),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -55,7 +56,7 @@ class _GoodExamples extends StatelessWidget {
             const SizedBox(width: 10),
             Text(
               'Good photo examples',
-              style: CreatiTheme.headingSmall(fontSize: 16),
+              style: VrTheme.headingSmall(fontSize: 16),
             ),
           ],
         ),
@@ -93,18 +94,17 @@ class _GoodCard extends StatelessWidget {
     return Container(
       width: 150,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
-        color: CreatiTheme.surfaceDark,
-        boxShadow: CreatiTheme.cardShadow(CreatiTheme.black),
+        borderRadius: BorderRadius.circular(VrTheme.radiusLg),
+        color: VrTheme.surfaceDark,
+        boxShadow: VrTheme.cardShadow(VrTheme.black),
       ),
       clipBehavior: Clip.antiAlias,
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Image.network(
-            url,
-            fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) => Container(),
+          AppNetworkImage(
+            url: url,
+            placeholderIcon: Icons.video_library_outlined,
           ),
           Container(
             decoration: BoxDecoration(
@@ -122,13 +122,10 @@ class _GoodCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: CreatiTheme.bodySmall(fontWeight: FontWeight.w600),
+                  style: VrTheme.bodySmall(fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 2),
-                Text(
-                  subtitle,
-                  style: CreatiTheme.caption(color: Colors.white70),
-                ),
+                Text(subtitle, style: VrTheme.caption(color: Colors.white70)),
               ],
             ),
           ),
@@ -157,7 +154,7 @@ class _BadExamples extends StatelessWidget {
             const SizedBox(width: 10),
             Text(
               'Bad photo examples',
-              style: CreatiTheme.headingSmall(fontSize: 16),
+              style: VrTheme.headingSmall(fontSize: 16),
             ),
           ],
         ),
@@ -189,8 +186,8 @@ class _BadCard extends StatelessWidget {
     return Container(
       width: 120,
       decoration: BoxDecoration(
-        color: CreatiTheme.surfaceDark,
-        borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
+        color: VrTheme.surfaceDark,
+        borderRadius: BorderRadius.circular(VrTheme.radiusLg),
         border: Border.all(color: Colors.red.withAlpha(50)),
       ),
       child: Column(
@@ -200,7 +197,7 @@ class _BadCard extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             label,
-            style: CreatiTheme.bodyMedium(color: Colors.white.withAlpha(100)),
+            style: VrTheme.bodyMedium(color: Colors.white.withAlpha(100)),
           ),
         ],
       ),
@@ -222,8 +219,8 @@ class _ActionButtons extends StatelessWidget {
             height: 54,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(27),
-              gradient: CreatiTheme.brandGradient,
-              boxShadow: CreatiTheme.buttonShadow(CreatiTheme.purple),
+              gradient: VrTheme.brandGradient,
+              boxShadow: VrTheme.buttonShadow(VrTheme.purple),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -236,7 +233,7 @@ class _ActionButtons extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   'From Camera',
-                  style: CreatiTheme.bodyMedium(
+                  style: VrTheme.bodyMedium(
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
                   ),
@@ -269,7 +266,7 @@ class _ActionButtons extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 'From Photo',
-                style: CreatiTheme.bodyMedium(
+                style: VrTheme.bodyMedium(
                   fontWeight: FontWeight.w500,
                   color: Colors.white.withAlpha(150),
                   fontSize: 16,

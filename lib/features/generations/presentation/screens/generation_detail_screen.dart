@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
 import 'package:vidspod_mobile/core/utils/platform_utils.dart';
 import 'package:vidspod_mobile/features/generations/generation_providers.dart';
 import 'package:vidspod_mobile/features/generations/presentation/widgets/video_player_widget.dart';
@@ -13,7 +13,7 @@ class GenerationDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final generation = ref.watch(generationProvider(id));
     return Scaffold(
-      backgroundColor: CreatiTheme.black,
+      backgroundColor: VrTheme.black,
       body: generation.when(
         data: (gen) => CustomScrollView(
           physics: const BouncingScrollPhysics(),
@@ -21,20 +21,20 @@ class GenerationDetailScreen extends ConsumerWidget {
             SliverAppBar(
               expandedHeight: 300,
               pinned: true,
-              backgroundColor: CreatiTheme.black,
+              backgroundColor: VrTheme.black,
               surfaceTintColor: Colors.transparent,
               flexibleSpace: FlexibleSpaceBar(
                 title: Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: Text(
                     'Generation ${gen.id.substring(0, 8)}...',
-                    style: CreatiTheme.caption(fontWeight: FontWeight.w600),
+                    style: VrTheme.caption(fontWeight: FontWeight.w600),
                   ),
                 ),
                 background: gen.videoUrl != null
                     ? VideoPlayerWidget(videoUrl: gen.videoUrl!)
                     : Container(
-                        color: CreatiTheme.darkSurface,
+                        color: VrTheme.darkSurface,
                         child: const Center(
                           child: Icon(
                             Icons.videocam_off_outlined,
@@ -51,17 +51,15 @@ class GenerationDetailScreen extends ConsumerWidget {
                 child: Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: CreatiTheme.surfaceDark,
-                    borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
-                    border: Border.all(
-                      color: CreatiTheme.cardBorder.withAlpha(60),
-                    ),
-                    boxShadow: CreatiTheme.cardShadow(CreatiTheme.black),
+                    color: VrTheme.surfaceDark,
+                    borderRadius: BorderRadius.circular(VrTheme.radiusLg),
+                    border: Border.all(color: VrTheme.cardBorder.withAlpha(60)),
+                    boxShadow: VrTheme.cardShadow(VrTheme.black),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Details', style: CreatiTheme.headingSmall()),
+                      Text('Details', style: VrTheme.headingSmall()),
                       const SizedBox(height: 14),
                       _DetailRow(Icons.tag, 'ID', gen.id),
                       _DetailRow(Icons.sync, 'Status', gen.status),
@@ -76,7 +74,7 @@ class GenerationDetailScreen extends ConsumerWidget {
                                 height: 20,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  color: CreatiTheme.purple,
+                                  color: VrTheme.purple,
                                 ),
                               )
                             : null,
@@ -161,13 +159,10 @@ class _DetailRow extends StatelessWidget {
           const SizedBox(width: 12),
           Text(
             label,
-            style: CreatiTheme.bodySmall(color: Colors.white.withAlpha(150)),
+            style: VrTheme.bodySmall(color: Colors.white.withAlpha(150)),
           ),
           const Spacer(),
-          Text(
-            value,
-            style: CreatiTheme.bodySmall(fontWeight: FontWeight.w500),
-          ),
+          Text(value, style: VrTheme.bodySmall(fontWeight: FontWeight.w500)),
           if (trailing != null) ...[const SizedBox(width: 8), trailing!],
         ],
       ),
@@ -196,12 +191,12 @@ class _ActionChip extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(CreatiTheme.radiusMd),
+          borderRadius: BorderRadius.circular(VrTheme.radiusMd),
           color: outlined
               ? Colors.transparent
               : (danger
                     ? Colors.red.withAlpha(30)
-                    : CreatiTheme.purple.withAlpha(30)),
+                    : VrTheme.purple.withAlpha(30)),
           border: outlined
               ? Border.all(color: Colors.white.withAlpha(30))
               : null,

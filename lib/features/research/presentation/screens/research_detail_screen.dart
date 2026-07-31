@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
 import 'package:vidspod_mobile/core/utils/platform_utils.dart';
 import 'package:vidspod_mobile/features/research/research_providers.dart';
 
@@ -13,15 +13,15 @@ class ResearchDetailScreen extends ConsumerWidget {
     final researchRun = ref.watch(researchRunProvider(id));
     final researchResults = ref.watch(researchRunResultsProvider(id));
     return Scaffold(
-      backgroundColor: CreatiTheme.black,
+      backgroundColor: VrTheme.black,
       body: researchRun.when(
         data: (run) => CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
             SliverAppBar(
-              title: Text(run.topic, style: CreatiTheme.headingSmall()),
+              title: Text(run.topic, style: VrTheme.headingSmall()),
               pinned: true,
-              backgroundColor: CreatiTheme.black,
+              backgroundColor: VrTheme.black,
               surfaceTintColor: Colors.transparent,
               actions: [
                 if (run.status == 'running')
@@ -29,7 +29,7 @@ class ResearchDetailScreen extends ConsumerWidget {
                     icon: Container(
                       padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: CreatiTheme.darkSurface,
+                        color: VrTheme.darkSurface,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Icon(
@@ -48,17 +48,15 @@ class ResearchDetailScreen extends ConsumerWidget {
                 child: Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: CreatiTheme.surfaceDark,
-                    borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
-                    border: Border.all(
-                      color: CreatiTheme.cardBorder.withAlpha(60),
-                    ),
-                    boxShadow: CreatiTheme.cardShadow(CreatiTheme.black),
+                    color: VrTheme.surfaceDark,
+                    borderRadius: BorderRadius.circular(VrTheme.radiusLg),
+                    border: Border.all(color: VrTheme.cardBorder.withAlpha(60)),
+                    boxShadow: VrTheme.cardShadow(VrTheme.black),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Details', style: CreatiTheme.headingSmall()),
+                      Text('Details', style: VrTheme.headingSmall()),
                       const SizedBox(height: 14),
                       _DetailRow(Icons.tag, 'ID', run.id),
                       _DetailRow(
@@ -71,7 +69,7 @@ class ResearchDetailScreen extends ConsumerWidget {
                                 height: 20,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  color: CreatiTheme.purple,
+                                  color: VrTheme.purple,
                                 ),
                               )
                             : null,
@@ -86,7 +84,7 @@ class ResearchDetailScreen extends ConsumerWidget {
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                 child: Text(
                   'Results',
-                  style: CreatiTheme.bodySmall(
+                  style: VrTheme.bodySmall(
                     fontWeight: FontWeight.w600,
                     color: Colors.white.withAlpha(150),
                   ),
@@ -100,7 +98,7 @@ class ResearchDetailScreen extends ConsumerWidget {
                         padding: const EdgeInsets.all(16),
                         child: Text(
                           'No results yet',
-                          style: CreatiTheme.bodySmall(
+                          style: VrTheme.bodySmall(
                             color: Colors.white.withAlpha(60),
                           ),
                         ),
@@ -113,17 +111,17 @@ class ResearchDetailScreen extends ConsumerWidget {
                           child: Container(
                             padding: const EdgeInsets.all(14),
                             decoration: BoxDecoration(
-                              color: CreatiTheme.surfaceDark,
+                              color: VrTheme.surfaceDark,
                               borderRadius: BorderRadius.circular(
-                                CreatiTheme.radiusLg,
+                                VrTheme.radiusLg,
                               ),
                               border: Border.all(
-                                color: CreatiTheme.cardBorder.withAlpha(60),
+                                color: VrTheme.cardBorder.withAlpha(60),
                               ),
                             ),
                             child: Text(
                               results[i].content,
-                              style: CreatiTheme.bodySmall(),
+                              style: VrTheme.bodySmall(),
                             ),
                           ),
                         ),
@@ -144,7 +142,7 @@ class ResearchDetailScreen extends ConsumerWidget {
                     padding: EdgeInsets.all(32),
                     child: Text(
                       'Error: $error',
-                      style: CreatiTheme.bodySmall(
+                      style: VrTheme.bodySmall(
                         color: Colors.white.withAlpha(100),
                       ),
                     ),
@@ -224,13 +222,10 @@ class _DetailRow extends StatelessWidget {
           const SizedBox(width: 12),
           Text(
             label,
-            style: CreatiTheme.bodySmall(color: Colors.white.withAlpha(150)),
+            style: VrTheme.bodySmall(color: Colors.white.withAlpha(150)),
           ),
           const Spacer(),
-          Text(
-            value,
-            style: CreatiTheme.bodySmall(fontWeight: FontWeight.w500),
-          ),
+          Text(value, style: VrTheme.bodySmall(fontWeight: FontWeight.w500)),
           if (trailing != null) ...[const SizedBox(width: 8), trailing!],
         ],
       ),
@@ -252,10 +247,8 @@ class _ActionChip extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(CreatiTheme.radiusMd),
-          color: outlined
-              ? Colors.transparent
-              : CreatiTheme.purple.withAlpha(30),
+          borderRadius: BorderRadius.circular(VrTheme.radiusMd),
+          color: outlined ? Colors.transparent : VrTheme.purple.withAlpha(30),
           border: outlined
               ? Border.all(color: Colors.white.withAlpha(30))
               : null,

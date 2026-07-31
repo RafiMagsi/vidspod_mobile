@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
 import 'package:vidspod_mobile/core/widgets/app_category_section.dart';
 import 'package:vidspod_mobile/core/widgets/app_motion_card.dart';
 
@@ -14,9 +14,9 @@ class SpeakScreen extends StatelessWidget {
         slivers: [
           SliverAppBar(
             pinned: true,
-            backgroundColor: CreatiTheme.black,
+            backgroundColor: VrTheme.black,
             surfaceTintColor: Colors.transparent,
-            title: Text('Speak', style: CreatiTheme.headingLarge()),
+            title: Text('Speak', style: VrTheme.headingLarge()),
             actions: [
               Container(
                 margin: const EdgeInsets.only(right: 12),
@@ -26,7 +26,7 @@ class SpeakScreen extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: Colors.white.withAlpha(20),
-                  borderRadius: BorderRadius.circular(CreatiTheme.radiusFull),
+                  borderRadius: BorderRadius.circular(VrTheme.radiusFull),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -39,7 +39,7 @@ class SpeakScreen extends StatelessWidget {
                     const SizedBox(width: 6),
                     Text(
                       'Listen',
-                      style: CreatiTheme.bodySmall(
+                      style: VrTheme.bodySmall(
                         fontWeight: FontWeight.w500,
                         color: Colors.white.withAlpha(150),
                       ),
@@ -61,10 +61,10 @@ class SpeakScreen extends StatelessWidget {
                       shape: BoxShape.circle,
                       gradient: SweepGradient(
                         colors: [
-                          CreatiTheme.purple,
-                          CreatiTheme.pink,
-                          CreatiTheme.orange,
-                          CreatiTheme.purple,
+                          VrTheme.purple,
+                          VrTheme.pink,
+                          VrTheme.orange,
+                          VrTheme.purple,
                         ],
                       ),
                     ),
@@ -78,7 +78,7 @@ class SpeakScreen extends StatelessWidget {
                         margin: const EdgeInsets.all(16),
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
-                          gradient: CreatiTheme.brandGradient,
+                          gradient: VrTheme.brandGradient,
                         ),
                         child: const Icon(
                           Icons.mic,
@@ -102,7 +102,7 @@ class SpeakScreen extends StatelessWidget {
                   const SizedBox(height: 6),
                   Text(
                     'Tap to start speaking',
-                    style: CreatiTheme.bodyMedium(
+                    style: VrTheme.bodyMedium(
                       color: Colors.white.withAlpha(80),
                     ),
                   ),

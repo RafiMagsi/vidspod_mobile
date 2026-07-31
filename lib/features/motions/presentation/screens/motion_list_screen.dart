@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
 import 'package:vidspod_mobile/core/utils/platform_utils.dart';
 import 'package:vidspod_mobile/core/widgets/app_motion_card.dart';
 import 'package:vidspod_mobile/core/widgets/staggered_fade_in.dart';
@@ -14,7 +14,7 @@ class MotionListScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final motions = ref.watch(motionListProvider);
     return Scaffold(
-      backgroundColor: CreatiTheme.black,
+      backgroundColor: VrTheme.black,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         leading: GoRouter.of(context).canPop()
@@ -23,7 +23,7 @@ class MotionListScreen extends ConsumerWidget {
                 onPressed: () => context.pop(),
               )
             : null,
-        title: Text('Motions', style: CreatiTheme.headingLarge()),
+        title: Text('Motions', style: VrTheme.headingLarge()),
       ),
       body: motions.when(
         data: (motions) => Scrollbar(
@@ -34,7 +34,7 @@ class MotionListScreen extends ConsumerWidget {
               crossAxisCount: 2,
               crossAxisSpacing: 12,
               mainAxisSpacing: 12,
-              childAspectRatio: 0.75,
+              childAspectRatio: 9 / 16,
             ),
             itemCount: motions.length,
             itemBuilder: (_, index) {
@@ -55,7 +55,7 @@ class MotionListScreen extends ConsumerWidget {
         error: (error, _) => Center(
           child: Text(
             'Failed to load motions',
-            style: CreatiTheme.bodyMedium(color: Colors.white.withAlpha(100)),
+            style: VrTheme.bodyMedium(color: Colors.white.withAlpha(100)),
           ),
         ),
       ),

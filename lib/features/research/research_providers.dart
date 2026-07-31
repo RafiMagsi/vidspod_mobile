@@ -19,6 +19,23 @@ final researchRunsProvider = FutureProvider<List<ResearchRun>>((ref) {
   return researchRepository.getResearchRuns();
 });
 
+/// Runs a research query for one of the eight tools (§5.9).
+final researchSearchProvider =
+    FutureProvider.family<ResearchRun, ({String query, String toolKey})>((
+      ref,
+      params,
+    ) async {
+      if (Config.previewMode) {
+        await Future<void>.delayed(const Duration(milliseconds: 400));
+        return PreviewData.researchRun('research-1');
+      }
+      final researchRepository = ref.watch(researchRepositoryProvider);
+      return researchRepository.search(
+        query: params.query,
+        toolKey: params.toolKey,
+      );
+    });
+
 final researchRunProvider = FutureProvider.family<ResearchRun, String>((
   ref,
   id,

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:vidspod_mobile/core/api/api_client.dart';
-import 'package:vidspod_mobile/core/errors/api_error.dart';
+import 'package:vidspod_mobile/core/api/endpoints.dart';
+import 'package:vidspod_mobile/core/api/error_mapper.dart';
 import 'package:vidspod_mobile/features/settings/domain/settings.dart';
 
 class SettingsRepository {
@@ -10,22 +11,24 @@ class SettingsRepository {
 
   Future<AppSettings> getSettings() async {
     try {
-      final response = await _apiClient.dio.get('/me/settings');
-      return AppSettings.fromJson(response.data);
+      return await _apiClient.getObject(
+        Endpoints.meSettings,
+        decoder: AppSettings.fromJson,
+      );
     } on DioException catch (e) {
-      throw ApiError.fromJson(e.response!.data);
+      throw mapDioException(e);
     }
   }
 
   Future<AppSettings> updateSettings(AppSettings settings) async {
     try {
-      final response = await _apiClient.dio.patch(
-        '/me/settings',
+      return await _apiClient.patchObject(
+        Endpoints.meSettings,
         data: settings.toJson(),
+        decoder: AppSettings.fromJson,
       );
-      return AppSettings.fromJson(response.data);
     } on DioException catch (e) {
-      throw ApiError.fromJson(e.response!.data);
+      throw mapDioException(e);
     }
   }
 }

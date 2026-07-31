@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
 import 'package:vidspod_mobile/core/utils/platform_utils.dart';
 import 'package:vidspod_mobile/features/auth/application/auth_service.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
-  LoginScreen({super.key});
+  const LoginScreen({super.key});
 
   @override
   ConsumerState<LoginScreen> createState() => _LoginScreenState();
@@ -29,7 +29,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final authNotifier = ref.read(authStateProvider.notifier);
 
     return Scaffold(
-      backgroundColor: CreatiTheme.black,
+      backgroundColor: VrTheme.black,
       body: GestureDetector(
         onTap: () => dismissKeyboard(context),
         child: SafeArea(
@@ -45,7 +45,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    gradient: CreatiTheme.brandGradient,
+                    gradient: VrTheme.brandGradient,
                   ),
                   child: const Icon(
                     Icons.auto_awesome,
@@ -57,30 +57,26 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 Text(
                   'Welcome to VidsPod',
                   textAlign: TextAlign.center,
-                  style: CreatiTheme.displayLarge(),
+                  style: VrTheme.displayLarge(),
                 ),
                 const SizedBox(height: 6),
                 Text(
                   'Sign in to continue creating',
                   textAlign: TextAlign.center,
-                  style: CreatiTheme.bodyMedium(
-                    color: Colors.white.withAlpha(120),
-                  ),
+                  style: VrTheme.bodyMedium(color: Colors.white.withAlpha(120)),
                 ),
                 const SizedBox(height: 48),
                 Container(
                   decoration: BoxDecoration(
-                    color: CreatiTheme.surfaceDark,
-                    borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
-                    border: Border.all(
-                      color: CreatiTheme.cardBorder.withAlpha(80),
-                    ),
+                    color: VrTheme.surfaceDark,
+                    borderRadius: BorderRadius.circular(VrTheme.radiusLg),
+                    border: Border.all(color: VrTheme.cardBorder.withAlpha(80)),
                   ),
                   child: TextField(
                     controller: _emailController,
                     decoration: InputDecoration(
                       hintText: 'Email',
-                      hintStyle: CreatiTheme.bodyMedium(
+                      hintStyle: VrTheme.bodyMedium(
                         color: Colors.white.withAlpha(60),
                       ),
                       prefixIcon: Icon(
@@ -91,25 +87,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       border: InputBorder.none,
                       contentPadding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    style: CreatiTheme.bodyMedium(),
+                    style: VrTheme.bodyMedium(),
                     keyboardType: TextInputType.emailAddress,
                   ),
                 ),
                 const SizedBox(height: 14),
                 Container(
                   decoration: BoxDecoration(
-                    color: CreatiTheme.surfaceDark,
-                    borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
-                    border: Border.all(
-                      color: CreatiTheme.cardBorder.withAlpha(80),
-                    ),
+                    color: VrTheme.surfaceDark,
+                    borderRadius: BorderRadius.circular(VrTheme.radiusLg),
+                    border: Border.all(color: VrTheme.cardBorder.withAlpha(80)),
                   ),
                   child: TextField(
                     controller: _passwordController,
                     obscureText: _obscurePassword,
                     decoration: InputDecoration(
                       hintText: 'Password',
-                      hintStyle: CreatiTheme.bodyMedium(
+                      hintStyle: VrTheme.bodyMedium(
                         color: Colors.white.withAlpha(60),
                       ),
                       prefixIcon: Icon(
@@ -132,7 +126,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       border: InputBorder.none,
                       contentPadding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    style: CreatiTheme.bodyMedium(),
+                    style: VrTheme.bodyMedium(),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -147,8 +141,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     height: 54,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(27),
-                      gradient: CreatiTheme.brandGradient,
-                      boxShadow: CreatiTheme.buttonShadow(CreatiTheme.purple),
+                      gradient: VrTheme.brandGradient,
+                      boxShadow: VrTheme.buttonShadow(VrTheme.purple),
                     ),
                     child: Center(
                       child: authState == AuthStatus.loading
@@ -159,7 +153,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             )
                           : Text(
                               'Sign In',
-                              style: CreatiTheme.bodyMedium(
+                              style: VrTheme.bodyMedium(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 16,
                               ),
@@ -175,7 +169,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                     child: Text(
                       'Forgot Password?',
-                      style: CreatiTheme.bodySmall(
+                      style: VrTheme.bodySmall(
                         color: Colors.white.withAlpha(100),
                       ),
                     ),
@@ -187,7 +181,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   children: [
                     Text(
                       "Don't have an account?",
-                      style: CreatiTheme.bodySmall(
+                      style: VrTheme.bodySmall(
                         color: Colors.white.withAlpha(100),
                       ),
                     ),
@@ -199,9 +193,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           ),
                       child: Text(
                         'Sign Up',
-                        style: CreatiTheme.bodySmall(
+                        style: VrTheme.bodySmall(
                           fontWeight: FontWeight.w600,
-                          color: CreatiTheme.purple,
+                          color: VrTheme.purple,
                         ),
                       ),
                     ),

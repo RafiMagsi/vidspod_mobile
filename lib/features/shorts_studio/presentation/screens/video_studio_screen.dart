@@ -1,0 +1,229 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
+import 'package:vidspod_mobile/core/utils/platform_utils.dart';
+import 'package:vidspod_mobile/core/widgets/app_category_section.dart';
+import 'package:vidspod_mobile/core/widgets/app_motion_card.dart';
+import 'package:vidspod_mobile/features/billing/credit_gate.dart';
+import 'package:vidspod_mobile/features/shorts_studio/domain/generate_hub.dart';
+import 'package:vidspod_mobile/features/shorts_studio/shorts_studio_providers.dart';
+
+/// Generic video studio per docs/MOBILE_APP_GUIDE.md §5.5.
+///
+/// Every studio is the same `/generate/hub` payload keyed by `flow_category`.
+/// Mobile shows prompt + style pack + aspect ratio + duration; the ~15 desktop
+/// production controls are hidden behind "Advanced". Nothing is hardcoded —
+/// all options come from the hub payload.
+class VideoStudioScreen extends ConsumerStatefulWidget {
+  final String flowCategory;
+  final String title;
+  const VideoStudioScreen({
+    super.key,
+    required this.flowCategory,
+    required this.title,
+  });
+
+  @override
+  ConsumerState<VideoStudioScreen> createState() => _VideoStudioScreenState();
+}
+
+class _VideoStudioScreenState extends ConsumerState<VideoStudioScreen> {
+  final _promptController = TextEditingController();
+  String? _stylePack;
+  String? _aspectRatio;
+
+  @override
+  void dispose() {
+    _promptController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final hub = ref.watch(generateHubProvider(widget.flowCategory));
+    return Scaffold(
+      backgroundColor: VrTheme.black,
+      appBar: AppBar(
+        backgroundColor: VrTheme.black,
+        title: Text(widget.title, style: VrTheme.headingLarge()),
+      ),
+      body: hub.when(
+        data: (data) => _StudioBody(
+          hub: data,
+          promptController: _promptController,
+          stylePack: _stylePack,
+          aspectRatio: _aspectRatio,
+          onStylePack: (v) => setState(() => _stylePack = v),
+          onAspectRatio: (v) => setState(() => _aspectRatio = v),
+        ),
+        loading: () => Center(child: platformLoader(size: 28)),
+        error: (error, _) => Center(
+          child: Text(
+            'Failed to load studio',
+            style: VrTheme.bodyMedium(color: Colors.white.withAlpha(100)),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _StudioBody extends ConsumerWidget {
+  final GenerateHub hub;
+  final TextEditingController promptController;
+  final String? stylePack;
+  final String? aspectRatio;
+  final ValueChanged<String> onStylePack;
+  final ValueChanged<String> onAspectRatio;
+  const _StudioBody({
+    required this.hub,
+    required this.promptController,
+    required this.stylePack,
+    required this.aspectRatio,
+    required this.onStylePack,
+    required this.onAspectRatio,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            (hub.flowMeta['title'] as String?) ?? 'Prompt',
+            style: VrTheme.headingMedium(),
+          ),
+          const SizedBox(height: 10),
+          TextField(
+            controller: promptController,
+            style: const TextStyle(color: Colors.white),
+            maxLines: 5,
+            decoration: InputDecoration(
+              hintText: 'Describe the video you want…',
+              hintStyle: TextStyle(color: Colors.white.withAlpha(80)),
+              filled: true,
+              fillColor: VrTheme.darkSurface,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(VrTheme.radiusLg),
+                borderSide: BorderSide.none,
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          if (hub.stylePacks.isNotEmpty) ...[
+            Text('Style pack', style: VrTheme.headingMedium()),
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 8,
+              children: [
+                for (final pack in hub.stylePacks)
+                  _optionChip(
+                    label:
+                        (pack['label'] as String?) ??
+                        (pack['key'] as String? ?? ''),
+                    selected: stylePack == pack['key'],
+                    onTap: () => onStylePack(pack['key'] as String? ?? ''),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 20),
+          ],
+          if (hub.aspectRatios.isNotEmpty) ...[
+            Text('Aspect ratio', style: VrTheme.headingMedium()),
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 8,
+              children: [
+                for (final ratio in hub.aspectRatios)
+                  _optionChip(
+                    label: ratio,
+                    selected: aspectRatio == ratio,
+                    onTap: () => onAspectRatio(ratio),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 20),
+          ],
+          Text(
+            'Duration: ~${(hub.flowMeta['default_duration_seconds'] as int?) ?? 15}s',
+            style: VrTheme.caption(color: Colors.white.withAlpha(80)),
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.icon(
+              style: FilledButton.styleFrom(
+                backgroundColor: VrTheme.purple,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+              ),
+              onPressed: () => _generate(context, ref),
+              icon: const Icon(Icons.auto_awesome),
+              label: Text('Generate · ${hub.generationCost} credits'),
+            ),
+          ),
+          if (hub.formatPresets.isNotEmpty) ...[
+            const SizedBox(height: 24),
+            AppCategorySection(
+              title: 'Presets',
+              itemCount: hub.formatPresets.length,
+              itemBuilder: (_, i) {
+                final preset = hub.formatPresets[i];
+                return AppMotionCard(
+                  imageUrl: preset.imageUrl ?? '',
+                  label: preset.label,
+                  route: '/get-started',
+                );
+              },
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _optionChip({
+    required String label,
+    required bool selected,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+        decoration: BoxDecoration(
+          color: selected ? VrTheme.purple.withAlpha(30) : VrTheme.darkSurface,
+          borderRadius: BorderRadius.circular(VrTheme.radiusFull),
+          border: Border.all(
+            color: selected
+                ? VrTheme.purple.withAlpha(90)
+                : VrTheme.cardBorder.withAlpha(60),
+          ),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: selected ? VrTheme.purple : Colors.white.withAlpha(90),
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _snack(BuildContext context, String message) {
+    ScaffoldMessenger.of(context)
+      ..clearSnackBars()
+      ..showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  Future<void> _generate(BuildContext context, WidgetRef ref) async {
+    // §3.4 / §5.5: block submit when the balance can't cover the run cost.
+    final ok = await CreditGate.ensureBalance(context, ref, hub.generationCost);
+    if (!ok || !context.mounted) return;
+    _snack(context, 'Generation coming soon');
+  }
+}

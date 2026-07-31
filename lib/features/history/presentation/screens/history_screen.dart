@@ -1,9 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
-import 'package:vidspod_mobile/core/widgets/app_placeholder.dart';
-import 'package:vidspod_mobile/core/widgets/shimmer_widget.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
+import 'package:vidspod_mobile/core/widgets/app_network_image.dart';
 
 class HistoryScreen extends StatelessWidget {
   const HistoryScreen({super.key});
@@ -18,9 +16,9 @@ class HistoryScreen extends StatelessWidget {
           slivers: [
             SliverAppBar(
               pinned: true,
-              backgroundColor: CreatiTheme.black,
+              backgroundColor: VrTheme.black,
               surfaceTintColor: Colors.transparent,
-              title: Text('History', style: CreatiTheme.headingLarge()),
+              title: Text('History', style: VrTheme.headingLarge()),
             ),
             const SliverToBoxAdapter(child: _CreditsBanner()),
             const SliverToBoxAdapter(child: _AmbassadorCard()),
@@ -44,17 +42,17 @@ class _CreditsBanner extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: CreatiTheme.surfaceDark,
-          borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
-          border: Border.all(color: CreatiTheme.cardBorder.withAlpha(60)),
-          boxShadow: CreatiTheme.cardShadow(CreatiTheme.black),
+          color: VrTheme.surfaceDark,
+          borderRadius: BorderRadius.circular(VrTheme.radiusLg),
+          border: Border.all(color: VrTheme.cardBorder.withAlpha(60)),
+          boxShadow: VrTheme.cardShadow(VrTheme.black),
         ),
         child: Row(
           children: [
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                gradient: CreatiTheme.brandGradient,
+                gradient: VrTheme.brandGradient,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: const Icon(
@@ -70,12 +68,12 @@ class _CreditsBanner extends StatelessWidget {
                 children: [
                   Text(
                     'Available Credits',
-                    style: CreatiTheme.bodyMedium(fontWeight: FontWeight.w500),
+                    style: VrTheme.bodyMedium(fontWeight: FontWeight.w500),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     '1,250 credits remaining',
-                    style: CreatiTheme.bodySmall(
+                    style: VrTheme.bodySmall(
                       color: Colors.white.withAlpha(100),
                     ),
                   ),
@@ -85,13 +83,13 @@ class _CreditsBanner extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                gradient: CreatiTheme.brandGradient,
-                borderRadius: BorderRadius.circular(CreatiTheme.radiusXl),
-                boxShadow: CreatiTheme.buttonShadow(CreatiTheme.purple),
+                gradient: VrTheme.brandGradient,
+                borderRadius: BorderRadius.circular(VrTheme.radiusXl),
+                boxShadow: VrTheme.buttonShadow(VrTheme.purple),
               ),
               child: Text(
                 'Buy',
-                style: CreatiTheme.bodySmall(fontWeight: FontWeight.w600),
+                style: VrTheme.bodySmall(fontWeight: FontWeight.w600),
               ),
             ),
           ],
@@ -112,12 +110,12 @@ class _AmbassadorCard extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [CreatiTheme.purple.withAlpha(30), Colors.transparent],
+            colors: [VrTheme.purple.withAlpha(30), Colors.transparent],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
-          border: Border.all(color: CreatiTheme.purple.withAlpha(50)),
+          borderRadius: BorderRadius.circular(VrTheme.radiusLg),
+          border: Border.all(color: VrTheme.purple.withAlpha(50)),
         ),
         child: Row(
           children: [
@@ -127,7 +125,7 @@ class _AmbassadorCard extends StatelessWidget {
                 children: [
                   Text(
                     'Become an ambassador',
-                    style: CreatiTheme.bodyMedium(
+                    style: VrTheme.bodyMedium(
                       fontWeight: FontWeight.w600,
                       fontSize: 15,
                     ),
@@ -135,7 +133,7 @@ class _AmbassadorCard extends StatelessWidget {
                   const SizedBox(height: 3),
                   Text(
                     'Earn rewards by referring friends',
-                    style: CreatiTheme.bodySmall(
+                    style: VrTheme.bodySmall(
                       color: Colors.white.withAlpha(110),
                     ),
                   ),
@@ -145,13 +143,13 @@ class _AmbassadorCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               decoration: BoxDecoration(
-                gradient: CreatiTheme.brandGradient,
+                gradient: VrTheme.brandGradient,
                 borderRadius: BorderRadius.circular(10),
-                boxShadow: CreatiTheme.buttonShadow(CreatiTheme.purple),
+                boxShadow: VrTheme.buttonShadow(VrTheme.purple),
               ),
               child: Text(
                 'Join',
-                style: CreatiTheme.bodySmall(fontWeight: FontWeight.w600),
+                style: VrTheme.bodySmall(fontWeight: FontWeight.w600),
               ),
             ),
           ],
@@ -170,23 +168,23 @@ class _HistoryTabBar extends StatelessWidget {
       margin: const EdgeInsets.fromLTRB(16, 12, 16, 0),
       height: 40,
       decoration: BoxDecoration(
-        color: CreatiTheme.surfaceDark,
-        borderRadius: BorderRadius.circular(CreatiTheme.radiusMd),
-        border: Border.all(color: CreatiTheme.cardBorder.withAlpha(60)),
+        color: VrTheme.surfaceDark,
+        borderRadius: BorderRadius.circular(VrTheme.radiusMd),
+        border: Border.all(color: VrTheme.cardBorder.withAlpha(60)),
       ),
       child: TabBar(
         indicator: BoxDecoration(
-          gradient: CreatiTheme.brandGradient,
-          borderRadius: BorderRadius.circular(CreatiTheme.radiusSm + 2),
+          gradient: VrTheme.brandGradient,
+          borderRadius: BorderRadius.circular(VrTheme.radiusSm + 2),
         ),
         indicatorSize: TabBarIndicatorSize.tab,
         labelColor: Colors.white,
-        unselectedLabelColor: CreatiTheme.textSecondary,
-        labelStyle: CreatiTheme.bodySmall(
+        unselectedLabelColor: VrTheme.textSecondary,
+        labelStyle: VrTheme.bodySmall(
           fontWeight: FontWeight.w600,
           fontSize: 11,
         ),
-        unselectedLabelStyle: CreatiTheme.bodySmall(fontSize: 11),
+        unselectedLabelStyle: VrTheme.bodySmall(fontSize: 11),
         dividerColor: Colors.transparent,
         isScrollable: true,
         tabs: const [
@@ -236,23 +234,17 @@ class _HistoryGrid extends StatelessWidget {
             },
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
-                border: Border.all(color: CreatiTheme.cardBorder.withAlpha(60)),
-                boxShadow: CreatiTheme.cardShadow(CreatiTheme.black),
+                borderRadius: BorderRadius.circular(VrTheme.radiusLg),
+                border: Border.all(color: VrTheme.cardBorder.withAlpha(60)),
+                boxShadow: VrTheme.cardShadow(VrTheme.black),
               ),
               clipBehavior: Clip.antiAlias,
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  CachedNetworkImage(
-                    imageUrl: 'https://picsum.photos/seed/history$i/300/400',
-                    fit: BoxFit.cover,
-                    placeholder: (_, __) => const ShimmerWidget(
-                      width: double.infinity,
-                      height: double.infinity,
-                    ),
-                    errorWidget: (_, __, ___) =>
-                        AppPlaceholder(icon: iconMap[type] ?? Icons.history),
+                  AppNetworkImage(
+                    url: 'https://picsum.photos/seed/history$i/300/400',
+                    placeholderIcon: iconMap[type] ?? Icons.history,
                   ),
                   Positioned(
                     bottom: 0,
@@ -264,16 +256,13 @@ class _HistoryGrid extends StatelessWidget {
                         gradient: LinearGradient(
                           colors: [
                             Colors.transparent,
-                            CreatiTheme.black.withAlpha(200),
+                            VrTheme.black.withAlpha(200),
                           ],
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                         ),
                       ),
-                      child: Text(
-                        '$type ${i + 1}',
-                        style: CreatiTheme.caption(),
-                      ),
+                      child: Text('$type ${i + 1}', style: VrTheme.caption()),
                     ),
                   ),
                   Positioned(

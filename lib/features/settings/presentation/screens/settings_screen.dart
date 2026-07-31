@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
 import 'package:vidspod_mobile/core/utils/platform_utils.dart';
 import 'package:vidspod_mobile/features/settings/settings_providers.dart';
 
@@ -12,10 +12,8 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsProvider);
     return Scaffold(
-      backgroundColor: CreatiTheme.black,
-      appBar: AppBar(
-        title: Text('Settings', style: CreatiTheme.headingLarge()),
-      ),
+      backgroundColor: VrTheme.black,
+      appBar: AppBar(title: Text('Settings', style: VrTheme.headingLarge())),
       body: settings.when(
         data: (settings) => Scrollbar(
           child: ListView(
@@ -137,7 +135,7 @@ class SettingsScreen extends ConsumerWidget {
                     showDialog(
                       context: context,
                       builder: (ctx) => AlertDialog(
-                        backgroundColor: CreatiTheme.surfaceDark,
+                        backgroundColor: VrTheme.surfaceDark,
                         title: const Text(
                           'Delete Account',
                           style: TextStyle(color: Colors.white),
@@ -233,10 +231,10 @@ class _SectionHeader extends StatelessWidget {
       child: Text(
         title.toUpperCase(),
         style: TextStyle(
-          color: CreatiTheme.purple.withAlpha(180),
+          color: VrTheme.purple.withAlpha(180),
           fontSize: 11,
           fontWeight: FontWeight.w700,
-          letterSpacing: CreatiTheme.letterSpacingLabel,
+          letterSpacing: VrTheme.letterSpacingLabel,
         ),
       ),
     );
@@ -268,7 +266,7 @@ class _SettingTile extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: CreatiTheme.bodyMedium(
+                      style: VrTheme.bodyMedium(
                         fontWeight: FontWeight.w500,
                         fontSize: 15,
                       ),
@@ -277,7 +275,7 @@ class _SettingTile extends StatelessWidget {
                       const SizedBox(height: 2),
                       Text(
                         subtitle!,
-                        style: CreatiTheme.caption(
+                        style: VrTheme.caption(
                           color: Colors.white.withAlpha(80),
                         ),
                       ),
@@ -318,7 +316,7 @@ class _SwitchTile extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: CreatiTheme.bodyMedium(
+                style: VrTheme.bodyMedium(
                   fontWeight: FontWeight.w500,
                   fontSize: 15,
                 ),
@@ -327,8 +325,8 @@ class _SwitchTile extends StatelessWidget {
             Switch(
               value: value,
               onChanged: onChanged,
-              activeColor: CreatiTheme.purple,
-              activeTrackColor: CreatiTheme.purple.withAlpha(80),
+              activeThumbColor: VrTheme.purple,
+              activeTrackColor: VrTheme.purple.withAlpha(80),
             ),
           ],
         ),
@@ -344,7 +342,7 @@ class _Divider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Divider(color: CreatiTheme.cardBorder.withAlpha(40), height: 1),
+      child: Divider(color: VrTheme.cardBorder.withAlpha(40), height: 1),
     );
   }
 }

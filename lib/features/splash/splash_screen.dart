@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -59,8 +59,8 @@ class _SplashScreenState extends State<SplashScreen>
                   height: 80,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    gradient: CreatiTheme.brandGradient,
-                    boxShadow: CreatiTheme.buttonShadow(CreatiTheme.purple),
+                    gradient: VrTheme.brandGradient,
+                    boxShadow: VrTheme.buttonShadow(VrTheme.purple),
                   ),
                   child: const Icon(
                     Icons.auto_awesome,
@@ -71,15 +71,12 @@ class _SplashScreenState extends State<SplashScreen>
                 const SizedBox(height: 24),
                 Text(
                   'VidsPod',
-                  style: CreatiTheme.displayLarge(
-                    fontSize: 44,
-                    letterSpacing: 3,
-                  ),
+                  style: VrTheme.displayLarge(fontSize: 44, letterSpacing: 3),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'AI Video & Motion Creator',
-                  style: CreatiTheme.bodySmall(
+                  style: VrTheme.bodySmall(
                     color: Colors.white.withAlpha(90),
                     letterSpacing: 2,
                   ),

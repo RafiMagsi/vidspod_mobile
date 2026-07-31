@@ -7,7 +7,7 @@ class VideoPlayerWidget extends StatefulWidget {
   const VideoPlayerWidget({super.key, required this.videoUrl});
 
   @override
-  _VideoPlayerWidgetState createState() => _VideoPlayerWidgetState();
+  State<VideoPlayerWidget> createState() => _VideoPlayerWidgetState();
 }
 
 class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {

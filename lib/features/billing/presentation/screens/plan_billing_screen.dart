@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
 
 class PlanBillingScreen extends StatelessWidget {
   const PlanBillingScreen({super.key});
@@ -19,20 +19,20 @@ class PlanBillingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CreatiTheme.black,
+      backgroundColor: VrTheme.black,
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
             pinned: true,
-            backgroundColor: CreatiTheme.black,
+            backgroundColor: VrTheme.black,
             surfaceTintColor: Colors.transparent,
-            title: Text('Plan & Billing', style: CreatiTheme.headingLarge()),
+            title: Text('Plan & Billing', style: VrTheme.headingLarge()),
           ),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-              child: Text('Current Plan', style: CreatiTheme.headingMedium()),
+              child: Text('Current Plan', style: VrTheme.headingMedium()),
             ),
           ),
           SliverPadding(
@@ -42,25 +42,20 @@ class PlanBillingScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [
-                      CreatiTheme.purple.withAlpha(40),
-                      Colors.transparent,
-                    ],
+                    colors: [VrTheme.purple.withAlpha(40), Colors.transparent],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-                  borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
-                  border: Border.all(color: CreatiTheme.purple.withAlpha(60)),
+                  borderRadius: BorderRadius.circular(VrTheme.radiusLg),
+                  border: Border.all(color: VrTheme.purple.withAlpha(60)),
                 ),
                 child: Row(
                   children: [
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        gradient: CreatiTheme.proGradient,
-                        borderRadius: BorderRadius.circular(
-                          CreatiTheme.radiusMd,
-                        ),
+                        gradient: VrTheme.proGradient,
+                        borderRadius: BorderRadius.circular(VrTheme.radiusMd),
                       ),
                       child: const Icon(
                         Icons.workspace_premium,
@@ -75,7 +70,7 @@ class PlanBillingScreen extends StatelessWidget {
                         children: [
                           Text(
                             'Creator Plan',
-                            style: CreatiTheme.bodyMedium(
+                            style: VrTheme.bodyMedium(
                               fontWeight: FontWeight.w600,
                               fontSize: 16,
                             ),
@@ -83,7 +78,7 @@ class PlanBillingScreen extends StatelessWidget {
                           const SizedBox(height: 2),
                           Text(
                             '\$19.99/mo • 100 credits remaining',
-                            style: CreatiTheme.caption(
+                            style: VrTheme.caption(
                               color: Colors.white.withAlpha(80),
                             ),
                           ),
@@ -96,14 +91,12 @@ class PlanBillingScreen extends StatelessWidget {
                         vertical: 7,
                       ),
                       decoration: BoxDecoration(
-                        gradient: CreatiTheme.brandGradient,
-                        borderRadius: BorderRadius.circular(
-                          CreatiTheme.radiusFull,
-                        ),
+                        gradient: VrTheme.brandGradient,
+                        borderRadius: BorderRadius.circular(VrTheme.radiusFull),
                       ),
                       child: Text(
                         'Manage',
-                        style: CreatiTheme.caption(fontWeight: FontWeight.w600),
+                        style: VrTheme.caption(fontWeight: FontWeight.w600),
                       ),
                     ),
                   ],
@@ -114,10 +107,7 @@ class PlanBillingScreen extends StatelessWidget {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
-              child: Text(
-                'Available Plans',
-                style: CreatiTheme.headingMedium(),
-              ),
+              child: Text('Available Plans', style: VrTheme.headingMedium()),
             ),
           ),
           SliverPadding(
@@ -132,7 +122,7 @@ class PlanBillingScreen extends StatelessWidget {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
-              child: Text('Credit Packs', style: CreatiTheme.headingMedium()),
+              child: Text('Credit Packs', style: VrTheme.headingMedium()),
             ),
           ),
           SliverPadding(
@@ -195,15 +185,15 @@ class _PlanCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: CreatiTheme.surfaceDark,
-          borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
+          color: VrTheme.surfaceDark,
+          borderRadius: BorderRadius.circular(VrTheme.radiusLg),
           border: Border.all(
             color: isActive
-                ? CreatiTheme.purple.withAlpha(60)
-                : CreatiTheme.cardBorder.withAlpha(60),
+                ? VrTheme.purple.withAlpha(60)
+                : VrTheme.cardBorder.withAlpha(60),
           ),
           boxShadow: isActive
-              ? CreatiTheme.buttonShadow(CreatiTheme.purple.withAlpha(30))
+              ? VrTheme.buttonShadow(VrTheme.purple.withAlpha(30))
               : null,
         ),
         child: Row(
@@ -216,9 +206,7 @@ class _PlanCard extends StatelessWidget {
                     children: [
                       Text(
                         plan.name,
-                        style: CreatiTheme.bodyMedium(
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: VrTheme.bodyMedium(fontWeight: FontWeight.w600),
                       ),
                       if (plan.isPopular) ...[
                         const SizedBox(width: 6),
@@ -228,7 +216,7 @@ class _PlanCard extends StatelessWidget {
                             vertical: 2,
                           ),
                           decoration: BoxDecoration(
-                            gradient: CreatiTheme.brandGradient,
+                            gradient: VrTheme.brandGradient,
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
@@ -247,7 +235,7 @@ class _PlanCard extends StatelessWidget {
                           'Current',
                           style: TextStyle(
                             fontSize: 10,
-                            color: CreatiTheme.green,
+                            color: VrTheme.green,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -260,14 +248,14 @@ class _PlanCard extends StatelessWidget {
                     children: [
                       Text(
                         plan.price,
-                        style: CreatiTheme.headingSmall(
+                        style: VrTheme.headingSmall(
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                       Text(
                         plan.period,
-                        style: CreatiTheme.caption(
+                        style: VrTheme.caption(
                           color: Colors.white.withAlpha(80),
                         ),
                       ),
@@ -276,7 +264,7 @@ class _PlanCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     plan.credits,
-                    style: CreatiTheme.caption(
+                    style: VrTheme.caption(
                       color: Colors.white.withAlpha(70),
                       fontSize: 11,
                     ),
@@ -292,21 +280,21 @@ class _PlanCard extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   gradient: plan.isPopular
-                      ? CreatiTheme.brandGradient
+                      ? VrTheme.brandGradient
                       : LinearGradient(
                           colors: [
                             Colors.white.withAlpha(15),
                             Colors.white.withAlpha(5),
                           ],
                         ),
-                  borderRadius: BorderRadius.circular(CreatiTheme.radiusFull),
+                  borderRadius: BorderRadius.circular(VrTheme.radiusFull),
                   border: plan.isPopular
                       ? null
-                      : Border.all(color: CreatiTheme.cardBorder.withAlpha(60)),
+                      : Border.all(color: VrTheme.cardBorder.withAlpha(60)),
                 ),
                 child: Text(
                   plan.isPopular ? 'Upgrade' : 'Downgrade',
-                  style: CreatiTheme.caption(
+                  style: VrTheme.caption(
                     fontWeight: FontWeight.w600,
                     color: plan.isPopular
                         ? Colors.white
@@ -335,9 +323,9 @@ class _PackCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: CreatiTheme.surfaceDark,
-          borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
-          border: Border.all(color: CreatiTheme.cardBorder.withAlpha(60)),
+          color: VrTheme.surfaceDark,
+          borderRadius: BorderRadius.circular(VrTheme.radiusLg),
+          border: Border.all(color: VrTheme.cardBorder.withAlpha(60)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -346,21 +334,21 @@ class _PackCard extends StatelessWidget {
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 gradient: index == 1
-                    ? CreatiTheme.brandGradient
-                    : CreatiTheme.proGradient,
-                borderRadius: BorderRadius.circular(CreatiTheme.radiusSm),
+                    ? VrTheme.brandGradient
+                    : VrTheme.proGradient,
+                borderRadius: BorderRadius.circular(VrTheme.radiusSm),
               ),
               child: Icon(Icons.auto_awesome, color: Colors.white, size: 16),
             ),
             const Spacer(),
             Text(
               pack.name,
-              style: CreatiTheme.bodySmall(fontWeight: FontWeight.w600),
+              style: VrTheme.bodySmall(fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 2),
             Text(
               pack.credits,
-              style: CreatiTheme.caption(
+              style: VrTheme.caption(
                 color: Colors.white.withAlpha(70),
                 fontSize: 10,
               ),
@@ -368,7 +356,7 @@ class _PackCard extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               pack.price,
-              style: CreatiTheme.headingSmall(
+              style: VrTheme.headingSmall(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
               ),
@@ -390,16 +378,16 @@ class _PaymentMethods extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: CreatiTheme.surfaceDark,
-          borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
-          border: Border.all(color: CreatiTheme.cardBorder.withAlpha(60)),
+          color: VrTheme.surfaceDark,
+          borderRadius: BorderRadius.circular(VrTheme.radiusLg),
+          border: Border.all(color: VrTheme.cardBorder.withAlpha(60)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Payment Methods',
-              style: CreatiTheme.bodyMedium(fontWeight: FontWeight.w600),
+              style: VrTheme.bodyMedium(fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 12),
             Row(
@@ -413,14 +401,14 @@ class _PaymentMethods extends StatelessWidget {
                 Expanded(
                   child: Text(
                     '•••• 4242',
-                    style: CreatiTheme.bodySmall(
+                    style: VrTheme.bodySmall(
                       color: Colors.white.withAlpha(140),
                     ),
                   ),
                 ),
                 Text(
                   'Expires 12/27',
-                  style: CreatiTheme.caption(
+                  style: VrTheme.caption(
                     color: Colors.white.withAlpha(60),
                     fontSize: 10,
                   ),
@@ -436,7 +424,7 @@ class _PaymentMethods extends StatelessWidget {
                 '+ Add Payment Method',
                 style: TextStyle(
                   fontSize: 12,
-                  color: CreatiTheme.purple.withAlpha(180),
+                  color: VrTheme.purple.withAlpha(180),
                   fontWeight: FontWeight.w600,
                 ),
               ),

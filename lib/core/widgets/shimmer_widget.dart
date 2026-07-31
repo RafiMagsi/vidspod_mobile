@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
 
 class ShimmerWidget extends StatefulWidget {
   final double width;
@@ -44,7 +44,7 @@ class _ShimmerWidgetState extends State<ShimmerWidget>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _animation,
-      builder: (_, __) {
+      builder: (_, _) {
         return Container(
           width: widget.width,
           height: widget.height,
@@ -52,10 +52,10 @@ class _ShimmerWidgetState extends State<ShimmerWidget>
             borderRadius: BorderRadius.circular(widget.borderRadius),
             gradient: LinearGradient(
               colors: [
-                CreatiTheme.darkSurface,
-                CreatiTheme.lightSurface,
-                CreatiTheme.mediumSurface,
-                CreatiTheme.darkSurface,
+                VrTheme.darkSurface,
+                VrTheme.lightSurface,
+                VrTheme.mediumSurface,
+                VrTheme.darkSurface,
               ],
               stops: [
                 (_animation.value - 0.6).clamp(0.0, 1.0),

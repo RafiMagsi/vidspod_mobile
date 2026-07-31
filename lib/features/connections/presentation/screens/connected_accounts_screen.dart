@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
 
 class ConnectedAccountsScreen extends StatelessWidget {
   const ConnectedAccountsScreen({super.key});
@@ -9,63 +9,57 @@ class ConnectedAccountsScreen extends StatelessWidget {
       'Google',
       'google',
       Icons.g_mobiledata,
-      const Color(0xFF4285F4),
+      Color(0xFF4285F4),
       'preview@vidspod.com',
     ),
     _AccountItem(
       'YouTube',
       'youtube',
       Icons.play_circle_fill,
-      const Color(0xFFFF0000),
+      Color(0xFFFF0000),
       'TechChannel',
     ),
     _AccountItem(
       'LinkedIn',
       'linkedin',
       Icons.business,
-      const Color(0xFF0A66C2),
+      Color(0xFF0A66C2),
       null,
     ),
     _AccountItem(
       'Facebook',
       'facebook',
       Icons.facebook,
-      const Color(0xFF1877F2),
+      Color(0xFF1877F2),
       'My Page',
     ),
     _AccountItem(
       'Instagram',
       'instagram',
       Icons.photo_camera,
-      const Color(0xFFE4405F),
+      Color(0xFFE4405F),
       '@preview_creator',
     ),
-    _AccountItem(
-      'TikTok',
-      'tiktok',
-      Icons.music_note,
-      const Color(0xFF000000),
-      null,
-    ),
+    _AccountItem('TikTok', 'tiktok', Icons.music_note, Color(0xFF000000), null),
     _AccountItem(
       'Twitter / X',
       'twitter',
       Icons.alternate_email,
-      const Color(0xFF1DA1F2),
+      Color(0xFF1DA1F2),
       '@vidspod_preview',
     ),
     _AccountItem(
       'Threads',
       'threads',
       Icons.text_fields,
-      const Color(0xFF000000),
+      Color(0xFF000000),
       null,
     ),
     _AccountItem(
       'Canva',
       'canva',
       Icons.design_services,
-      const Color(0xFF00C4CC),
+      Color(0xFF00C4CC),
       null,
     ),
   ];
@@ -73,25 +67,22 @@ class ConnectedAccountsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CreatiTheme.black,
+      backgroundColor: VrTheme.black,
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
             pinned: true,
-            backgroundColor: CreatiTheme.black,
+            backgroundColor: VrTheme.black,
             surfaceTintColor: Colors.transparent,
-            title: Text(
-              'Connected Accounts',
-              style: CreatiTheme.headingLarge(),
-            ),
+            title: Text('Connected Accounts', style: VrTheme.headingLarge()),
           ),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
               child: Text(
                 'Link your social and creative accounts to enable publishing, asset imports, and more.',
-                style: CreatiTheme.caption(color: Colors.white.withAlpha(80)),
+                style: VrTheme.caption(color: Colors.white.withAlpha(80)),
               ),
             ),
           ),
@@ -133,12 +124,12 @@ class _AccountCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: CreatiTheme.surfaceDark,
-          borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
+          color: VrTheme.surfaceDark,
+          borderRadius: BorderRadius.circular(VrTheme.radiusLg),
           border: Border.all(
             color: isConnected
                 ? item.color.withAlpha(40)
-                : CreatiTheme.cardBorder.withAlpha(60),
+                : VrTheme.cardBorder.withAlpha(60),
           ),
         ),
         child: Row(
@@ -147,7 +138,7 @@ class _AccountCard extends StatelessWidget {
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: item.color.withAlpha(20),
-                borderRadius: BorderRadius.circular(CreatiTheme.radiusMd),
+                borderRadius: BorderRadius.circular(VrTheme.radiusMd),
               ),
               child: Icon(item.icon, color: item.color, size: 22),
             ),
@@ -158,12 +149,12 @@ class _AccountCard extends StatelessWidget {
                 children: [
                   Text(
                     item.name,
-                    style: CreatiTheme.bodyMedium(fontWeight: FontWeight.w600),
+                    style: VrTheme.bodyMedium(fontWeight: FontWeight.w600),
                   ),
                   if (isConnected)
                     Text(
                       item.email!,
-                      style: CreatiTheme.caption(
+                      style: VrTheme.caption(
                         color: Colors.white.withAlpha(80),
                         fontSize: 11,
                       ),
@@ -171,7 +162,7 @@ class _AccountCard extends StatelessWidget {
                   else
                     Text(
                       'Not connected',
-                      style: CreatiTheme.caption(
+                      style: VrTheme.caption(
                         color: Colors.white.withAlpha(50),
                         fontSize: 11,
                       ),
@@ -191,7 +182,7 @@ class _AccountCard extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: Colors.red.withAlpha(15),
-                    borderRadius: BorderRadius.circular(CreatiTheme.radiusFull),
+                    borderRadius: BorderRadius.circular(VrTheme.radiusFull),
                     border: Border.all(color: Colors.red.withAlpha(50)),
                   ),
                   child: Text(
@@ -215,7 +206,7 @@ class _AccountCard extends StatelessWidget {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    gradient: item.color.value == 0xFF000000
+                    gradient: item.color.toARGB32() == 0xFF000000
                         ? LinearGradient(
                             colors: [
                               Colors.grey.shade700,
@@ -225,7 +216,7 @@ class _AccountCard extends StatelessWidget {
                         : LinearGradient(
                             colors: [item.color, item.color.withAlpha(180)],
                           ),
-                    borderRadius: BorderRadius.circular(CreatiTheme.radiusFull),
+                    borderRadius: BorderRadius.circular(VrTheme.radiusFull),
                   ),
                   child: Text(
                     'Connect',

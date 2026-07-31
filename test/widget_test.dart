@@ -18,6 +18,6 @@ void main() {
     // Suppress google_fonts exceptions (fonts not bundled in tests)
     while (tester.takeException() != null) {}
 
-    expect(find.text('SeeDance 2.5'), findsOneWidget);
+    expect(find.text('Create a Short'), findsOneWidget);
   });
 }

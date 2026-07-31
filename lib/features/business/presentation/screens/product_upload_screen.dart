@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
+import 'package:vidspod_mobile/core/widgets/app_network_image.dart';
 
 class ProductUploadScreen extends StatelessWidget {
   const ProductUploadScreen({super.key});
@@ -44,52 +45,61 @@ class ProductUploadScreen extends StatelessWidget {
     return Container(
       height: 320,
       decoration: BoxDecoration(
-        color: CreatiTheme.surfaceDark,
+        color: VrTheme.surfaceDark,
         borderRadius: BorderRadius.circular(18),
-        image: const DecorationImage(
-          image: NetworkImage('https://picsum.photos/seed/product/400/500'),
-          fit: BoxFit.cover,
-        ),
       ),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18),
-          gradient: LinearGradient(
-            colors: [Colors.transparent, Colors.black.withAlpha(128)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+      clipBehavior: Clip.antiAlias,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          AppNetworkImage(
+            url: 'https://picsum.photos/seed/product/400/500',
+            borderRadius: 18,
+            placeholderIcon: Icons.shopping_bag_outlined,
           ),
-        ),
-        alignment: Alignment.bottomLeft,
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: Colors.black.withAlpha(150),
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: const Text(
-                '1/3',
-                style: TextStyle(color: Colors.white, fontSize: 12),
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.transparent, Colors.black.withAlpha(128)],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
             ),
-            const Spacer(),
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.black.withAlpha(150),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.fullscreen,
-                color: Colors.white,
-                size: 18,
-              ),
+            alignment: Alignment.bottomLeft,
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withAlpha(150),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: const Text(
+                    '1/3',
+                    style: TextStyle(color: Colors.white, fontSize: 12),
+                  ),
+                ),
+                const Spacer(),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withAlpha(150),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.fullscreen,
+                    color: Colors.white,
+                    size: 18,
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -110,7 +120,7 @@ class ProductUploadScreen extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           'Skincare product — 200ml',
-          style: CreatiTheme.bodyMedium(color: Colors.white.withAlpha(100)),
+          style: VrTheme.bodyMedium(color: Colors.white.withAlpha(100)),
         ),
       ],
     );
@@ -125,8 +135,8 @@ class ProductUploadScreen extends StatelessWidget {
         height: 54,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(27),
-          gradient: CreatiTheme.brandGradient,
-          boxShadow: CreatiTheme.buttonShadow(CreatiTheme.purple),
+          gradient: VrTheme.brandGradient,
+          boxShadow: VrTheme.buttonShadow(VrTheme.purple),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -139,7 +149,7 @@ class ProductUploadScreen extends StatelessWidget {
             const SizedBox(width: 8),
             Text(
               'Upload Product Image',
-              style: CreatiTheme.bodyMedium(
+              style: VrTheme.bodyMedium(
                 fontWeight: FontWeight.w600,
                 fontSize: 16,
               ),
@@ -158,7 +168,7 @@ class ProductUploadScreen extends StatelessWidget {
         const SizedBox(width: 6),
         Text(
           '150 credits',
-          style: CreatiTheme.bodySmall(color: Colors.white.withAlpha(110)),
+          style: VrTheme.bodySmall(color: Colors.white.withAlpha(110)),
         ),
       ],
     );

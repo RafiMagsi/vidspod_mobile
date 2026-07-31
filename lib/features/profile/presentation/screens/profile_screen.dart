@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:vidspod_mobile/app/creati_theme.dart';
+import 'package:vidspod_mobile/core/theme/vr_theme.dart';
 import 'package:vidspod_mobile/features/auth/application/auth_service.dart';
 import 'package:vidspod_mobile/features/dashboard/dashboard_providers.dart';
 import 'package:vidspod_mobile/features/profile/profile_providers.dart';
@@ -16,14 +16,14 @@ class ProfileScreen extends ConsumerWidget {
     final authNotifier = ref.read(authStateProvider.notifier);
 
     return Scaffold(
-      backgroundColor: CreatiTheme.black,
+      backgroundColor: VrTheme.black,
       body: profile.when(
         data: (profile) => CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
             SliverAppBar(
               pinned: true,
-              backgroundColor: CreatiTheme.black,
+              backgroundColor: VrTheme.black,
               surfaceTintColor: Colors.transparent,
               automaticallyImplyLeading: false,
               leading: GoRouter.of(context).canPop()
@@ -32,7 +32,7 @@ class ProfileScreen extends ConsumerWidget {
                       onPressed: () => context.pop(),
                     )
                   : null,
-              title: Text('Profile', style: CreatiTheme.headingLarge()),
+              title: Text('Profile', style: VrTheme.headingLarge()),
             ),
             SliverToBoxAdapter(
               child: Column(
@@ -43,13 +43,13 @@ class ProfileScreen extends ConsumerWidget {
                     height: 88,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      gradient: CreatiTheme.brandGradient,
+                      gradient: VrTheme.brandGradient,
                     ),
                     padding: const EdgeInsets.all(3),
                     child: Container(
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
-                        color: CreatiTheme.darkSurface,
+                        color: VrTheme.darkSurface,
                       ),
                       child: const Center(
                         child: Icon(
@@ -63,12 +63,12 @@ class ProfileScreen extends ConsumerWidget {
                   const SizedBox(height: 14),
                   Text(
                     profile.displayName,
-                    style: CreatiTheme.headingSmall(fontSize: 20),
+                    style: VrTheme.headingSmall(fontSize: 20),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     profile.email,
-                    style: CreatiTheme.bodySmall(
+                    style: VrTheme.bodySmall(
                       color: Colors.white.withAlpha(100),
                     ),
                   ),
@@ -82,12 +82,12 @@ class ProfileScreen extends ConsumerWidget {
                   data: (summary) => Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: CreatiTheme.surfaceDark,
-                      borderRadius: BorderRadius.circular(CreatiTheme.radiusLg),
+                      color: VrTheme.surfaceDark,
+                      borderRadius: BorderRadius.circular(VrTheme.radiusLg),
                       border: Border.all(
-                        color: CreatiTheme.cardBorder.withAlpha(60),
+                        color: VrTheme.cardBorder.withAlpha(60),
                       ),
-                      boxShadow: CreatiTheme.cardShadow(CreatiTheme.black),
+                      boxShadow: VrTheme.cardShadow(VrTheme.black),
                     ),
                     child: Column(
                       children: [
@@ -96,7 +96,7 @@ class ProfileScreen extends ConsumerWidget {
                             Container(
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                gradient: CreatiTheme.brandGradient,
+                                gradient: VrTheme.brandGradient,
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: const Icon(
@@ -112,14 +112,14 @@ class ProfileScreen extends ConsumerWidget {
                                 children: [
                                   Text(
                                     'Credit Balance',
-                                    style: CreatiTheme.bodyMedium(
+                                    style: VrTheme.bodyMedium(
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
                                     '${summary.creditBalance} credits',
-                                    style: CreatiTheme.caption(
+                                    style: VrTheme.caption(
                                       color: Colors.white.withAlpha(100),
                                     ),
                                   ),
@@ -132,14 +132,14 @@ class ProfileScreen extends ConsumerWidget {
                                 vertical: 7,
                               ),
                               decoration: BoxDecoration(
-                                gradient: CreatiTheme.brandGradient,
+                                gradient: VrTheme.brandGradient,
                                 borderRadius: BorderRadius.circular(
-                                  CreatiTheme.radiusFull,
+                                  VrTheme.radiusFull,
                                 ),
                               ),
                               child: Text(
                                 'Buy',
-                                style: CreatiTheme.caption(
+                                style: VrTheme.caption(
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -167,11 +167,11 @@ class ProfileScreen extends ConsumerWidget {
                     child: Center(
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        color: CreatiTheme.purple,
+                        color: VrTheme.purple,
                       ),
                     ),
                   ),
-                  error: (_, __) => const SizedBox.shrink(),
+                  error: (_, _) => const SizedBox.shrink(),
                 ),
               ),
             ),
@@ -311,14 +311,14 @@ class _StatChip extends StatelessWidget {
           children: [
             Text(
               value,
-              style: CreatiTheme.bodySmall(
+              style: VrTheme.bodySmall(
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
               ),
             ),
             Text(
               label,
-              style: CreatiTheme.caption(
+              style: VrTheme.caption(
                 color: Colors.white.withAlpha(80),
                 fontSize: 10,
               ),
@@ -340,9 +340,9 @@ class _SectionHeader extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
       child: Text(
         title,
-        style: CreatiTheme.bodySmall(
+        style: VrTheme.bodySmall(
           fontWeight: FontWeight.w600,
-          color: CreatiTheme.textSecondary,
+          color: VrTheme.textSecondary,
         ),
       ),
     );
@@ -365,7 +365,7 @@ class _MenuTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
           decoration: BoxDecoration(
             border: Border(
-              bottom: BorderSide(color: CreatiTheme.cardBorder.withAlpha(40)),
+              bottom: BorderSide(color: VrTheme.cardBorder.withAlpha(40)),
             ),
           ),
           child: Row(
@@ -375,7 +375,7 @@ class _MenuTile extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: CreatiTheme.bodyMedium(
+                  style: VrTheme.bodyMedium(
                     fontWeight: FontWeight.w500,
                     fontSize: 15,
                   ),

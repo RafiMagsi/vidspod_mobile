@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:vidspod_mobile/core/api/api_client.dart';
-import 'package:vidspod_mobile/core/errors/api_error.dart';
+import 'package:vidspod_mobile/core/api/endpoints.dart';
+import 'package:vidspod_mobile/core/api/error_mapper.dart';
 import 'package:vidspod_mobile/features/profile/domain/profile.dart';
 
 class ProfileRepository {
@@ -10,22 +11,24 @@ class ProfileRepository {
 
   Future<Profile> getProfile() async {
     try {
-      final response = await _apiClient.dio.get('/me/profile');
-      return Profile.fromJson(response.data);
+      return await _apiClient.getObject(
+        Endpoints.meProfile,
+        decoder: Profile.fromJson,
+      );
     } on DioException catch (e) {
-      throw ApiError.fromJson(e.response!.data);
+      throw mapDioException(e);
     }
   }
 
   Future<Profile> updateProfile(Profile profile) async {
     try {
-      final response = await _apiClient.dio.patch(
-        '/me/profile',
+      return await _apiClient.patchObject(
+        Endpoints.meProfile,
         data: profile.toJson(),
+        decoder: Profile.fromJson,
       );
-      return Profile.fromJson(response.data);
     } on DioException catch (e) {
-      throw ApiError.fromJson(e.response!.data);
+      throw mapDioException(e);
     }
   }
 }
